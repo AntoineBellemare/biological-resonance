@@ -146,6 +146,27 @@ repository root (the studies form the importable `resonance_paper` package).
 | 13 | [study13_anesthesia.py](resonance_paper/study13_anesthesia.py) | Real data: does H track depth/criticality? | Chennu propofol (10 subj) | H tracks state but ≈ band power; mild sedation = weak contrast |
 | 14 | [study14_sleep.py](resonance_paper/study14_sleep.py) | Real data: H across sleep stages? | Sleep-EDF (8 subj) | H highest in **N3** (slow-wave harmonics); decode < band power; ρ(H,m̂-prox)=−0.24 (reversal) |
 | 15 | [study15_deep_anesthesia.py](resonance_paper/study15_deep_anesthesia.py) | Real data: H across loss of consciousness? | ds004541 deep GA (7 subj) | wake vs LOC decodable (all-features AUC 0.82); resonance ≈ band power; markers disagree on criticality sign |
+| 16 | [study16_criticality_indepth.py](resonance_paper/study16_criticality_indepth.py) | Why does the in-silico criticality prediction reverse in vivo? | Sleep-EDF + ds004541 | raw-EEG H reversal is a slow-wave artifact; on scale-free population activity + within-state, H tracks criticality (sleep ρ=+0.11, p=0.03) — recovers Study 10 (run via `--only 16`) |
+| 17 | [study17_tripartite_dissociation.py](resonance_paper/study17_tripartite_dissociation.py) | Are H/PC/R separable; does R beat its factors? | synthetic grid | **H ⟂ phase (ρ=0.00)**; PC not ratio-blind (−0.47, mode-locking); R AUC 0.66 < PC 0.78 — R is *interpretive decomposition*, not a better detector |
+| 18 | [study18_stochastic_resonance.py](resonance_paper/study18_stochastic_resonance.py) | Can noise induce resonance at complex ratios? | forced Van der Pol | noise-induced H gain ~7× larger for complex vs simple ratios (+0.024 vs +0.004) |
+| 19 | [study19_ssvep_intermod.py](resonance_paper/study19_ssvep_intermod.py) | SSVEP harmonics + intermodulation under nonlinearity? | synthetic | two-flicker intermodulation rises with nonlinearity (ρ=+0.61), richer for simple ratios (0.35 vs 0.13); single-flicker H at ceiling |
+| 20 | [study20_musical_intermod.py](resonance_paper/study20_musical_intermod.py) | Does H track musical consonance? | synthetic chords | ρ(H, chord complexity) = −0.73; auditory nonlinearity (combination tones) *sharpens* the recovery |
+| 20b | [study20b_ffr_consonance.py](resonance_paper/study20b_ffr_consonance.py) | Real EEG: is the brainstem FFR more harmonic for consonant dyads? | FFR to dyads (OSF 5puhb, 36 subj) | **consonant>dissonant H** (CC>DC p=1.3e-8; **CI>DI missing-fundamental p=4e-5**); effect lives in the stimulus-**silent** band (leakage-null p=0.27), FFR reconstructs each dyad's own fundamental (240/225 Hz) — **neural, adversarially verified** (run via `--only 20b`) |
+
+**The construct & its dynamical regimes (Studies 17–20)** (see
+[`paper/construct_and_dynamics.md`](resonance_paper/paper/construct_and_dynamics.md)):
+Study 17 is the non-circular capstone — H is *exactly* phase-blind (ρ=0.00), so
+harmonicity and phase-coupling are distinct measurements; but mode-locking ties PC
+to ratio simplicity, so R = H·PC is best read as an **interpretive decomposition**
+(why is/isn't this a resonance?) rather than a detector that beats PC. Studies 18–20
+show resonance is *generated* across three regimes: by noise at complex ratios
+(stochastic resonance), by nonlinear intermodulation (SSVEP/frequency-tagging), and
+tracking **auditory consonance** (sharpened by combination tones). Study **20b**
+then confirms it in **real EEG**: the human brainstem FFR is more harmonically
+organized for consonant than dissonant dyads — even for *missing-fundamental* dyads,
+where the brain reconstructs the harmonic relations (the effect lives in the
+stimulus-silent band, is frequency-specific to each dyad's own fundamental, and
+survives SNR/leakage/mains/permutation controls — adversarially verified).
 
 **Real-data criticality (Studies 13–16) — honest summary** (see
 [`paper/realdata_criticality.md`](resonance_paper/paper/realdata_criticality.md)):
@@ -187,12 +208,16 @@ biological-resonance/
 └── resonance_paper/                  # the importable analysis package
     ├── _common.py                    # config presets, surrogate-z, AUC/stats, plotting
     ├── signals.py  datasets.py       # synthetic generators / real-data loaders
-    ├── study1..12_*.py  run_all.py   # the studies + driver
+    ├── study1..20_*.py  run_all.py   # the studies + driver
+    ├── criticality.py                # validated DFA/LRTC/branching-ratio estimators
+    ├── crit_resonance.py             # shared real-data criticality analysis
     ├── results/   *.json             # paper-grade headline metrics (committed)
     ├── figures/   study*_*.{png,pdf} # per-study diagnostic figures
     └── paper/
         ├── resonance_paper_draft.md          # main manuscript draft
-        ├── resonance_and_criticality.md      # studies 9–12 synthesis
+        ├── resonance_and_criticality.md      # studies 9–12 synthesis (in-silico)
+        ├── realdata_criticality.md           # studies 13–16 synthesis (real data)
+        ├── construct_and_dynamics.md         # studies 17–20 synthesis
         ├── make_paper_figures.py             # builds the composite Fig 1–4
         └── figures/   Fig1..4_*.{png,pdf}    # publication composites (600 DPI)
 ```

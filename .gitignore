@@ -19,6 +19,11 @@ data/
 *.eeg
 *.vhdr
 *.vmrk
+*.edf
+*.set
+*.fif
+*.bdf
+*.mat
 .pytest_cache/
 .mypy_cache/
 

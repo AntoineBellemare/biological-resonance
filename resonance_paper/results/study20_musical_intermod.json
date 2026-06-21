@@ -1,0 +1,130 @@
+{
+  "quick": false,
+  "rows": [
+    {
+      "chord": "octave (1:2)",
+      "complexity": 1.0,
+      "condition": "linear",
+      "H_max": 0.43026137518038093
+    },
+    {
+      "chord": "octave (1:2)",
+      "complexity": 1.0,
+      "condition": "nonlinear",
+      "H_max": 0.44600731942383315
+    },
+    {
+      "chord": "fifth (2:3)",
+      "complexity": 2.584962500721156,
+      "condition": "linear",
+      "H_max": 0.3164012838330452
+    },
+    {
+      "chord": "fifth (2:3)",
+      "complexity": 2.584962500721156,
+      "condition": "nonlinear",
+      "H_max": 0.2776970933633155
+    },
+    {
+      "chord": "major_triad (4:5:6)",
+      "complexity": 3.9379270637390125,
+      "condition": "linear",
+      "H_max": 0.2050724690145702
+    },
+    {
+      "chord": "major_triad (4:5:6)",
+      "complexity": 3.9379270637390125,
+      "condition": "nonlinear",
+      "H_max": 0.1936654973026449
+    },
+    {
+      "chord": "minor_triad (10:12:15)",
+      "complexity": 3.9379270637390125,
+      "condition": "linear",
+      "H_max": 0.22622795345934166
+    },
+    {
+      "chord": "minor_triad (10:12:15)",
+      "complexity": 3.9379270637390125,
+      "condition": "nonlinear",
+      "H_max": 0.2107303027419273
+    },
+    {
+      "chord": "major7 (8:10:12:15)",
+      "complexity": 4.2712603970723455,
+      "condition": "linear",
+      "H_max": 0.17171125552520955
+    },
+    {
+      "chord": "major7 (8:10:12:15)",
+      "complexity": 4.2712603970723455,
+      "condition": "nonlinear",
+      "H_max": 0.1650739899352702
+    },
+    {
+      "chord": "dom7 (4:5:6:7)",
+      "complexity": 4.523789425499728,
+      "condition": "linear",
+      "H_max": 0.1681390790481093
+    },
+    {
+      "chord": "dom7 (4:5:6:7)",
+      "complexity": 4.523789425499728,
+      "condition": "nonlinear",
+      "H_max": 0.16028244956295362
+    },
+    {
+      "chord": "tritone (5:7)",
+      "complexity": 5.129283016944966,
+      "condition": "linear",
+      "H_max": 0.26094421212019914
+    },
+    {
+      "chord": "tritone (5:7)",
+      "complexity": 5.129283016944966,
+      "condition": "nonlinear",
+      "H_max": 0.2411065835673433
+    },
+    {
+      "chord": "minor2nd (15:16)",
+      "complexity": 7.906890595608519,
+      "condition": "linear",
+      "H_max": 0.1962484887576753
+    },
+    {
+      "chord": "minor2nd (15:16)",
+      "complexity": 7.906890595608519,
+      "condition": "nonlinear",
+      "H_max": 0.19274054282854444
+    },
+    {
+      "chord": "cluster (16:17:18)",
+      "complexity": 7.504925228461768,
+      "condition": "linear",
+      "H_max": 0.15181930571074864
+    },
+    {
+      "chord": "cluster (16:17:18)",
+      "complexity": 7.504925228461768,
+      "condition": "nonlinear",
+      "H_max": 0.14897049478377852
+    },
+    {
+      "chord": "complex (11:13:17)",
+      "complexity": 7.498222785352486,
+      "condition": "linear",
+      "H_max": 0.16858475407823098
+    },
+    {
+      "chord": "complex (11:13:17)",
+      "complexity": 7.498222785352486,
+      "condition": "nonlinear",
+      "H_max": 0.15837779590407797
+    }
+  ],
+  "summary": {
+    "rho_H_vs_complexity_linear": -0.705170430668875,
+    "rho_H_vs_complexity_nonlinear": -0.7294866524160775,
+    "nonlinearity_sharpens": true
+  }
+}
