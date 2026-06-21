@@ -75,11 +75,18 @@ def powerlaw_score(sizes):
         return dict(slope=float("nan"), r2=float("nan"))
     counts, edges = np.histogram(sizes, bins=bins, density=True)
     centers = np.sqrt(edges[:-1] * edges[1:])
-    mask = counts > 0
+    mask = (counts > 0) & np.isfinite(centers) & (centers > 0)
     if mask.sum() < 4:
         return dict(slope=float("nan"), r2=float("nan"))
     lx, ly = np.log10(centers[mask]), np.log10(counts[mask])
-    slope, inter = np.polyfit(lx, ly, 1)
+    good = np.isfinite(lx) & np.isfinite(ly)
+    lx, ly = lx[good], ly[good]
+    if lx.size < 4 or np.ptp(lx) < 1e-9:
+        return dict(slope=float("nan"), r2=float("nan"))
+    try:
+        slope, inter = np.polyfit(lx, ly, 1)
+    except (np.linalg.LinAlgError, ValueError):
+        return dict(slope=float("nan"), r2=float("nan"))
     pred = slope * lx + inter
     ss_res = np.sum((ly - pred) ** 2); ss_tot = np.sum((ly - ly.mean()) ** 2)
     r2 = 1 - ss_res / (ss_tot + 1e-12)
@@ -98,45 +105,51 @@ def branching_estimate(A):
 def run(quick=True):
     N = 300 if quick else 600
     T = 8000 if quick else 20000
-    seeds = range(3) if quick else range(8)
+    seeds = list(range(4) if quick else range(20))   # replicate networks -> CIs
     sigmas = [0.80, 0.90, 0.95, 1.00, 1.05, 1.10, 1.30] if quick else \
              [0.70, 0.85, 0.92, 0.97, 1.00, 1.03, 1.08, 1.15, 1.30, 1.5]
     cfg = C.default_config(fmin=2, fmax=60, precision_hz=0.5)  # remove_aperiodic=True
+    from biotuner.metrics import spectral_flatness
+    METRICS = ["susceptibility", "powerlaw_r2", "powerlaw_slope", "branching_est",
+               "activity_flatness", "R_max", "R_avg", "H_max", "R_flatness"]
 
+    per = {m: [] for m in METRICS}   # m -> list over sigma of per-seed arrays
     rows = []
     for sigma in sigmas:
-        sus, pl_r2, pl_slope, br = [], [], [], []
-        Rmax, Ravg, Hmax, Rflat, Aflat = [], [], [], [], []
+        acc = {m: [] for m in METRICS}
         for seed in seeds:
             A, avs = branching_activity(sigma, N=N, T=T, seed=seed)
-            sus.append(float(np.var(A)))
-            pl = powerlaw_score(avs); pl_r2.append(pl["r2"]); pl_slope.append(pl["slope"])
-            br.append(branching_estimate(A))
-            # spectral flatness of raw activity (1/f-ness near criticality)
-            from biotuner.metrics import spectral_flatness
-            Aflat.append(float(spectral_flatness(np.abs(np.fft.rfft(_norm(A)))[1:])))
-            # resonance of population activity
+            acc["susceptibility"].append(float(np.var(A)))
+            pl = powerlaw_score(avs)
+            acc["powerlaw_r2"].append(pl["r2"]); acc["powerlaw_slope"].append(pl["slope"])
+            acc["branching_est"].append(branching_estimate(A))
+            acc["activity_flatness"].append(
+                float(spectral_flatness(np.abs(np.fft.rfft(_norm(A)))[1:])))
             r = compute_resonance(_norm(A).astype(np.float64), sf=SF, config=cfg)
-            Rmax.append(r.summaries["R"]["max"]); Ravg.append(r.summaries["R"]["avg"])
-            Hmax.append(r.summaries["H"]["max"]); Rflat.append(r.summaries["R"]["flatness"])
-        rows.append(dict(sigma=sigma,
-                         susceptibility=float(np.mean(sus)),
-                         powerlaw_r2=float(np.nanmean(pl_r2)),
-                         powerlaw_slope=float(np.nanmean(pl_slope)),
-                         branching_est=float(np.nanmean(br)),
-                         activity_flatness=float(np.mean(Aflat)),
-                         R_max=float(np.mean(Rmax)), R_avg=float(np.mean(Ravg)),
-                         H_max=float(np.mean(Hmax)), R_flatness=float(np.mean(Rflat))))
-        print(f"  sigma={sigma:.2f}  suscept={np.mean(sus):.1f}  PL_r2={np.nanmean(pl_r2):.2f}  "
-              f"R_max={np.mean(Rmax):.4f}")
+            acc["R_max"].append(r.summaries["R"]["max"]); acc["R_avg"].append(r.summaries["R"]["avg"])
+            acc["H_max"].append(r.summaries["H"]["max"]); acc["R_flatness"].append(r.summaries["R"]["flatness"])
+        row = dict(sigma=sigma)
+        for m in METRICS:
+            ci = C.mean_ci(acc[m]); per[m].append(acc[m])
+            row[m] = ci["mean"]; row[m + "_sem"] = ci["sem"]; row[m + "_ci"] = [ci["lo"], ci["hi"]]
+        rows.append(row)
+        print(f"  sigma={sigma:.2f}  suscept={row['susceptibility']:.1f}  "
+              f"PL_r2={row['powerlaw_r2']:.2f}  H_max={row['H_max']:.3f}+-{row['H_max_sem']:.3f}  "
+              f"R_max={row['R_max']:.4f}")
 
-    # where does each quantity peak in sigma?
-    def argmax_sigma(key): return float(rows[int(np.argmax([r[key] for r in rows]))]["sigma"])
+    # peak location in sigma with bootstrap-over-seeds CI
+    def mat(m):
+        k = min(len(a) for a in per[m]); return np.array([a[:k] for a in per[m]])
+    def loc(m):
+        d = C.argmax_location_ci(sigmas, mat(m)); return d["point"], [d["lo"], d["hi"]]
+    pS, cS = loc("susceptibility"); pP, cP = loc("powerlaw_r2")
+    pH, cH = loc("H_max"); pR, cR = loc("R_max")
     summary = dict(
-        sigma_at_max_susceptibility=argmax_sigma("susceptibility"),
-        sigma_at_max_powerlaw=argmax_sigma("powerlaw_r2"),
-        sigma_at_max_R=argmax_sigma("R_max"),
-        sigma_at_max_H=argmax_sigma("H_max"),
+        n_seeds=len(seeds),
+        sigma_at_max_susceptibility=pS, sigma_at_max_susceptibility_ci=cS,
+        sigma_at_max_powerlaw=pP, sigma_at_max_powerlaw_ci=cP,
+        sigma_at_max_R=pR, sigma_at_max_R_ci=cR,
+        sigma_at_max_H=pH, sigma_at_max_H_ci=cH,
     )
     result = dict(quick=quick, N=N, T=T, rows=rows, summary=summary)
     C.save_json(result, "study10_criticality.json")
@@ -152,10 +165,13 @@ def _headline(result):
     for r in result["rows"]:
         print(f"  {r['sigma']:>5.2f} {r['susceptibility']:>9.1f} {r['powerlaw_r2']:>7.2f} "
               f"{r['branching_est']:>7.2f} {r['H_max']:>7.3f} {r['R_max']:>8.4f}")
-    print(f"\n  Criticality markers peak near sigma=1 (driving shifts it slightly >1):")
-    print(f"    susceptibility -> sigma={s['sigma_at_max_susceptibility']:.2f}, "
-          f"avalanche power-law -> sigma={s['sigma_at_max_powerlaw']:.2f}")
-    print(f"  HARMONICITY H_max peaks at sigma={s['sigma_at_max_H']:.2f} (criticality signature in H).")
+    cH = s.get("sigma_at_max_H_ci", [np.nan, np.nan])
+    cS = s.get("sigma_at_max_susceptibility_ci", [np.nan, np.nan])
+    print(f"\n  (n_seeds={s.get('n_seeds','?')}; peaks reported with bootstrap-over-seeds 95% CI)")
+    print(f"    susceptibility -> sigma={s['sigma_at_max_susceptibility']:.2f} "
+          f"[{cS[0]:.2f},{cS[1]:.2f}], avalanche power-law -> sigma={s['sigma_at_max_powerlaw']:.2f}")
+    print(f"  HARMONICITY H_max peaks at sigma={s['sigma_at_max_H']:.2f} "
+          f"[{cH[0]:.2f},{cH[1]:.2f}] (criticality signature in H).")
     print("  RESONANCE R_max ~ 0 throughout: pure avalanche dynamics are scale-free but NOT")
     print("    oscillatory/phase-locked, so the phase-coupling factor (and R) stays near zero.")
     print("  => Criticality is reflected in HARMONICITY, not in phase-coupling resonance, for a")
@@ -167,22 +183,33 @@ def _figures(result):
     plt = C.setup_mpl()
     rows = result["rows"]; sig = [r["sigma"] for r in rows]
     fig, ax1 = plt.subplots(figsize=(8, 4.8))
-    def nrm(k):
-        v = np.array([r[k] for r in rows], float); return v / (np.nanmax(np.abs(v)) + 1e-12)
-    ax1.plot(sig, nrm("susceptibility"), "o-", color="#1565c0", label="susceptibility (var)")
-    ax1.plot(sig, nrm("powerlaw_r2"), "^-", color="#2e7d32", label="avalanche power-law R²")
-    ax1.plot(sig, nrm("H_max"), "d-", color="#ef6c00", label="harmonicity H_max")
+    def nrm_err(k):
+        v = np.array([r[k] for r in rows], float)
+        e = np.array([r.get(k + "_sem", 0.0) for r in rows], float)
+        mx = np.nanmax(np.abs(v)) + 1e-12
+        return v / mx, e / mx
+    for k, c, mk, lab in [("susceptibility", "#1565c0", "o", "susceptibility (var)"),
+                          ("powerlaw_r2", "#2e7d32", "^", "avalanche power-law R²"),
+                          ("H_max", "#ef6c00", "d", "harmonicity H_max")]:
+        y, e = nrm_err(k)
+        ax1.errorbar(sig, y, yerr=e, fmt=mk + "-", color=c, label=lab, capsize=2, lw=1.4, ms=5)
     Rmaxvals = np.array([r["R_max"] for r in rows])
     if np.nanmax(Rmaxvals) > 1e-6:
-        ax1.plot(sig, nrm("R_max"), "s-", color="#b71c1c", label="resonance R_max")
+        y, e = nrm_err("R_max")
+        ax1.errorbar(sig, y, yerr=e, fmt="s-", color="#b71c1c", label="resonance R_max", capsize=2)
     else:
         ax1.plot([], [], "s-", color="#b71c1c", label="resonance R_max ≈ 0 (no oscillation)")
     ax1.axvline(1.0, color="grey", ls="--", lw=0.9, label="critical point (sigma=1)")
+    cH = result["summary"].get("sigma_at_max_H_ci")
+    if cH:
+        ax1.axvspan(cH[0], cH[1], color="#ef6c00", alpha=0.12, label="H peak 95% CI")
     ax1.set_xlabel("branching ratio  sigma"); ax1.set_ylabel("normalized")
     s = result["summary"]
+    _cH = s.get("sigma_at_max_H_ci", [np.nan, np.nan])
     ax1.set_title("Study 10 — Criticality vs resonance (branching network)\n"
                   f"criticality markers peak ~sigma=1; harmonicity H peaks at "
-                  f"sigma={s['sigma_at_max_H']:.2f}; R~0 (avalanches non-oscillatory)",
+                  f"sigma={s['sigma_at_max_H']:.2f} [{_cH[0]:.2f},{_cH[1]:.2f}] "
+                  f"(n={s.get('n_seeds','?')} seeds); R~0 (avalanches non-oscillatory)",
                   fontweight="bold", fontsize=10)
     ax1.legend(fontsize=8)
     fig.tight_layout()

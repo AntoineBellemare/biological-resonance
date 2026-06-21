@@ -15,6 +15,10 @@ env/
 # Caches / data downloads
 .mne_data/
 mne_data/
+data/
+*.eeg
+*.vhdr
+*.vmrk
 .pytest_cache/
 .mypy_cache/
 

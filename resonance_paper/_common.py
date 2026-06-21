@@ -342,6 +342,47 @@ def fdr_bh(pvals, alpha=0.05):
     return out_q <= alpha, out_q
 
 
+def mean_ci(values, n_boot=2000, alpha=0.05, seed=0):
+    """Mean of cross-seed replicates + bootstrap (1-alpha) percentile CI + SEM.
+
+    For the model studies (10-12): aggregate a per-seed metric into a mean with
+    a defensible uncertainty band instead of a bare point estimate.
+    """
+    v = np.asarray(values, float); v = v[np.isfinite(v)]
+    if v.size == 0:
+        return dict(mean=np.nan, lo=np.nan, hi=np.nan, sem=np.nan, n=0)
+    if v.size == 1:
+        return dict(mean=float(v[0]), lo=float(v[0]), hi=float(v[0]), sem=0.0, n=1)
+    rng = np.random.default_rng(seed)
+    boots = np.array([rng.choice(v, size=v.size, replace=True).mean() for _ in range(n_boot)])
+    lo, hi = np.nanpercentile(boots, [100 * alpha / 2, 100 * (1 - alpha / 2)])
+    return dict(mean=float(v.mean()), lo=float(lo), hi=float(hi),
+                sem=float(v.std(ddof=1) / np.sqrt(v.size)), n=int(v.size))
+
+
+def argmax_location_ci(grid, value_matrix, n_boot=2000, alpha=0.05, seed=0):
+    """Bootstrap CI for the grid location of a seed-averaged curve's maximum.
+
+    grid: (n_grid,) control-parameter values; value_matrix: (n_grid, n_seeds).
+    Resamples seeds with replacement, re-averages the curve, takes the argmax
+    grid value -> distribution -> (point, lo, hi). Lets us say e.g. "H peaks at
+    sigma = 1.08 [1.00, 1.15]" rather than a bare argmax.
+    """
+    grid = np.asarray(grid, float)
+    M = np.asarray(value_matrix, float)            # (n_grid, n_seeds)
+    point = float(grid[int(np.nanargmax(np.nanmean(M, axis=1)))])
+    ns = M.shape[1]
+    if ns < 2:
+        return dict(point=point, lo=point, hi=point)
+    rng = np.random.default_rng(seed)
+    locs = np.empty(n_boot)
+    for b in range(n_boot):
+        idx = rng.integers(0, ns, ns)
+        locs[b] = grid[int(np.nanargmax(np.nanmean(M[:, idx], axis=1)))]
+    lo, hi = np.nanpercentile(locs, [100 * alpha / 2, 100 * (1 - alpha / 2)])
+    return dict(point=point, lo=float(lo), hi=float(hi))
+
+
 def paired_by_group(rows, feature, group_key, cond_key, cond_a, cond_b):
     """Per-group (e.g. per-subject) paired comparison of ``feature`` between two
     conditions. Returns Wilcoxon signed-rank p, mean within-pair difference,

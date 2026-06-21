@@ -234,22 +234,24 @@ def figure4():
     if np.isfinite(rc):
         axes[1].axvline(rc, color="k", ls="--", lw=0.7, label=f"edge of chaos")
     axes[1].set_xlabel("spectral radius ρ"); axes[1].set_ylabel("normalized")
-    axes[1].set_title("Reservoir\n(R peaks below edge of chaos)")
+    axes[1].set_title("Reservoir\n(R highest when ordered; dies in chaos)")
     axes[1].legend(loc="lower center", fontsize=6)
     panel(axes[1], "B")
 
-    # C: E/I network — phase coupling switches on at synchronization onset
+    # C: E/I network — phase coupling RISES (from a non-zero baseline) at sync onset
     r = s12["rows"]; g = [x["g"] for x in r]; gc = s12["summary"]["g_critical"]
+    base_pc = s12["summary"].get("baseline_PC", float(r[0]["crossEI_PC"]))
     axes[2].plot(g, nrm([x["order_param"] for x in r]), "o-", color=GREY, label="order param")
     axes[2].plot(g, nrm([x["susceptibility"] for x in r]), "^-", color=BLUE, label="susceptibility")
-    axes[2].plot(g, nrm([x["crossEI_PC"] for x in r]), "v-", color=PURPLE, label="E↔I phase coupling")
+    axes[2].plot(g, [x["crossEI_PC"] for x in r], "v-", color=PURPLE, label="E↔I PC (raw PLV)")
+    axes[2].axhline(base_pc, color=PURPLE, ls=":", lw=0.8, label=f"async baseline {base_pc:.2f}")
     axes[2].axvline(gc, color="k", ls="--", lw=0.7)
-    axes[2].set_xlabel("coupling gain g"); axes[2].set_ylabel("normalized")
-    axes[2].set_title("E/I network\n(PC switches on at sync onset)")
+    axes[2].set_xlabel("coupling gain g"); axes[2].set_ylabel("normalized  /  PLV")
+    axes[2].set_title("E/I network\n(PC rises at sync onset, not from 0)")
     axes[2].legend(loc="lower right", fontsize=6)
     panel(axes[2], "C")
 
-    fig.suptitle("Figure 4 — Harmonic structure tracks criticality; phase-coupling resonance tracks its ordered approach",
+    fig.suptitle("Figure 4 — Harmonic structure tracks criticality; phase-coupling resonance rises at the synchronization transition",
                  fontsize=9.5, fontweight="bold", y=1.04)
     fig.tight_layout()
     save(fig, "Fig4_criticality")
