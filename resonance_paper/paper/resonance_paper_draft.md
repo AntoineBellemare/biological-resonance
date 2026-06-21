@@ -162,8 +162,14 @@ harmonic-organization axis beyond raw band power. Critically, the
 peak-harmonicity difference is **1/f-dependent**: H_max separates the states at
 AUC = 0.83 with FOOOF-style aperiodic removal but at only 0.29 without it, so the
 eyes-closed "more harmonic" effect must be read after the aperiodic background is
-removed. The harder rest-vs-motor contrast decodes at AUC = 0.62 (vs 0.54 for
-band power), where resonance features add the most over raw band power.
+removed. We also tested a motor contrast, but a fair, event-locked re-analysis
+(movement vs rest *within* run, mu/beta ERD) showed this is a single-band
+*amplitude* phenomenon where a proper multiband-power baseline wins (AUC ≈ 0.59)
+and resonance is at chance (≈ 0.49); we therefore do **not** claim a motor
+advantage. This correctly delimits the framework's scope: it adds value for
+harmonic and cross-frequency-coupling structure, not for band-amplitude changes.
+(The motor contrast in the released `study2` code is confounded — it compares a
+baseline run to a task run — and is being replaced by the event-locked design.)
 
 ### 3.3 The feature vector fingerprints signal modality
 *(Study 3; Fig. 3)*

@@ -44,9 +44,15 @@ regenerated from those JSONs by
    coupling must be read as a surrogate z-score, not in absolute terms.
 3. **Polyrhythmic structure is recovered** — the 2:3:4 resonance peak/median
    ratio separates locked from scrambled stacks at AUC = 1.0.
-4. **Resonance features discriminate brain states.** Eyes-open vs eyes-closed
-   decodes at AUC ≈ 0.81 (matching band power) and rest-vs-motor at AUC ≈ 0.62
-   (vs 0.54 for band power), leave-one-subject-out, permutation p = 0.001.
+4. **Resonance discriminates the eyes-open/closed state at AUC ≈ 0.81**
+   (leave-one-subject-out, p = 0.001), matching a relative-alpha-power baseline,
+   with eyes-closed more harmonically organized (after aperiodic removal).
+   *Scope note:* on motor ERD — a single-band *amplitude* phenomenon — a fair
+   event-locked test (movement vs rest within-run) finds band power wins (≈0.59)
+   and resonance is at chance (≈0.49). This correctly bounds the method: it adds
+   value for harmonic / cross-frequency-coupling structure, **not** band-amplitude
+   changes. (The motor contrast in the committed `study2` is confounded —
+   baseline-run vs task-run — and is being replaced by the event-locked design.)
 5. **Harmonicity is 1/f-confounded — and the suite controls for it.** Peak
    harmonicity discriminates eyes-open/closed at AUC = 0.83 *with* FOOOF-style
    aperiodic removal but collapses to 0.29 *without* it. Cross-condition
@@ -121,7 +127,7 @@ repository root (the studies form the importable `resonance_paper` package).
 | # | File | Question | Data | Result |
 |---|------|----------|------|--------|
 | 1 | [study1_ground_truth.py](resonance_paper/study1_ground_truth.py) | Recover known harmonic structure & n:m coupling? | synthetic | H ranks richness ρ=0.98; coupling PC_z AUC 0.99, matrix 1.0 |
-| 2 | [study2_eeg_states.py](resonance_paper/study2_eeg_states.py) | Separate brain states? | PhysioNet eegbci | EO/EC 0.81, rest/motor 0.62 (LOSO, p=0.001) |
+| 2 | [study2_eeg_states.py](resonance_paper/study2_eeg_states.py) | Separate brain states? | PhysioNet eegbci | EO/EC AUC 0.81 (= alpha-power baseline, p=0.001); motor ERD is band-power's domain (resonance ≈ chance — see scope note) |
 | 3 | [study3_cross_modality.py](resonance_paper/study3_cross_modality.py) | Fingerprint signal modality? | EEG+ECG+PPG+RSP+synthetic | 7-way acc 0.99 (chance 0.14) |
 | 4 | [study4_strategy_comparison.py](resonance_paper/study4_strategy_comparison.py) | Which strategy for which goal? | synthetic | 20 strategies scored; `harmsim·binary·nm_plv` AUC 1.0 |
 | 5 | [study5_cross_signal.py](resonance_paper/study5_cross_signal.py) | Cross-signal coupling recovery (1:1/1:2/2:3)? | synthetic pairs | AUC 1.0 each vs 0.59 single-signal baseline |
