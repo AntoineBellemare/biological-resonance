@@ -143,6 +143,19 @@ repository root (the studies form the importable `resonance_paper` package).
 | 10 | [study10_criticality.py](resonance_paper/study10_criticality.py) | Resonance vs criticality (avalanches)? | branching network | H peaks at σ=1.00 [0.97,1.08]; R≈0 (avalanches non-oscillatory) |
 | 11 | [study11_reservoir_criticality.py](resonance_paper/study11_reservoir_criticality.py) | Does criticality GENERATE resonance (noise-driven)? | echo-state network | noise→harmonic structure generated at the edge of chaos (onset ρ≈1.3, peak ρ_c=1.57) |
 | 12 | [study12_ei_network.py](resonance_paper/study12_ei_network.py) | Resonance vs the edge of synchronization? | Wilson–Cowan E/I | E↔I phase coupling rises (PLV 0.43→0.99) at g_c=1.0, not from 0 |
+| 13 | [study13_anesthesia.py](resonance_paper/study13_anesthesia.py) | Real data: does H track depth/criticality? | Chennu propofol (10 subj) | H tracks state but ≈ band power; mild sedation = weak contrast |
+| 14 | [study14_sleep.py](resonance_paper/study14_sleep.py) | Real data: H across sleep stages? | Sleep-EDF (8 subj) | H highest in **N3** (slow-wave harmonics); decode < band power; ρ(H,m̂-prox)=−0.24 (reversal) |
+| 15 | [study15_deep_anesthesia.py](resonance_paper/study15_deep_anesthesia.py) | Real data: H across loss of consciousness? | ds004541 deep GA (7 subj) | wake vs LOC decodable (all-features AUC 0.82); resonance ≈ band power; markers disagree on criticality sign |
+
+**Real-data criticality (Studies 13–15) — honest summary** (see
+[`paper/realdata_criticality.md`](resonance_paper/paper/realdata_criticality.md)):
+H/R discriminate brain state above chance but **do not beat band power**, and the
+in-silico "H peaks at criticality" (Study 10) **reverses in vivo** — because
+in-vivo H is dominated by the **slow-oscillation harmonic series** (test B1: the
+relationship lives entirely in the <2 Hz band and survives controlling for
+slow-wave power), which marks synchronization/subcriticality, not avalanche
+criticality. The in-silico criticality result holds for the *scale-free*
+generator; the in-vivo signal is the *oscillatory* one — a precise dissociation.
 
 Study 7 is retained for the record but **excluded from the default sweep**: its
 Direction B is confounded (natural frequencies set at exact rational ratios, so

@@ -28,7 +28,8 @@ def main():
         study5_cross_signal, study6_resonance_conjunction,
         study8_arnold_tongues, study9_reservoir,
         study10_criticality, study11_reservoir_criticality,
-        study12_ei_network,
+        study12_ei_network, study13_anesthesia, study14_sleep,
+        study15_deep_anesthesia,
     )
     studies = {
         1: ("Ground-truth recovery", study1_ground_truth.run),
@@ -42,9 +43,13 @@ def main():
         10: ("Criticality (branching network)", study10_criticality.run),
         11: ("Reservoir: edge of chaos", study11_reservoir_criticality.run),
         12: ("E/I network: edge of synchronization", study12_ei_network.run),
+        13: ("Real data: propofol sedation (H vs depth/criticality)", study13_anesthesia.run),
+        14: ("Real data: sleep wake->N3 (H vs depth/criticality)", study14_sleep.run),
+        15: ("Real data: deep anesthesia / LOC (H vs depth/criticality)", study15_deep_anesthesia.run),
     }
     # Study 7 omitted from the default sweep (Direction B confounded; see file).
-    todo = [args.only] if args.only else [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12]
+    # 13-15 download real EEG (Chennu/Sleep-EDF/ds004541) on first run.
+    todo = [args.only] if args.only else [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15]
     print(f"=== Resonance validation suite ({'PAPER' if args.paper else 'QUICK'} mode) ===\n")
     for n in todo:
         title, fn = studies[n]
