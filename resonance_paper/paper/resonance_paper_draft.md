@@ -290,10 +290,13 @@ figures remain in `figures/study*.{png,pdf}`.
   over wider drive ranges (ρ_width,complexity = −0.50) and score higher
   harmonicity (ρ_width,harmonicity = +0.41).
 
-- **Fig. 4 — Resonance, computation and criticality.**
+- **Fig. 4 — Resonance is a signature of criticality (three systems).**
   `paper/figures/Fig4_criticality`. (A) Branching network: harmonic structure H
-  peaks at the critical branching ratio σ = 1, tracking susceptibility and
-  avalanche power-law fit. (B) Echo-state reservoir: resonance R and memory
-  capacity both peak in the ordered regime, below the edge of chaos.
-  (C) Wilson–Cowan E/I network: cross E↔I phase coupling switches on at the
-  synchronization onset, coincident with the susceptibility peak.
+  peaks at the critical branching ratio (σ = 1.00 [0.97, 1.08]), co-located with
+  the susceptibility and avalanche-power-law peaks. (B) Echo-state reservoir
+  driven by **white noise**: harmonic structure of the emergent mode is generated
+  *at the edge of chaos* — it rises above the noise baseline only from ρ ≈ 1.3 and
+  peaks at ρ_c = 1.57 [1.44, 1.68], distinct from the memory-capacity optimum
+  (ρ ≈ 0.70). (C) Wilson–Cowan E/I network: cross E↔I phase coupling **rises**
+  from a non-zero asynchronous baseline (PLV ≈ 0.43 → 0.99) at the synchronization
+  onset (g_c = 1.0 [1.0, 1.0]), coincident with the susceptibility peak.
