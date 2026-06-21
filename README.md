@@ -63,14 +63,16 @@ regenerated from those JSONs by
 7. **Harmonic simplicity governs lockability.** For a forced Van der Pol
    oscillator, Arnold-tongue width vs ratio complexity correlates ρ = −0.50, and
    the framework's harmonicity tracks tongue width at ρ = +0.41.
-8. **Resonance maps onto criticality, not raw computation** (paper-grade, 12–20
-   seed replicates + bootstrap CIs). Harmonic structure `H` peaks at the critical
-   branching ratio (σ = 1.00 [0.97, 1.08], co-located with the susceptibility
-   peak); reservoir resonance is highest in the ordered regime and **collapses in
-   chaos** past the edge (ρ_c = 1.57 [1.44, 1.68]) — and does **not** track memory
-   capacity (ρ = −0.32, an honest null); cross E↔I phase coupling **rises** from a
-   non-zero asynchronous baseline (PLV ≈ 0.43 → 0.99, ΔPC ≈ +0.55) at the
-   synchronization onset (g_c = 1.0) — it does not switch on from zero.
+8. **Resonance is a signature of criticality, across three independent systems**
+   (paper-grade, 12–20 seed replicates + bootstrap CIs). (a) Harmonic structure
+   `H` peaks at the critical branching ratio (σ = 1.00 [0.97, 1.08], co-located
+   with the susceptibility peak). (b) A reservoir driven by **white noise**
+   *generates* harmonic structure specifically at the **edge of chaos** — H rises
+   above the noise baseline only from ρ ≈ 1.3, peaking at ρ_c = 1.57 [1.44, 1.68]
+   (and distinct from generic spectral peakedness, which keeps rising into chaos,
+   and from its memory-capacity optimum at ρ ≈ 0.70). (c) Cross E↔I phase coupling
+   **rises** from a non-zero asynchronous baseline (PLV ≈ 0.43 → 0.99, ΔPC ≈ +0.55)
+   at the synchronization onset (g_c = 1.0) — it does not switch on from zero.
 
 ## Figures
 
@@ -139,7 +141,7 @@ repository root (the studies form the importable `resonance_paper` package).
 | 8 | [study8_arnold_tongues.py](resonance_paper/study8_arnold_tongues.py) | Does harmonic complexity govern lockability? | forced Van der Pol | width~complexity ρ=−0.50, width~harmonicity ρ=+0.41 |
 | 9 | [study9_reservoir.py](resonance_paper/study9_reservoir.py) | Resonance vs reservoir memory? | echo-state network | R vs memory ρ=−0.32 (honest null) |
 | 10 | [study10_criticality.py](resonance_paper/study10_criticality.py) | Resonance vs criticality (avalanches)? | branching network | H peaks at σ=1.00 [0.97,1.08]; R≈0 (avalanches non-oscillatory) |
-| 11 | [study11_reservoir_criticality.py](resonance_paper/study11_reservoir_criticality.py) | Resonance vs the edge of chaos? | echo-state network | R highest when ordered, collapses past ρ_c=1.57 [1.44,1.68] |
+| 11 | [study11_reservoir_criticality.py](resonance_paper/study11_reservoir_criticality.py) | Does criticality GENERATE resonance (noise-driven)? | echo-state network | noise→harmonic structure generated at the edge of chaos (onset ρ≈1.3, peak ρ_c=1.57) |
 | 12 | [study12_ei_network.py](resonance_paper/study12_ei_network.py) | Resonance vs the edge of synchronization? | Wilson–Cowan E/I | E↔I phase coupling rises (PLV 0.43→0.99) at g_c=1.0, not from 0 |
 
 Study 7 is retained for the record but **excluded from the default sweep**: its

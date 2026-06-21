@@ -227,15 +227,19 @@ def figure4():
     axes[0].legend(loc="lower center", fontsize=6)
     panel(axes[0], "A")
 
-    # B: reservoir — resonance vs computation vs edge of chaos
+    # B: reservoir — harmonic structure GENERATED from noise, peaks at edge of chaos
     r = s11["rows"]; rho = [x["rho"] for x in r]; rc = s11["summary"]["rho_critical"]
-    axes[1].plot(rho, nrm([x["memory_capacity"] for x in r]), "o-", color=BLUE, label="memory capacity")
-    axes[1].plot(rho, nrm([x["R_internal"] for x in r]), "s-", color=RED, label="resonance R")
+    base = s11["summary"].get("H_input_baseline", 0.0)
+    Hint = np.array([x["H_internal"] for x in r], float)
+    axes[1].plot(rho, Hint, "s-", color=RED, label="H of emergent mode (PC1)")
+    axes[1].axhline(base, color=RED, ls=":", lw=0.8, label=f"noise-input baseline {base:.2f}")
+    axes[1].plot(rho, nrm([x["memory_capacity"] for x in r]) * np.nanmax(Hint),
+                 "o-", color=BLUE, alpha=0.55, label="memory capacity (scaled)")
     if np.isfinite(rc):
-        axes[1].axvline(rc, color="k", ls="--", lw=0.7, label=f"edge of chaos")
-    axes[1].set_xlabel("spectral radius ρ"); axes[1].set_ylabel("normalized")
-    axes[1].set_title("Reservoir\n(R highest when ordered; dies in chaos)")
-    axes[1].legend(loc="lower center", fontsize=6)
+        axes[1].axvline(rc, color="k", ls="--", lw=0.7, label="edge of chaos")
+    axes[1].set_xlabel("spectral radius ρ"); axes[1].set_ylabel("harmonicity H")
+    axes[1].set_title("Reservoir\n(noise→harmonic structure, peaks at edge)")
+    axes[1].legend(loc="upper left", fontsize=6)
     panel(axes[1], "B")
 
     # C: E/I network — phase coupling RISES (from a non-zero baseline) at sync onset

@@ -17,36 +17,37 @@ same object: the critical point of a dynamical phase transition between an order
 across that transition — in two complementary models — answers both questions at
 once.
 
-- **Reservoir / echo-state network** — tunable via spectral radius ρ; can be
-  driven by oscillatory input, so it supports genuine phase-coupling resonance.
+- **Reservoir / echo-state network** — tunable via spectral radius ρ; driven by
+  white noise to test whether near-critical dynamics *generate* harmonic resonance.
 - **Branching neural network** — the canonical model of neuronal criticality;
   tunable via branching ratio σ, with power-law avalanches at σ = 1. Scale-free
   but *not* oscillatory.
 
 ## What we found
 
-### Reservoir (Studies 9, 11)
-Locating the edge of chaos by a Lyapunov divergence estimate (ρ_c ≈ 1.57
-[1.44, 1.68], n = 16 reservoirs):
+### Reservoir (Studies 9, 11) — does criticality GENERATE resonance?
+Study 11 was redesigned. Echoing a *fixed harmonic input* is flat-until-chaos and
+uninformative (the ordered reservoir just passes the input through). Instead we
+drive the reservoir with **white noise** (no harmonic content, flat spectrum) and
+ask whether its dynamics *manufacture* harmonic structure in the dominant emergent
+mode (PC1), as a function of ρ. Edge of chaos (Lyapunov λ = 0) at
+ρ_c ≈ 1.57 [1.44, 1.68] (n = 16 reservoirs).
 
-| quantity | peaks at | regime |
-|---|---|---|
-| memory capacity (computation) | ρ ≈ 0.70 | ordered, below ρ_c |
-| harmonic resonance R (driven) | no sharp peak; ~flat for ρ ≲ 1.5 | ordered |
-| — R collapses for | ρ > ρ_c (chaos) | chaotic |
-
-- Harmonic resonance R is **small and roughly flat across the ordered regime**
-  (its argmax CI is wide — ρ ≈ 0.3 [0.2, 1.5] — i.e. there is *no* well-defined
-  peak), and then **declines monotonically once the network passes the edge of
-  chaos**: chaos destroys harmonic resonance. (The earlier quick pass that put a
-  peak at ρ ≈ 1.3 was a few-seed artifact.)
-- Memory capacity (computation) peaks in the ordered regime (ρ ≈ 0.70), below
-  ρ_c — so **both** resonance and computation live below the edge of chaos, not
-  at it.
-- The reservoir does **not** amplify input harmonic resonance: internal/input R
-  ≈ 0.8–0.9 (< 1) across the ordered regime and falls further in chaos. RC is a
-  useful testbed for *how dynamics shape resonance*, but it neither generates nor
-  amplifies it.
+- **The reservoir generates harmonic resonance from noise — specifically at the
+  edge of chaos.** Harmonicity of the emergent mode sits at/below the white-noise
+  baseline (H_input ≈ 0.45) throughout the ordered regime (H_gain ≤ 0 for
+  ρ ≲ 1.1), then **switches on at the approach to criticality** — H_gain's 95% CI
+  clears 0 at ρ ≈ 1.30, just below ρ_c — and **peaks at the edge of chaos**
+  (ρ ≈ 1.50, H_gain = +0.15 [+0.06, +0.25]), staying elevated in the chaotic
+  regime. The tanh nonlinearity folds the emergent collective oscillation into
+  integer harmonics.
+- **Harmonicity and generic peakedness dissociate.** Generic spectral peakedness
+  rises *monotonically* with ρ (0.13 → 0.69, deep into chaos), but *harmonic*
+  (integer-related) structure specifically onsets and peaks at the edge of chaos.
+  So criticality generates **resonance**, not just any spectral structure.
+- Memory capacity (computation) peaks deeper in the ordered regime (ρ ≈ 0.70),
+  **distinct** from where harmonic generation switches on — resonance generation
+  and linear computation are different regimes.
 
 ### Branching network (Study 10)
 Sweeping σ through the critical point (criticality markers — susceptibility,
@@ -94,22 +95,24 @@ criticality, and the difference is interpretable:
   in the **structured, near-critical-but-ordered** regime, collapsing in disorder
   (chaos) and absent in non-oscillatory avalanche criticality.
 
-In one line: **harmonic structure tracks criticality; harmonic resonance lives in
-the ordered regime and rises at the synchronization transition, collapsing in chaos.**
+In one line: **harmonic/resonant structure is a signature of criticality across
+three independent systems — it peaks at branching criticality, is generated from
+noise at the reservoir's edge of chaos, and rises at the E/I synchronization onset.**
 
 Across all three models the story is consistent:
-- branching network: H peaks AT criticality (σ = 1.00 [0.97, 1.08]); R ≈ 0 (no oscillations).
-- reservoir: R is highest in the ordered regime (flat, no sharp peak) and collapses past the edge of chaos (ρ_c ≈ 1.57 [1.44, 1.68]).
+- branching network: H peaks AT criticality (σ = 1.00 [0.97, 1.08]); R ≈ 0 (no oscillations to phase-lock).
+- reservoir: driven by NOISE, harmonic structure is GENERATED at the edge of chaos (onset ρ ≈ 1.3, peak at ρ_c ≈ 1.57), and is distinct from generic peakedness (which keeps rising into chaos).
 - E/I network: E↔I phase coupling rises from a non-zero asynchronous baseline (≈0.43 → ≈0.99, ΔPC ≈ +0.55) at the synchronization onset (g_c ≈ 1.0) and saturates.
 
 ## Can reservoir computing "model" resonance?
-Mostly not. A driven reservoir does **not** amplify the harmonic resonance of its
-input (internal/input ≈ 0.8–0.9, < 1, across the ordered regime; it falls further
-in chaos), and its internal resonance is a readable but weak function of the
-dynamical regime. Resonance is **not** a proxy for computational capacity either
-(memory capacity peaks at ρ ≈ 0.70, where R is flat). So RC is a useful testbed
-for *how dynamics shape resonance* — chiefly, that chaos destroys it — but it
-neither generates, amplifies, nor is gated by reservoir computation.
+Yes, in a specific sense. Driven by structureless **noise**, a reservoir
+**generates** harmonic structure once it reaches the edge of chaos (H_gain clears
+0 at ρ ≈ 1.3 and peaks at ρ_c ≈ 1.57) — the tanh nonlinearity folds the emergent
+collective oscillation into integer harmonics. It does *not* do this in the ordered
+regime (where it merely filters the input), and the generation is **distinct from**
+its computational optimum (memory capacity peaks at ρ ≈ 0.70). So RC is a genuine
+*generative* model of resonance, but only near/beyond criticality — and resonance
+is not a proxy for reservoir computation.
 
 ## Limitations and next steps
 - **Quick-mode, few seeds** — the H-peak-at-criticality (Study 10) and the
