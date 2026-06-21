@@ -1,0 +1,191 @@
+{
+  "quick": false,
+  "n_seeds": 15,
+  "precision_hz": 0.5,
+  "runtime_per_call_s": {
+    "harmsim": 0.2126171064376831,
+    "subharm_tension": 5.636604515711467
+  },
+  "table": [
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_plv",
+      "label": "harmsim|binary|nm_plv",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_plv_canonical",
+      "label": "harmsim|binary|nm_plv_canonical",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_pli",
+      "label": "harmsim|binary|nm_pli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_wpli",
+      "label": "harmsim|binary|nm_wpli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_rrci",
+      "label": "harmsim|binary|nm_rrci",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_plv",
+      "label": "harmsim|fraction|nm_plv",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_plv_canonical",
+      "label": "harmsim|fraction|nm_plv_canonical",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_wpli",
+      "label": "harmsim|fraction|nm_wpli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_rrci",
+      "label": "harmsim|fraction|nm_rrci",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_plv",
+      "label": "subharm_tension|binary|nm_plv",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_plv_canonical",
+      "label": "subharm_tension|binary|nm_plv_canonical",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_pli",
+      "label": "subharm_tension|binary|nm_pli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_plv",
+      "label": "subharm_tension|fraction|nm_plv",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_plv_canonical",
+      "label": "subharm_tension|fraction|nm_plv_canonical",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_wpli",
+      "label": "subharm_tension|fraction|nm_wpli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_rrci",
+      "label": "subharm_tension|fraction|nm_rrci",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 1.0,
+      "auc_mean": 1.0
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_wpli",
+      "label": "subharm_tension|binary|nm_wpli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 0.9955555555555555,
+      "auc_mean": 0.9977777777777778
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "binary",
+      "coupling_metric": "nm_rrci",
+      "label": "subharm_tension|binary|nm_rrci",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 0.9955555555555555,
+      "auc_mean": 0.9977777777777778
+    },
+    {
+      "harmonic_kernel": "harmsim",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_pli",
+      "label": "harmsim|fraction|nm_pli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 0.9688888888888889,
+      "auc_mean": 0.9844444444444445
+    },
+    {
+      "harmonic_kernel": "subharm_tension",
+      "ratio_kernel": "fraction",
+      "coupling_metric": "nm_pli",
+      "label": "subharm_tension|fraction|nm_pli",
+      "auc_harmonic_vs_pink": 1.0,
+      "auc_harmonic_vs_inharmonic": 0.9644444444444444,
+      "auc_mean": 0.9822222222222222
+    }
+  ]
+}

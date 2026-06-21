@@ -1,0 +1,1174 @@
+{
+  "quick": false,
+  "n_surrogates": 100,
+  "n_seeds": 20,
+  "single_signal_baseline_auc": 0.59,
+  "records": [
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 0,
+      "coupled": true,
+      "z": 0.41102825676317595
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 0,
+      "coupled": false,
+      "z": 0.798513385605944
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 1,
+      "coupled": true,
+      "z": -0.15078501568016686
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 1,
+      "coupled": false,
+      "z": 0.5495882588454817
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 2,
+      "coupled": true,
+      "z": -1.0256613988640464
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 2,
+      "coupled": false,
+      "z": -0.3819222722869263
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 3,
+      "coupled": true,
+      "z": -1.3455535927519016
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 3,
+      "coupled": false,
+      "z": -1.5111607300463772
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 4,
+      "coupled": true,
+      "z": -0.5814094978613761
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 4,
+      "coupled": false,
+      "z": 0.8509998737053128
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 5,
+      "coupled": true,
+      "z": 0.5050023712021936
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 5,
+      "coupled": false,
+      "z": -0.2880715150273428
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 6,
+      "coupled": true,
+      "z": 0.7479716506521313
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 6,
+      "coupled": false,
+      "z": 1.0064487073047652
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 7,
+      "coupled": true,
+      "z": -0.2125593987231562
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 7,
+      "coupled": false,
+      "z": 0.678324426971542
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 8,
+      "coupled": true,
+      "z": 0.5906864447311986
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 8,
+      "coupled": false,
+      "z": 0.5471458128502587
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 9,
+      "coupled": true,
+      "z": -1.378851638785599
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 9,
+      "coupled": false,
+      "z": -0.6222523136881343
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 10,
+      "coupled": true,
+      "z": 0.3993633445838089
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 10,
+      "coupled": false,
+      "z": -0.916941997456319
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 11,
+      "coupled": true,
+      "z": -0.45576250151767606
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 11,
+      "coupled": false,
+      "z": -0.5330133592640577
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 12,
+      "coupled": true,
+      "z": -0.16412334537338247
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 12,
+      "coupled": false,
+      "z": -0.29401367375361304
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 13,
+      "coupled": true,
+      "z": -0.8987099512720959
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 13,
+      "coupled": false,
+      "z": -2.56188146069559
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 14,
+      "coupled": true,
+      "z": 0.9547768628233143
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 14,
+      "coupled": false,
+      "z": 0.2548956359157674
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 15,
+      "coupled": true,
+      "z": -0.2904711492938681
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 15,
+      "coupled": false,
+      "z": -0.6933622754002524
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 16,
+      "coupled": true,
+      "z": -0.7166113721151492
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 16,
+      "coupled": false,
+      "z": 0.34237759408057516
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 17,
+      "coupled": true,
+      "z": -0.9050875517330441
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 17,
+      "coupled": false,
+      "z": 0.039849410399633425
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 18,
+      "coupled": true,
+      "z": -1.295110464932747
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 18,
+      "coupled": false,
+      "z": -1.8311632874932329
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 19,
+      "coupled": true,
+      "z": -2.0078415953920388
+    },
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "seed": 19,
+      "coupled": false,
+      "z": 0.12099154451543191
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": true,
+      "z": 5.8364334064628505
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": false,
+      "z": -0.19298114605776692
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": true,
+      "z": 4.974435563073589
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": false,
+      "z": 0.15062240882628275
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": true,
+      "z": 6.161845813014137
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": false,
+      "z": 1.1336919158359877
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": true,
+      "z": 5.141630309945502
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": false,
+      "z": 0.06253807106918469
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": true,
+      "z": 7.412289029367893
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": false,
+      "z": -0.1371444435929436
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": true,
+      "z": 4.702109968346872
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": false,
+      "z": -1.38519185357422
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": true,
+      "z": 4.571282786418752
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": false,
+      "z": 1.4359366017532054
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": true,
+      "z": 4.941317813306033
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": false,
+      "z": -1.1320854946475845
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": true,
+      "z": 6.027974720462283
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": false,
+      "z": -0.8396328804910279
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": true,
+      "z": 4.393595682723398
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": false,
+      "z": -0.9077095905709363
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": true,
+      "z": 6.21688103662685
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": false,
+      "z": -0.3696346394810259
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": true,
+      "z": 4.783754598037093
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": false,
+      "z": -0.12110853602895455
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": true,
+      "z": 4.532945083387023
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": false,
+      "z": -0.7147271849554023
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": true,
+      "z": 5.101436784869473
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": false,
+      "z": -0.9573796278185281
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": true,
+      "z": 5.419556881314028
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": false,
+      "z": -1.196513042155012
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": true,
+      "z": 4.61170184959046
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": false,
+      "z": -0.7681669908911282
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": true,
+      "z": 4.565576569647761
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": false,
+      "z": -0.05852576098345669
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": true,
+      "z": 4.901769945703165
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": false,
+      "z": -0.35541740478760075
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": true,
+      "z": 4.3510315387122995
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": false,
+      "z": -1.1386375335620167
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": true,
+      "z": 4.848367021077508
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": false,
+      "z": 0.09023943546551001
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": true,
+      "z": 8.777073068583329
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": false,
+      "z": 0.15157329790917023
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": true,
+      "z": 7.891134565497737
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": false,
+      "z": -0.8362351130115316
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": true,
+      "z": 7.207695563220165
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": false,
+      "z": 1.6986519017841268
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": true,
+      "z": 7.709610350088071
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": false,
+      "z": 1.216987107015098
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": true,
+      "z": 8.316588302174644
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": false,
+      "z": -1.4649197987612907
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": true,
+      "z": 6.685994295895808
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": false,
+      "z": 0.22690526713448136
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": true,
+      "z": 6.897795196116524
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": false,
+      "z": -0.4615977755147968
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": true,
+      "z": 8.543329579257637
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": false,
+      "z": -0.7693226324351805
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": true,
+      "z": 6.6361571542679645
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": false,
+      "z": 0.6349162196123791
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": true,
+      "z": 7.331474497573457
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": false,
+      "z": -0.7771311255366351
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": true,
+      "z": 7.7477194022644085
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": false,
+      "z": 1.1235199840505268
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": true,
+      "z": 6.9402263355448754
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": false,
+      "z": -0.26788533685712496
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": true,
+      "z": 7.99996109042141
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": false,
+      "z": 0.9293217312038088
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": true,
+      "z": 7.0508948850379145
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": false,
+      "z": 1.1584335805826824
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": true,
+      "z": 7.328394987664467
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": false,
+      "z": -0.019746434342347702
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": true,
+      "z": 7.085870931160068
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": false,
+      "z": 0.7312703015214841
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": true,
+      "z": 7.6294829635563355
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": false,
+      "z": -1.4663602814580317
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": true,
+      "z": 8.066535749750008
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": false,
+      "z": 0.05647732203581523
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": true,
+      "z": 7.0278394877614065
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": false,
+      "z": 0.060761339276569445
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": true,
+      "z": 8.900527049618741
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": false,
+      "z": 1.5719500432617675
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": true,
+      "z": 10.17045075192525
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 0,
+      "coupled": false,
+      "z": -1.4475710878171446
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": true,
+      "z": 10.897033398021119
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 1,
+      "coupled": false,
+      "z": 1.3455365075438643
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": true,
+      "z": 10.045454782500842
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 2,
+      "coupled": false,
+      "z": -1.1976765918200878
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": true,
+      "z": 10.191373875019266
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 3,
+      "coupled": false,
+      "z": -0.8377738104333523
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": true,
+      "z": 9.029438693918078
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 4,
+      "coupled": false,
+      "z": 0.6993278903904001
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": true,
+      "z": 9.337558621012525
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 5,
+      "coupled": false,
+      "z": -1.5857805595000827
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": true,
+      "z": 9.520576903699677
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 6,
+      "coupled": false,
+      "z": 1.33255897120476
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": true,
+      "z": 11.079549952275793
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 7,
+      "coupled": false,
+      "z": -1.2543318759300515
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": true,
+      "z": 9.833913831969403
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 8,
+      "coupled": false,
+      "z": 1.7560366129607703
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": true,
+      "z": 10.87195271076121
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 9,
+      "coupled": false,
+      "z": -0.6706928822863835
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": true,
+      "z": 10.174315862207015
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 10,
+      "coupled": false,
+      "z": 1.587628677579195
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": true,
+      "z": 9.932321715969385
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 11,
+      "coupled": false,
+      "z": -0.8077729162475388
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": true,
+      "z": 9.215563867909598
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 12,
+      "coupled": false,
+      "z": -0.42453286385912503
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": true,
+      "z": 8.741934645234238
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 13,
+      "coupled": false,
+      "z": -1.1161423453569388
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": true,
+      "z": 10.027862776890862
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 14,
+      "coupled": false,
+      "z": -0.5109485263383968
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": true,
+      "z": 10.002546881881075
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 15,
+      "coupled": false,
+      "z": -0.21607561212046603
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": true,
+      "z": 10.606823102139538
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 16,
+      "coupled": false,
+      "z": 1.2089942375613354
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": true,
+      "z": 10.485644408891932
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 17,
+      "coupled": false,
+      "z": 0.3879821917591063
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": true,
+      "z": 9.525123440232232
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 18,
+      "coupled": false,
+      "z": -0.08293441908462397
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": true,
+      "z": 9.646630869774427
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "seed": 19,
+      "coupled": false,
+      "z": -1.1714584488804196
+    }
+  ],
+  "auc": [
+    {
+      "regime": "shared_harmonic",
+      "axis": "H",
+      "auc": 0.4275,
+      "ci": [
+        0.2525,
+        0.5975624999999997
+      ],
+      "coupled_mean_z": -0.39098547717702126,
+      "uncoupled_mean_z": -0.22223241174585667
+    },
+    {
+      "regime": "lock_1to1",
+      "axis": "PC",
+      "auc": 1.0,
+      "ci": [
+        1.0,
+        1.0
+      ],
+      "coupled_mean_z": 5.1747968201043495,
+      "uncoupled_mean_z": -0.3700913848323717
+    },
+    {
+      "regime": "lock_1to2",
+      "axis": "PC",
+      "auc": 1.0,
+      "ci": [
+        1.0,
+        1.0
+      ],
+      "coupled_mean_z": 7.58871527277275,
+      "uncoupled_mean_z": 0.1748784798735485
+    },
+    {
+      "regime": "lock_2to3",
+      "axis": "PC",
+      "auc": 1.0,
+      "ci": [
+        1.0,
+        1.0
+      ],
+      "coupled_mean_z": 9.966803554611673,
+      "uncoupled_mean_z": -0.150281342533759
+    }
+  ]
+}

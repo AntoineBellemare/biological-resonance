@@ -1,0 +1,773 @@
+{
+  "quick": false,
+  "part_a": {
+    "rows": [
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 0,
+        "harm_score": 1.0,
+        "phase_z": 8.777073068583329,
+        "resonance": 8.777073068583329
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 1,
+        "harm_score": 1.0,
+        "phase_z": 7.891134565497737,
+        "resonance": 7.891134565497737
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 2,
+        "harm_score": 1.0,
+        "phase_z": 7.207695563220165,
+        "resonance": 7.207695563220165
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 3,
+        "harm_score": 1.0,
+        "phase_z": 7.709610350088071,
+        "resonance": 7.709610350088071
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 4,
+        "harm_score": 1.0,
+        "phase_z": 8.316588302174644,
+        "resonance": 8.316588302174644
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 5,
+        "harm_score": 1.0,
+        "phase_z": 6.685994295895808,
+        "resonance": 6.685994295895808
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 6,
+        "harm_score": 1.0,
+        "phase_z": 6.897795196116524,
+        "resonance": 6.897795196116524
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 7,
+        "harm_score": 1.0,
+        "phase_z": 8.543329579257637,
+        "resonance": 8.543329579257637
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 8,
+        "harm_score": 1.0,
+        "phase_z": 6.6361571542679645,
+        "resonance": 6.6361571542679645
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 9,
+        "harm_score": 1.0,
+        "phase_z": 7.331474497573457,
+        "resonance": 7.331474497573457
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 10,
+        "harm_score": 1.0,
+        "phase_z": 7.7477194022644085,
+        "resonance": 7.7477194022644085
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 11,
+        "harm_score": 1.0,
+        "phase_z": 6.9402263355448754,
+        "resonance": 6.9402263355448754
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 12,
+        "harm_score": 1.0,
+        "phase_z": 7.99996109042141,
+        "resonance": 7.99996109042141
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 13,
+        "harm_score": 1.0,
+        "phase_z": 7.0508948850379145,
+        "resonance": 7.0508948850379145
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 14,
+        "harm_score": 1.0,
+        "phase_z": 7.328394987664467,
+        "resonance": 7.328394987664467
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 15,
+        "harm_score": 1.0,
+        "phase_z": 7.085870931160068,
+        "resonance": 7.085870931160068
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 16,
+        "harm_score": 1.0,
+        "phase_z": 7.6294829635563355,
+        "resonance": 7.6294829635563355
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 17,
+        "harm_score": 1.0,
+        "phase_z": 8.066535749750008,
+        "resonance": 8.066535749750008
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 18,
+        "harm_score": 1.0,
+        "phase_z": 7.0278394877614065,
+        "resonance": 7.0278394877614065
+      },
+      {
+        "cond": "HL",
+        "harmonic": true,
+        "locked": true,
+        "seed": 19,
+        "harm_score": 1.0,
+        "phase_z": 8.900527049618741,
+        "resonance": 8.900527049618741
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 0,
+        "harm_score": 1.0,
+        "phase_z": 0.15157329790917023,
+        "resonance": 0.15157329790917023
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 1,
+        "harm_score": 1.0,
+        "phase_z": -0.8362351130115316,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 2,
+        "harm_score": 1.0,
+        "phase_z": 1.6986519017841268,
+        "resonance": 1.6986519017841268
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 3,
+        "harm_score": 1.0,
+        "phase_z": 1.216987107015098,
+        "resonance": 1.216987107015098
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 4,
+        "harm_score": 1.0,
+        "phase_z": -1.4649197987612907,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 5,
+        "harm_score": 1.0,
+        "phase_z": 0.22690526713448136,
+        "resonance": 0.22690526713448136
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 6,
+        "harm_score": 1.0,
+        "phase_z": -0.4615977755147968,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 7,
+        "harm_score": 1.0,
+        "phase_z": -0.7693226324351805,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 8,
+        "harm_score": 1.0,
+        "phase_z": 0.6349162196123791,
+        "resonance": 0.6349162196123791
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 9,
+        "harm_score": 1.0,
+        "phase_z": -0.7771311255366351,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 10,
+        "harm_score": 1.0,
+        "phase_z": 1.1235199840505268,
+        "resonance": 1.1235199840505268
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 11,
+        "harm_score": 1.0,
+        "phase_z": -0.26788533685712496,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 12,
+        "harm_score": 1.0,
+        "phase_z": 0.9293217312038088,
+        "resonance": 0.9293217312038088
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 13,
+        "harm_score": 1.0,
+        "phase_z": 1.1584335805826824,
+        "resonance": 1.1584335805826824
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 14,
+        "harm_score": 1.0,
+        "phase_z": -0.019746434342347702,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 15,
+        "harm_score": 1.0,
+        "phase_z": 0.7312703015214841,
+        "resonance": 0.7312703015214841
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 16,
+        "harm_score": 1.0,
+        "phase_z": -1.4663602814580317,
+        "resonance": 0.0
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 17,
+        "harm_score": 1.0,
+        "phase_z": 0.05647732203581523,
+        "resonance": 0.05647732203581523
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 18,
+        "harm_score": 1.0,
+        "phase_z": 0.060761339276569445,
+        "resonance": 0.060761339276569445
+      },
+      {
+        "cond": "Hn",
+        "harmonic": true,
+        "locked": false,
+        "seed": 19,
+        "harm_score": 1.0,
+        "phase_z": 1.5719500432617675,
+        "resonance": 1.5719500432617675
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 0,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.51736702503744,
+        "resonance": 1.8223920060696823
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 1,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 6.996038259248084,
+        "resonance": 1.6960092749692326
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 2,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.0531882512333945,
+        "resonance": 1.709863818480823
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 3,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.933705795233776,
+        "resonance": 1.9233226170263702
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 4,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.119811461684163,
+        "resonance": 1.7260148998022213
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 5,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.829546414950853,
+        "resonance": 2.140496100594146
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 6,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.36452656756512,
+        "resonance": 2.027764016379423
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 7,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 6.458703710658991,
+        "resonance": 1.5657463540991494
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 8,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.936445562441676,
+        "resonance": 1.923986803016164
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 9,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.9083977857782966,
+        "resonance": 1.91718734200686
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 10,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.30406662663238,
+        "resonance": 1.7706828185775467
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 11,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.366951540827703,
+        "resonance": 2.0283518886855036
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 12,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.583494249730546,
+        "resonance": 2.080847090843769
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 13,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.30350140739117,
+        "resonance": 2.0129700381554354
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 14,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.016090563427896,
+        "resonance": 1.9432946820431265
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 15,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 6.32727202574673,
+        "resonance": 1.5338841274537527
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 16,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 9.533807845633582,
+        "resonance": 2.31122614439602
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 17,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 7.643978138138057,
+        "resonance": 1.8530856092455896
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 18,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 6.462896415005781,
+        "resonance": 1.5667627672741287
+      },
+      {
+        "cond": "nL",
+        "harmonic": false,
+        "locked": true,
+        "seed": 19,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 8.120901004643372,
+        "resonance": 1.9687032738529386
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 0,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -1.0896341052532683,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 1,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.853753932948245,
+        "resonance": 0.20697065041169577
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 2,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.30782980520567144,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 3,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.6367432933579003,
+        "resonance": 0.15436201051100612
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 4,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.28397181121590637,
+        "resonance": 0.06884165120385609
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 5,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.9188903821007038,
+        "resonance": 0.2227613047516858
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 6,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.24609123462172297,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 7,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.7483386919583578,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 8,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.879896072677357,
+        "resonance": 0.21330813883087443
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 9,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.37109042015566646,
+        "resonance": 0.08996131397713127
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 10,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 0.0241256352025938,
+        "resonance": 0.005848638836992436
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 11,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.4054968207877338,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 12,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 1.0827756972641098,
+        "resonance": 0.2624910781246327
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 13,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 2.0069617230923966,
+        "resonance": 0.4865361752951265
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 14,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 1.2375241532360541,
+        "resonance": 0.30000585532995255
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 15,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.2095577346428197,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 16,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.3740612355663309,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 17,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.7173294393731668,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 18,
+        "harm_score": 0.24242424242424243,
+        "phase_z": -0.458708843244092,
+        "resonance": 0.0
+      },
+      {
+        "cond": "nn",
+        "harmonic": false,
+        "locked": false,
+        "seed": 19,
+        "harm_score": 0.24242424242424243,
+        "phase_z": 1.2875445527906653,
+        "resonance": 0.31213201279773706
+      }
+    ],
+    "auc_harmonic": {
+      "auc": 0.8333333333333334,
+      "lo": 0.775,
+      "hi": 0.8916666666666667
+    },
+    "auc_phase": {
+      "auc": 0.8116666666666666,
+      "lo": 0.715,
+      "hi": 0.8983333333333333
+    },
+    "auc_resonance": {
+      "auc": 1.0,
+      "lo": 1.0,
+      "hi": 1.0
+    },
+    "cond_means": {
+      "HL": {
+        "harm": 1.0,
+        "phase": 7.58871527277275,
+        "res": 7.58871527277275
+      },
+      "Hn": {
+        "harm": 1.0,
+        "phase": 0.1748784798735485,
+        "res": 0.4780384047693954
+      },
+      "nL": {
+        "harm": 0.24242424242424238,
+        "phase": 7.739034532550451,
+        "res": 1.8761295836485938
+      },
+      "nn": {
+        "harm": 0.24242424242424238,
+        "phase": 0.2513114881694217,
+        "res": 0.11616094150353454
+      }
+    }
+  },
+  "part_b": {
+    "within_locked_ratio": 52.3608809335004,
+    "within_scrambled_ratio": 25.208722205968176,
+    "auc_within": {
+      "auc": 1.0,
+      "lo": 1.0,
+      "hi": 1.0
+    }
+  }
+}

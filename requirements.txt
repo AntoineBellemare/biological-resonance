@@ -1,0 +1,17 @@
+# Core dependency: the biotuner resonance engine.
+# IMPORTANT: the resonance fixes used by this suite (phase-row alignment,
+# factor-level surrogate z) landed on biotuner `main` AFTER the v0.4.1 PyPI
+# release and the version was not bumped — so `pip install biotuner` (0.4.1)
+# does NOT reproduce these results. Install biotuner from `main`:
+biotuner @ git+https://github.com/AntoineBellemare/biotuner.git@main
+
+# Scientific stack
+numpy>=1.23
+scipy>=1.9
+matplotlib>=3.6
+joblib>=1.2
+scikit-learn>=1.1
+
+# Real-data acquisition / simulation
+mne>=1.4            # PhysioNet EEG (eegbci) auto-download
+neurokit2>=0.2      # ECG / PPG / RSP simulation

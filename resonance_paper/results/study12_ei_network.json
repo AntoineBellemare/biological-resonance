@@ -1,0 +1,121 @@
+{
+  "quick": false,
+  "rows": [
+    {
+      "g": 0.45,
+      "order_param": 0.003263872965132258,
+      "susceptibility": 2.8415741277392665e-06,
+      "autocorr_time": 13.75,
+      "crossEI_H": 4.106037216722257,
+      "crossEI_PC": 0.6028645943384758,
+      "crossEI_R": 2.5913108454699025
+    },
+    {
+      "g": 0.55,
+      "order_param": 0.005745264276581317,
+      "susceptibility": 8.903077022499435e-06,
+      "autocorr_time": 19.875,
+      "crossEI_H": 3.6714862501134995,
+      "crossEI_PC": 0.7488900418121323,
+      "crossEI_R": 2.8232552840652105
+    },
+    {
+      "g": 0.6,
+      "order_param": 0.010007062972695213,
+      "susceptibility": 2.6944038867503744e-05,
+      "autocorr_time": 22.125,
+      "crossEI_H": 3.7980456219310925,
+      "crossEI_PC": 0.9111394088717322,
+      "crossEI_R": 3.473779122968443
+    },
+    {
+      "g": 0.65,
+      "order_param": 0.02569439119807327,
+      "susceptibility": 0.00017857344527210823,
+      "autocorr_time": 17.875,
+      "crossEI_H": 4.685496010592285,
+      "crossEI_PC": 0.9977371254100531,
+      "crossEI_R": 4.674519635663911
+    },
+    {
+      "g": 0.7,
+      "order_param": 0.12814506916137633,
+      "susceptibility": 0.0018001078782125626,
+      "autocorr_time": 12.375,
+      "crossEI_H": 2.670401548740522,
+      "crossEI_PC": 0.9997207296438322,
+      "crossEI_R": 2.6696551527502304
+    },
+    {
+      "g": 0.75,
+      "order_param": 0.16896759911028467,
+      "susceptibility": 0.004258990886872651,
+      "autocorr_time": 10.375,
+      "crossEI_H": 3.0322340490165898,
+      "crossEI_PC": 0.99974642275161,
+      "crossEI_R": 3.031467075530572
+    },
+    {
+      "g": 0.8,
+      "order_param": 0.19497839810672596,
+      "susceptibility": 0.00647894498180915,
+      "autocorr_time": 10.0,
+      "crossEI_H": 3.2741018240651005,
+      "crossEI_PC": 0.9997684457307965,
+      "crossEI_R": 3.2733461531114205
+    },
+    {
+      "g": 0.9,
+      "order_param": 0.2591088402750461,
+      "susceptibility": 0.012506954993580746,
+      "autocorr_time": 9.375,
+      "crossEI_H": 2.955954911612586,
+      "crossEI_PC": 0.9998828199490986,
+      "crossEI_R": 2.9556086666374135
+    },
+    {
+      "g": 1.0,
+      "order_param": 0.3841851865598913,
+      "susceptibility": 0.019604956410508377,
+      "autocorr_time": 11.0,
+      "crossEI_H": 3.026693595027762,
+      "crossEI_PC": 0.999825241869406,
+      "crossEI_R": 3.02616386679147
+    },
+    {
+      "g": 1.15,
+      "order_param": 0.49755948139259787,
+      "susceptibility": 0.01768346576208467,
+      "autocorr_time": 13.0,
+      "crossEI_H": 2.4254048210413663,
+      "crossEI_PC": 0.9999342610775606,
+      "crossEI_R": 2.4252452628486045
+    },
+    {
+      "g": 1.3,
+      "order_param": 0.5479248025558247,
+      "susceptibility": 0.013889943558016522,
+      "autocorr_time": 15.0,
+      "crossEI_H": 3.491058723420686,
+      "crossEI_PC": 0.999890800525565,
+      "crossEI_R": 3.4906771650320563
+    },
+    {
+      "g": 1.5,
+      "order_param": 0.5875087062252153,
+      "susceptibility": 0.010447319253485795,
+      "autocorr_time": 17.0,
+      "crossEI_H": 3.020853445200479,
+      "crossEI_PC": 0.9999269091005261,
+      "crossEI_R": 3.0206319229407086
+    }
+  ],
+  "summary": {
+    "g_critical": 1.0,
+    "g_at_max_susceptibility": 1.0,
+    "g_at_max_autocorr": 0.6,
+    "g_at_max_R": 0.65,
+    "g_at_max_PC": 1.15,
+    "g_at_max_H": 0.65
+  }
+}

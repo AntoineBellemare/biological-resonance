@@ -1,0 +1,133 @@
+{
+  "quick": false,
+  "N": 600,
+  "T": 20000,
+  "rows": [
+    {
+      "sigma": 0.7,
+      "susceptibility": 0.7591300290625,
+      "powerlaw_r2": 0.9963015578601347,
+      "powerlaw_slope": -2.0363393226323145,
+      "branching_est": 0.5504422643891809,
+      "activity_flatness": 0.7736271622756556,
+      "R_max": 2.9771989322709614e-05,
+      "R_avg": 8.783478846153832e-06,
+      "H_max": 0.30285329465006267,
+      "R_flatness": 0.8358824666204514
+    },
+    {
+      "sigma": 0.85,
+      "susceptibility": 3.0130016975,
+      "powerlaw_r2": 0.9975934406829111,
+      "powerlaw_slope": -1.7864848849977613,
+      "branching_est": 0.7663521436765653,
+      "activity_flatness": 0.6858803685428281,
+      "R_max": 1.8860974106667154e-05,
+      "R_avg": 8.407306129310848e-06,
+      "H_max": 0.35591799025391613,
+      "R_flatness": 0.9260191090746583
+    },
+    {
+      "sigma": 0.92,
+      "susceptibility": 8.578327850312501,
+      "powerlaw_r2": 0.9982788308076418,
+      "powerlaw_slope": -1.6654063215607202,
+      "branching_est": 0.8664351792464701,
+      "activity_flatness": 0.6151628481320377,
+      "R_max": 1.8070580737318533e-05,
+      "R_avg": 8.64930204937948e-06,
+      "H_max": 0.42200623943245313,
+      "R_flatness": 0.9149015504219024
+    },
+    {
+      "sigma": 0.97,
+      "susceptibility": 30.34122171,
+      "powerlaw_r2": 0.9978801289517849,
+      "powerlaw_slope": -1.580445876890555,
+      "branching_est": 0.931567445975347,
+      "activity_flatness": 0.544281931545231,
+      "R_max": 1.874047975234405e-05,
+      "R_avg": 8.836420434802856e-06,
+      "H_max": 0.5023790929733086,
+      "R_flatness": 0.8783487127378111
+    },
+    {
+      "sigma": 1.0,
+      "susceptibility": 93.74500612093749,
+      "powerlaw_r2": 0.9966147191073269,
+      "powerlaw_slope": -1.5056993297786643,
+      "branching_est": 0.959869957835273,
+      "activity_flatness": 0.49465236116154665,
+      "R_max": 1.7330354032733778e-05,
+      "R_avg": 8.870134612004013e-06,
+      "H_max": 0.49190785959077676,
+      "R_flatness": 0.8732604423309684
+    },
+    {
+      "sigma": 1.03,
+      "susceptibility": 387.6994683225,
+      "powerlaw_r2": 0.9858104332579739,
+      "powerlaw_slope": -1.4131333681260516,
+      "branching_est": 0.9750135880280834,
+      "activity_flatness": 0.45932814313682613,
+      "R_max": 1.5953177316537658e-05,
+      "R_avg": 8.827079978003534e-06,
+      "H_max": 0.48862338466660576,
+      "R_flatness": 0.8595300639637555
+    },
+    {
+      "sigma": 1.08,
+      "susceptibility": 578.614860349375,
+      "powerlaw_r2": NaN,
+      "powerlaw_slope": NaN,
+      "branching_est": 0.9380506376501558,
+      "activity_flatness": 0.5369065727246743,
+      "R_max": 1.8623650335511857e-05,
+      "R_avg": 8.864707382871787e-06,
+      "H_max": 0.5465610939102941,
+      "R_flatness": 0.8475084865239328
+    },
+    {
+      "sigma": 1.15,
+      "susceptibility": 455.116145906875,
+      "powerlaw_r2": NaN,
+      "powerlaw_slope": NaN,
+      "branching_est": 0.8691424904788514,
+      "activity_flatness": 0.6139282598166388,
+      "R_max": 1.533690118815557e-05,
+      "R_avg": 8.42199912792151e-06,
+      "H_max": 0.4420106403918883,
+      "R_flatness": 0.8910880754023509
+    },
+    {
+      "sigma": 1.3,
+      "susceptibility": 336.243251734375,
+      "powerlaw_r2": NaN,
+      "powerlaw_slope": NaN,
+      "branching_est": 0.751080369736269,
+      "activity_flatness": 0.6940075012003187,
+      "R_max": 2.027807582752112e-05,
+      "R_avg": 7.939608937847123e-06,
+      "H_max": 0.3485472001695674,
+      "R_flatness": 0.8944686257803255
+    },
+    {
+      "sigma": 1.5,
+      "susceptibility": 239.92887424718754,
+      "powerlaw_r2": NaN,
+      "powerlaw_slope": NaN,
+      "branching_est": 0.6250561873099176,
+      "activity_flatness": 0.751079527970143,
+      "R_max": 3.1069697109591755e-05,
+      "R_avg": 8.336279658328958e-06,
+      "H_max": 0.31799270875328267,
+      "R_flatness": 0.8178640573751199
+    }
+  ],
+  "summary": {
+    "sigma_at_max_susceptibility": 1.08,
+    "sigma_at_max_powerlaw": 1.08,
+    "sigma_at_max_R": 1.5,
+    "sigma_at_max_H": 1.08
+  }
+}
