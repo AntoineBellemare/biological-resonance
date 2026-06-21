@@ -105,6 +105,78 @@ def eeg_branching_ratio(data, sf, thresh=3.0, bin_ms=4.0, kmax=20):
 
 
 # ---------------------------------------------------------------------------
+# Population activity + neuronal-avalanche analysis (DCC)
+# ---------------------------------------------------------------------------
+def population_activity(data, sf, mode="gfp", thresh=2.5):
+    """A scalar population-activity TIME SERIES from multichannel EEG -- the
+    in-vivo analog of Study 10's branching-activity A(t), on which to compute
+    *avalanche-resonance* (Investigation #1).
+      mode='gfp'        -> global field power (std across channels per sample)
+      mode='event_rate' -> count of |z|>thresh channels per sample
+    """
+    data = np.atleast_2d(np.asarray(data, float))
+    if mode == "gfp":
+        return data.std(axis=0)
+    z = (data - data.mean(1, keepdims=True)) / (data.std(1, keepdims=True) + 1e-12)
+    return (np.abs(z) > thresh).sum(0).astype(float)
+
+
+def _avalanches_from_activity(A):
+    """Avalanche (size, duration) pairs from a 1-D activity series: an avalanche
+    is a run of A>0 bounded by A==0 bins."""
+    A = np.asarray(A, float)
+    thr = np.median(A[A > 0]) * 0.0 if np.any(A > 0) else 0.0   # active = A>0
+    active = A > thr
+    sizes, durs = [], []
+    cs = cd = 0.0
+    for a, v in zip(active, A):
+        if a:
+            cs += v; cd += 1
+        elif cd > 0:
+            sizes.append(cs); durs.append(cd); cs = cd = 0.0
+    if cd > 0:
+        sizes.append(cs); durs.append(cd)
+    return np.asarray(sizes, float), np.asarray(durs, float)
+
+
+def powerlaw_mle(x, xmin=1.0):
+    """Clauset discrete-power-law MLE exponent."""
+    x = np.asarray(x, float); x = x[x >= xmin]
+    if x.size < 20:
+        return float("nan")
+    return float(1.0 + x.size / np.sum(np.log(x / (xmin - 0.5))))
+
+
+def dcc_from_activity(A):
+    """DCC + avalanche exponents from a 1-D population-activity series."""
+    sizes, durs = _avalanches_from_activity(A)
+    out = dict(tau=float("nan"), alpha=float("nan"), gamma_fit=float("nan"),
+               gamma_pred=float("nan"), dcc=float("nan"), n_avalanches=int(len(sizes)))
+    if len(sizes) < 50:
+        return out
+    tau = powerlaw_mle(sizes, 1.0); alpha = powerlaw_mle(durs, 1.0)
+    out["tau"] = tau; out["alpha"] = alpha
+    uniq = np.unique(durs)
+    mS = np.array([sizes[durs == d].mean() for d in uniq])
+    ok = (uniq > 0) & (mS > 0)
+    if ok.sum() >= 4:
+        gamma_fit = float(np.polyfit(np.log(uniq[ok]), np.log(mS[ok]), 1)[0])
+        out["gamma_fit"] = gamma_fit
+        if np.isfinite(tau) and np.isfinite(alpha) and abs(tau - 1) > 1e-6:
+            gp = (alpha - 1.0) / (tau - 1.0)
+            out["gamma_pred"] = float(gp); out["dcc"] = float(abs(gamma_fit - gp))
+    return out
+
+
+def avalanche_dcc(data, sf, thresh=2.5, bin_ms=4.0):
+    """Deviation-from-Criticality Coefficient (Ma et al. 2019) from multichannel
+    EEG: avalanches in the population event-rate -> size exponent tau, duration
+    exponent alpha; crackling scaling predicts gamma_pred=(alpha-1)/(tau-1);
+    DCC=|gamma_fit-gamma_pred|, ~0 at criticality."""
+    return dcc_from_activity(eeg_event_rate(data, sf, thresh=thresh, bin_ms=bin_ms))
+
+
+# ---------------------------------------------------------------------------
 # self-validation against known ground truth
 # ---------------------------------------------------------------------------
 def _validate():
@@ -122,15 +194,29 @@ def _validate():
     # branching ratio vs known sigma (reuse Study 10's branching process)
     try:
         from resonance_paper.study10_criticality import branching_activity
-        print("branching_ratio_mr validation (m_hat should rank with sigma):")
-        for sigma in (0.80, 0.95, 1.00):
-            ms = []
-            for seed in range(5):
-                A, _ = branching_activity(sigma, N=400, T=8000, seed=seed)
-                ms.append(branching_ratio_mr(A))
+        print("branching_ratio_mr validation (m_hat peaks at sigma=1):")
+        for sigma in (0.80, 0.90, 1.00, 1.10, 1.20):
+            ms = [branching_ratio_mr(branching_activity(sigma, N=500, T=12000, seed=s)[0]) for s in range(6)]
             print(f"  sigma={sigma:.2f} -> m_hat={np.nanmean(ms):.3f}")
     except Exception as exc:  # pragma: no cover
         print(f"  [branching validation skipped: {exc}]")
+
+    # DCC validation on a Poisson-branching avalanche process (real silent bins)
+    def _sim_aval(sigma, n_av, rng):
+        s = []
+        for _ in range(n_av):
+            active = 1
+            while active > 0 and len(s) < 400000:
+                s.append(active)
+                active = min(int(rng.poisson(min(sigma * active, 50.0))), 200)  # cap to avoid runaway
+            s.append(0)
+        return np.asarray(s, float)
+    print("avalanche-exponent validation (Poisson branching; size tau->1.5 at sigma=1):")
+    for sigma in (0.85, 0.95, 1.00, 1.05, 1.15):
+        rng = np.random.default_rng(int(sigma * 100))
+        d = dcc_from_activity(_sim_aval(sigma, 4000, rng))
+        print(f"  sigma={sigma:.2f} -> tau={d['tau']:.2f} |tau-1.5|={abs(d['tau']-1.5):.2f} "
+              f"DCC={d['dcc']:.3f} (n_av={d['n_avalanches']})")
 
 
 if __name__ == "__main__":

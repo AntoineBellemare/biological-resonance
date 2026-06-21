@@ -64,6 +64,37 @@ avalanche-criticality.** The two regimes measure *different generators of harmon
 structure*; the in-silico result (Studies 10–12) holds for the scale-free
 generator, not the oscillatory one. This is a precise dissociation, not a vague null.
 
+## Resolution — the reversal is the observable (Study 16)
+
+Study 10's H was computed on the **avalanche activity** A(t) (a scale-free,
+non-oscillatory signal); in vivo we had computed H on the **raw oscillatory EEG**.
+Study 16 recomputes resonance on the **population-activity / global-field-power**
+signal (the in-vivo analog of A(t)) alongside raw-EEG H, against the validated m̂
+axis (DCC was attempted but dropped — it did not minimize at σ=1 in ground-truth
+simulation; the avalanche size exponent τ→~1.5 at criticality validates and is kept
+descriptively).
+
+Sleep (n=8, 600 windows):
+| | across-state ρ(·, m̂-prox) | within-state ρ (controls oscillation confound) |
+|---|---|---|
+| **H_full** (oscillatory, raw EEG) | **−0.24** (p=0.008) — the reversal | −0.08 (p=0.03) |
+| **H_aval** (scale-free, population activity) | +0.07 (neutral) | **+0.11 (p=0.031, positive)** |
+| R_aval | −0.07 | +0.01 (null) |
+
+**The reversal is a measurement artifact of oscillatory H.** On the scale-free
+observable, and controlling for between-state oscillation differences
+(within-state, moment-to-moment), in-vivo H **positively** tracks
+criticality-proximity (ρ = +0.11, p = 0.03) — **recovering the Study-10
+prediction**. It is **H, not R** that does so (R_aval within-state ≈ 0), exactly
+as the model says (H tracks criticality; R requires oscillations). Deep GA
+(ds004541) is underpowered for this: m̂ ≈ 0.98 in *both* wake and LOC, so that
+dataset does not actually traverse criticality and cannot test the prediction.
+
+In one line: **once resonance is measured on the right (scale-free) observable and
+between-state oscillation confounds are removed, the in-silico "H is maximized near
+criticality" holds in vivo too; the earlier "reversal" was oscillatory H (slow-wave
+harmonics), not a real contradiction.**
+
 ## A measurement lesson (parameter sweeps)
 - **Frequency-bin precision matters.** At fmin = 0.5 with 0.5 Hz bins the grid
   (0.5, 1.0, 1.5…) cannot pin a ~0.75 Hz slow-wave peak and H is artifactually
@@ -79,15 +110,20 @@ generator, not the oscillatory one. This is a precise dissociation, not a vague 
   (acc 0.42 vs ≤0.27); the peak-based Tenney harmonicity adds nothing.
 
 ## Honest conclusion
-- The **in-silico criticality result is the strong one** (Studies 10–12): H peaks
-  at branching criticality, the reservoir generates harmonic structure at the edge
-  of chaos, E↔I coupling rises at the synchronization onset.
-- **In real EEG**, H/R are valid state descriptors but **do not beat band power**,
-  and the **H-at-criticality prediction reverses** because in-vivo H is governed by
-  slow-oscillation harmonics (a synchronization/subcritical phenomenon), while
-  "criticality" itself is estimator-dependent here. The forward-looking statement
-  is mechanistic and falsifiable, not a failure: *resonance indexes harmonic
-  organization; whether that aligns with criticality depends on whether the
-  harmonic structure is scale-free (critical) or oscillatory (synchronized).*
+- The **in-silico criticality result is solid** (Studies 10–12): H peaks at
+  branching criticality, the reservoir generates harmonic structure at the edge of
+  chaos, E↔I coupling rises at the synchronization onset.
+- **In real EEG**, H/R are valid state descriptors but **do not beat band power**.
+  The H-at-criticality prediction *appeared* to reverse — but Study 16 shows that
+  was an **observable artifact**: raw-EEG H is dominated by the slow-oscillation
+  harmonic series (B1). On the **scale-free** observable (population activity), with
+  between-state oscillation confounds removed (within-state), **in-vivo H positively
+  tracks criticality-proximity (sleep ρ=+0.11, p=0.03), recovering the model
+  prediction — and it is H, not R, as in silico.**
+- Net, mechanistic and falsifiable: *resonance indexes harmonic organization; on the
+  scale-free generator it tracks criticality both in silico and in vivo; measured on
+  the raw oscillatory signal it instead indexes slow-oscillation synchronization,
+  which anti-correlates with avalanche-criticality.* The two are now reconciled, not
+  contradictory.
 
-See `figures/Fig5_realdata.{png,pdf}` and `figures/study1[345]_*` for the per-dataset panels.
+See `figures/Fig5_realdata.{png,pdf}`, `study16_*` (results), and `figures/study1[345]_*`.

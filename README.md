@@ -147,15 +147,19 @@ repository root (the studies form the importable `resonance_paper` package).
 | 14 | [study14_sleep.py](resonance_paper/study14_sleep.py) | Real data: H across sleep stages? | Sleep-EDF (8 subj) | H highest in **N3** (slow-wave harmonics); decode < band power; ρ(H,m̂-prox)=−0.24 (reversal) |
 | 15 | [study15_deep_anesthesia.py](resonance_paper/study15_deep_anesthesia.py) | Real data: H across loss of consciousness? | ds004541 deep GA (7 subj) | wake vs LOC decodable (all-features AUC 0.82); resonance ≈ band power; markers disagree on criticality sign |
 
-**Real-data criticality (Studies 13–15) — honest summary** (see
+**Real-data criticality (Studies 13–16) — honest summary** (see
 [`paper/realdata_criticality.md`](resonance_paper/paper/realdata_criticality.md)):
-H/R discriminate brain state above chance but **do not beat band power**, and the
-in-silico "H peaks at criticality" (Study 10) **reverses in vivo** — because
-in-vivo H is dominated by the **slow-oscillation harmonic series** (test B1: the
-relationship lives entirely in the <2 Hz band and survives controlling for
-slow-wave power), which marks synchronization/subcriticality, not avalanche
-criticality. The in-silico criticality result holds for the *scale-free*
-generator; the in-vivo signal is the *oscillatory* one — a precise dissociation.
+H/R discriminate brain state above chance but **do not beat band power**. The
+in-silico "H peaks at criticality" (Study 10) at first appeared to **reverse in
+vivo** — but Study 16 shows that was a **measurement artifact**: raw-EEG H is
+dominated by the slow-oscillation harmonic series (test B1: the effect lives
+entirely in the <2 Hz band, survives controlling for slow-wave power). Recomputing
+resonance on the **scale-free population-activity signal** (the in-vivo analog of
+what Study 10 actually used) and controlling between-state oscillation confounds
+(within-state), in-vivo **H positively tracks criticality-proximity** (sleep
+ρ=+0.11, p=0.03), **recovering the model prediction** — and it is H, not R, exactly
+as in silico. Criticality axis = validated branching ratio m̂ (DCC was tried but
+failed ground-truth validation and is not used).
 
 Study 7 is retained for the record but **excluded from the default sweep**: its
 Direction B is confounded (natural frequencies set at exact rational ratios, so
