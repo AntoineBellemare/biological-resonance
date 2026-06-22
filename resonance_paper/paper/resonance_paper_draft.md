@@ -117,10 +117,17 @@ locking (ρ(PC, κ) = +0.49). The one honest asymmetry: PC is **not** ratio-blin
 (ρ(PC, complexity) = −0.47), because stable mode-locking is physically easier at simple
 ratios (the Arnold-tongue structure, §3.6). So H and PC are conceptually distinct
 measurements — cleanly so for H — but not statistically independent in a real oscillator.
-The dissociation also holds **generatively**: in detuned n:m Kuramoto oscillator pairs, as
-coupling K rises the framework's PC climbs through the synchronization transition
-(PC(2:3): 0.02 → 0.99, ρ(PC,K) = +1.0; same for 3:4, 4:5) while H stays near-constant
-(varies ~6%) — H is blind to the emergent polyrhythmic coupling that PC captures (Fig 1D).
+The construct is also confirmed **generatively** with the physically-correct phase model.
+We couple harmonically-rich phase oscillators so that an n:m resonance is mediated by the
+participating harmonics (oscillator-1's *n*-th meeting oscillator-2's *m*-th), giving it the
+leading-order strength a_n·a_m (Pikovsky et al.). As coupling K rises each pair locks at its
+n:m ratio and the framework's PC climbs through the synchronization transition — but the
+**locking threshold K\* rises with ratio complexity** (K\* = 3.0, 8.6, 24.4 for 2:3, 3:4, 4:5;
+ρ(K\*, n·m) = +1.0): complex ratios, mediated by higher and weaker harmonics, require stronger
+coupling to lock. This is the Arnold-tongue narrowing (§3.6) seen in the *coupling-strength*
+dimension. PC tracks this emergent locking directly, whereas the cross-spectral H responds only
+weakly — and only because locking pulls the frequency onto the exact rational — so the framework's
+phase coupling, not its harmonicity, reports dynamical synchronization (Fig 1D).
 
 ### 3.2 Why R = H·PC *(Fig 2; Study 23)*
 Two results justify the product. **(i) Operator analysis.** With H and PC sampled as
@@ -134,9 +141,10 @@ gate.** Phase-scrambling a harmonic signal preserves its power spectrum exactly,
 *unchanged* (AUC coherent-vs-scrambled = 0.50, blind) while R collapses (AUC = 1.00): R
 adds the phase-coherence requirement H lacks. **Honest scope:** when the factors co-occur
 (coupled oscillators), R does not out-*detect* PC — its value is the interpretable
-decomposition, not detection beyond PC. The conjunction also holds generatively: in the
-detuned n:m Kuramoto pairs, R = H·PC rises with the emergent coupling while H stays flat
-(Fig 2D) — the dynamical analog of the phase-scramble.
+decomposition, not detection beyond PC. The gate also holds generatively: in the
+harmonically-coupled 2:3 oscillators, R = H·PC stays low while harmonicity is present but the
+phases are unlocked, and rises only as coupling brings the phases into n:m lock (Fig 2D) — the
+dynamical analog of the phase-scramble.
 
 ### 3.3 Ground-truth recovery *(Fig 3; Studies 1, 5, 6)*
 Mean harmonicity increases monotonically with known harmonic richness (Spearman ρ =
@@ -227,8 +235,8 @@ is STFT-only; Hilbert/wavelet estimators (registry slots present) are a natural 
 One command reproduces every number and figure.
 
 ## Figures
-- **Fig 1 — The construct** (`method_Fig1_dissociation`): H phase-blind (ρ(H,κ)=0.00); PC tracks κ; independence bars; **generative panel** — detuned n:m Kuramoto, PC(2:3/3:4/4:5) rises with coupling while H flat.
-- **Fig 2 — Why R = H·PC** (`method_Fig2_R_justification`): conjunction beats both factors & disjunctions; phase-scramble shows R adds the phase gate H lacks; **generative panel** — 2:3 Kuramoto, R rises with emergent coupling, H flat.
+- **Fig 1 — The construct** (`method_Fig1_dissociation`): H phase-blind (ρ(H,κ)=0.00); PC tracks κ; independence bars; **generative panel** — harmonically-coupled oscillators, PC locks at the n:m ratio with threshold K\* rising with complexity (K\*=3.0/8.6/24.4 for 2:3/3:4/4:5, ρ=+1.0).
+- **Fig 2 — Why R = H·PC** (`method_Fig2_R_justification`): conjunction beats both factors & disjunctions; phase-scramble shows R adds the phase gate H lacks; **generative panel** — 2:3 oscillators, R gates harmonicity on the emergent phase locking.
 - **Fig 3 — Ground-truth recovery** (`method_Fig3_ground_truth`): H richness ρ=0.98; n:m coupling AUC≈1.0; polyrhythm 1.0.
 - **Fig 4 — Operating characteristics** (`method_Fig4_operating`): detection AUC vs SNR; PC_z null calibration; runtime vs n_freqs.
 - **Fig 5 — Baselines** (`method_Fig5_baselines`): PC_z vs raw n:m PLV; H vs HNR.

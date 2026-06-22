@@ -158,18 +158,20 @@ def figure2():
     ax.set_title("Independence"); ax.legend(loc="lower left")
     panel(ax, "C")
 
-    # D: GENERATIVE dissociation — detuned n:m Kuramoto: PC (n:m phase coupling)
-    #    rises with coupling K, H stays ~flat (spectrum, blind to emergent coupling).
+    # D: GENERATIVE — harmonically-coupled phase oscillators. As coupling K rises each
+    #    pair locks at its n:m ratio, but the threshold K* RISES with ratio complexity
+    #    (n:m via higher/weaker harmonics) — the Arnold tongue in the coupling dimension.
     ax = axes[3]
-    s7 = load("study7_coupled_oscillators.json"); tr = s7["transition"]
-    kcols = {"2:3": PURPLE, "3:4": BLUE, "4:5": GREEN}
+    s7 = load("study7_coupled_oscillators.json"); tr = s7["transition"]; cx = s7["complexity"]
+    kcols = {"2:3": GREEN, "3:4": BLUE, "4:5": RED}
     for label, rows in tr.items():
-        ax.plot([d["K"] for d in rows], [d["PC"] for d in rows], "o-", color=kcols.get(label),
-                ms=3, lw=1.2, label=f"PC {label}")
-    p = tr["2:3"]; Hn = np.array([d["H"] for d in p], float); Hn = Hn / (Hn.max() + 1e-12)
-    ax.plot([d["K"] for d in p], Hn, "s--", color=ORANGE, ms=3, label="H (norm)")
-    ax.set_xlabel("coupling strength K"); ax.set_ylabel("PC  /  H (norm)")
-    ax.set_title("Generative (n:m Kuramoto):\nPC rises, H flat")
+        ax.plot([max(d["K"], 1.0) for d in rows], [d["PC"] for d in rows], "o-",
+                color=kcols.get(label), ms=3, lw=1.2, label=f"{label} (n·m={cx[label]})")
+    ax.axhline(0.5, color="grey", ls=":", lw=0.6)
+    ax.set_xscale("log")
+    ax.set_xlabel("coupling strength K (log)"); ax.set_ylabel("phase coupling PC")
+    rho = s7["corr"]["kstar_vs_complexity"]
+    ax.set_title(f"Generative: complex ratios\nlock later (K*↑ with n·m, ρ={rho:+.1f})")
     ax.legend(fontsize=5.5)
     panel(ax, "D")
 
@@ -392,14 +394,15 @@ def figure7():
     axes[2].set_ylabel("AUC (coherent vs scrambled)"); axes[2].set_title("R adds the phase gate\nH lacks")
     panel(axes[2], "C")
 
-    # D: GENERATIVE — detuned n:m (2:3) Kuramoto: as coupling K rises, R = H·PC rises
-    #    (it gates on the emergent coupling) while H stays flat. The dynamical analog of B.
+    # D: GENERATIVE — harmonically-coupled 2:3 oscillators: as coupling K rises, PC and
+    #    R = H·PC rise (R gates on the emergent coupling) while H stays high throughout —
+    #    R is low when phase coherence is absent despite present harmonicity. Analog of B.
     s7 = load("study7_coupled_oscillators.json"); p = s7["transition"]["2:3"]
     for key, color, lbl in [("H", ORANGE, "H"), ("PC", PURPLE, "PC"), ("R", RED, "R = H·PC")]:
         v = np.array([d[key] for d in p], float); v = v / (v.max() + 1e-12)
         axes[3].plot([d["K"] for d in p], v, "o-", color=color, ms=3, label=lbl)
     axes[3].set_xlabel("coupling strength K"); axes[3].set_ylabel("normalized")
-    axes[3].set_title("Generative (2:3 Kuramoto):\nR tracks emergent coupling, H flat")
+    axes[3].set_title("Generative (2:3 oscillators):\nR gates H by emergent coupling")
     axes[3].legend(fontsize=6); panel(axes[3], "D")
 
     fig.suptitle("Figure 2 — Why R = H·PC: a conjunction (beats both factors; gates harmonicity by phase "

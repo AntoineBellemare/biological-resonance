@@ -137,7 +137,7 @@ repository root (the studies form the importable `resonance_paper` package).
 | 4 | [study4_strategy_comparison.py](resonance_paper/study4_strategy_comparison.py) | Which strategy for which goal? | synthetic | 20 strategies scored; `harmsim·binary·nm_plv` AUC 1.0 |
 | 5 | [study5_cross_signal.py](resonance_paper/study5_cross_signal.py) | Cross-signal coupling recovery (1:1/1:2/2:3)? | synthetic pairs | AUC 1.0 each vs 0.59 single-signal baseline |
 | 6 | [study6_resonance_conjunction.py](resonance_paper/study6_resonance_conjunction.py) | Polyrhythm (2:3:4) recovery? | synthetic | AUC 1.0 |
-| 7 | [study7_coupled_oscillators.py](resonance_paper/study7_coupled_oscillators.py) | Coupled Van der Pol H/PC/R co-variation | generative | Direction A sound; **Direction B confounded** — excluded from the sweep (see file caveat) |
+| 7 | [study7_coupled_oscillators.py](resonance_paper/study7_coupled_oscillators.py) | Generative coupling: harmonically-coupled phase oscillators; locking threshold K\* vs ratio complexity | generative | **K\*=3.0/8.6/24.4 for 2:3/3:4/4:5 (ρ=+1.0): complex ratios lock later**; PC tracks the emergent lock, H blind |
 | 8 | [study8_arnold_tongues.py](resonance_paper/study8_arnold_tongues.py) | Does harmonic complexity govern lockability? | forced Van der Pol | width~complexity ρ=−0.50, width~harmonicity ρ=+0.41 |
 | 9 | [study9_reservoir.py](resonance_paper/study9_reservoir.py) | Resonance vs reservoir memory? | echo-state network | R vs memory ρ=−0.32 (honest null) |
 | 10 | [study10_criticality.py](resonance_paper/study10_criticality.py) | Resonance vs criticality (avalanches)? | branching network | H peaks at σ=1.00 [0.97,1.08]; R≈0 (avalanches non-oscillatory) |
@@ -187,11 +187,16 @@ what Study 10 actually used) and controlling between-state oscillation confounds
 as in silico. Criticality axis = validated branching ratio m̂ (DCC was tried but
 failed ground-truth validation and is not used).
 
-Study 7 is retained for the record but **excluded from the default sweep**: its
-Direction B is confounded (natural frequencies set at exact rational ratios, so
-the n:m phase combination cancels deterministically regardless of coupling). A
-correct Arnold-tongue test with detuned frequencies and real coupling lives in
-Study 8.
+Study 7 is the generative coupling demonstration. It couples harmonically-rich
+phase oscillators so that an n:m resonance is mediated by the participating
+harmonics (oscillator-1's n-th meeting oscillator-2's m-th), giving it the
+leading-order strength a_n·a_m (Pikovsky et al.). Sweeping coupling K at a fixed
+detuning, each pair locks at its n:m ratio with a threshold K\* that **rises with
+ratio complexity** (K\*=3.0/8.6/24.4 for 2:3/3:4/4:5; ρ(K\*,n·m)=+1.0) — the
+Arnold-tongue narrowing (Study 8) seen in the coupling-strength dimension. PC
+tracks the emergent lock; the cross-spectral H responds only weakly (and only via
+the frequency pull at lock). The earlier confounded Direction B (exact-rational
+frequencies, deterministic phase cancellation) was dropped.
 
 ## Methods notes
 

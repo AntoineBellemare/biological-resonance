@@ -62,7 +62,7 @@ CFG = ResonanceConfig(precision_hz=0.5, fmin=2, fmax=60, noverlap=200,
 
 
 def simulate_vdp_pair(ratio, K, sf=SF, duration=16.0, mu=MU, seed=0,
-                      unidirectional=False):
+                      unidirectional=False, detune=0.0):
     """Integrate two coupled Van der Pol oscillators; return (x1, x2).
 
     unidirectional=False : mutual diffusive coupling K(x2-x1), K(x1-x2).
@@ -72,7 +72,7 @@ def simulate_vdp_pair(ratio, K, sf=SF, duration=16.0, mu=MU, seed=0,
     """
     rng = np.random.default_rng(seed)
     w1 = 2 * np.pi * F1
-    w2 = 2 * np.pi * F1 * ratio
+    w2 = 2 * np.pi * F1 * ratio * (1.0 + detune)   # detune so uncoupled drifts; lock emerges with K
     n = int(sf * duration)
     t_eval = np.arange(n) / sf
 
@@ -138,6 +138,35 @@ def simulate_kuramoto_pair(ratio, K, sf=SF, duration=16.0, seed=0,
     return x1.astype(np.float64), x2.astype(np.float64)
 
 
+def harmonic_kuramoto_pair(ratio, K, sf=SF, duration=16.0, seed=0, n_harm=5,
+                           noise=0.03, detune=0.03):
+    """Harmonically-coupled phase oscillators (the physically-correct phase reduction
+    of amplitude-oscillator coupling). For w2/w1 = num/den, the n:m resonance couples
+    oscillator-1's num-th harmonic to oscillator-2's den-th harmonic, so its strength
+    is the PRODUCT of those harmonic amplitudes a_num*a_den (a_k = 0.6^(k-1); Pikovsky
+    et al.). Complex ratios are mediated by higher (weaker) harmonics -> they lock at
+    HIGHER coupling K (Arnold-tongue narrowing in the coupling dimension)."""
+    rng = np.random.default_rng(seed)
+    frac = Fraction(float(ratio)).limit_denominator(8)
+    num, den = frac.numerator, frac.denominator        # w2/w1 = num/den
+    a = lambda k: 0.6 ** (k - 1)
+    wgt = a(num) * a(den)                               # n:m resonance strength
+    w1 = 2 * np.pi * F1; w2 = 2 * np.pi * F1 * ratio * (1.0 + detune)
+    N = int(sf * duration); dt = 1.0 / sf
+    th1 = np.empty(N); th2 = np.empty(N)
+    th1[0], th2[0] = rng.uniform(0, 2 * np.pi, size=2)
+    for i in range(1, N):
+        th1[i] = th1[i - 1] + dt * (w1 + K * wgt * np.sin(den * th2[i - 1] - num * th1[i - 1]))
+        th2[i] = th2[i - 1] + dt * (w2 + K * wgt * np.sin(num * th1[i - 1] - den * th2[i - 1]))
+    rend = lambda th: sum(a(k + 1) * np.sin((k + 1) * th) for k in range(n_harm))
+    cut = int(2 * sf)
+    x1 = rend(th1)[cut:] + noise * rng.standard_normal(N - cut)
+    x2 = rend(th2)[cut:] + noise * rng.standard_normal(N - cut)
+    x1 = (x1 - x1.mean()) / (x1.std() + 1e-12)
+    x2 = (x2 - x2.mean()) / (x2.std() + 1e-12)
+    return x1.astype(np.float64), x2.astype(np.float64)
+
+
 def _bp(x, lo, hi):
     lo = max(lo, 0.5); hi = min(hi, SF / 2 - 0.5)
     b, a = butter(4, [lo / (SF / 2), hi / (SF / 2)], btype="band")
@@ -175,36 +204,46 @@ def framework_nm_plv(x1, x2, f1, f2, bw=2.0):
 
 
 def run(quick=True):
-    seeds = range(3) if quick else range(8)
-    K_list = [0.0, 0.5, 1.0, 2.0, 3.0, 5.0, 8.0]
-    DETUNE = 0.05   # gradual lock across the K range; the lock barely shifts f2 so H stays ~flat (~7%)
+    seeds = range(3) if quick else range(6)
+    K_list = [0.0, 2.0, 5.0, 10.0, 20.0, 40.0, 80.0]
+    DETUNE = 0.03
     RATIOS = [(1.5, "2:3"), (4.0 / 3.0, "3:4"), (1.25, "4:5")]
 
-    # Generative synchronization transition at POLYRHYTHMIC ratios: two detuned
-    # n:m Kuramoto oscillators; as coupling K rises they lock at the n:m ratio.
-    # H (spectral; frequencies fixed) stays flat while PC (n:m phase coupling) and
-    # R = H*PC rise through the transition -> the framework's polyrhythmic phase
-    # coupling tracks EMERGENT coupling that H is blind to.
-    transition = {}
+    # Harmonically-coupled phase oscillators at polyrhythmic ratios. As coupling K
+    # rises each pair locks at its n:m ratio; the locking threshold K* RISES WITH
+    # RATIO COMPLEXITY (n:m mediated by higher, weaker harmonics -> Arnold-tongue
+    # narrowing in the COUPLING dimension). H (spectrum) stays ~flat: blind to coupling.
+    transition = {}; kstar = {}; complexity = {}
     for ratio, label in RATIOS:
+        frac = Fraction(ratio).limit_denominator(8); nm = frac.numerator * frac.denominator
+        complexity[label] = nm
         rows = []
         for K in K_list:
             H, PC, R = [], [], []
             for seed in seeds:
-                x1, x2 = simulate_kuramoto_pair(ratio, K, detune=DETUNE, seed=seed)
+                x1, x2 = harmonic_kuramoto_pair(ratio, K, detune=DETUNE, seed=seed)
                 h, pc, r = framework_HPCR(x1, x2, F1, F1 * ratio)
                 H.append(h); PC.append(pc); R.append(r)
             rows.append(dict(K=float(K), H=float(np.mean(H)), PC=float(np.mean(PC)), R=float(np.mean(R))))
         transition[label] = rows
-        print(f"  ratio {label} (vary K) done", flush=True)
+        ks = float("nan")
+        for a in range(len(rows) - 1):
+            if rows[a]["PC"] < 0.5 <= rows[a + 1]["PC"]:
+                ks = rows[a]["K"] + (0.5 - rows[a]["PC"]) / (rows[a + 1]["PC"] - rows[a]["PC"] + 1e-9) \
+                    * (rows[a + 1]["K"] - rows[a]["K"]); break
+        kstar[label] = ks
+        print(f"  ratio {label} (n*m={nm}) K*={ks:.1f}", flush=True)
 
     from scipy.stats import spearmanr
-    primary = transition["2:3"]; Ks = [d["K"] for d in primary]
-    corr = dict(PC_vs_K=float(spearmanr(Ks, [d["PC"] for d in primary])[0]),
-                R_vs_K=float(spearmanr(Ks, [d["R"] for d in primary])[0]),
-                H_vs_K=float(spearmanr(Ks, [d["H"] for d in primary])[0]))
+    labels = [l for _, l in RATIOS]
+    fin = [(complexity[l], kstar[l]) for l in labels if kstar[l] == kstar[l]]
+    kstar_rho = float(spearmanr([c for c, _ in fin], [k for _, k in fin])[0]) if len(fin) > 2 else float("nan")
+    p = transition["2:3"]; Ks = [d["K"] for d in p]
+    corr = dict(PC_vs_K_2to3=float(spearmanr(Ks, [d["PC"] for d in p])[0]),
+                H_vs_K_2to3=float(spearmanr(Ks, [d["H"] for d in p])[0]),
+                kstar_vs_complexity=kstar_rho)
     result = dict(quick=quick, F1=F1, detune=DETUNE, K_list=list(K_list),
-                  transition=transition, corr=corr)
+                  transition=transition, kstar=kstar, complexity=complexity, corr=corr)
     C.save_json(result, "study7_coupled_oscillators.json")
     _figures(result)
     _headline(result)
@@ -212,43 +251,49 @@ def run(quick=True):
 
 
 def _headline(result):
-    c = result["corr"]; p = result["transition"]["2:3"]
-    Hs = [d["H"] for d in p]
-    h_pct = 100.0 * (max(Hs) - min(Hs)) / (np.mean(Hs) + 1e-12)
-    print("\n  --- Study 7 headline (generative polyrhythmic coupling) ---")
-    print("  detuned n:m Kuramoto, vary coupling K (primary ratio 2:3):")
-    print(f"    PC(2:3): {p[0]['PC']:.2f} (uncoupled) -> {p[-1]['PC']:.2f} (coupled), "
-          f"rho(PC,K)={c['PC_vs_K']:+.2f}; R rho={c['R_vs_K']:+.2f}")
-    print(f"    H near-CONSTANT: {min(Hs):.2f}-{max(Hs):.2f} (varies only {h_pct:.0f}%) "
-          f"while PC changes ~{(p[-1]['PC']-p[0]['PC']):.2f} -> H is blind to coupling")
-    print("  => framework POLYRHYTHMIC phase coupling (n:m) tracks the EMERGENT")
-    print("     synchronization transition; H (spectrum) barely moves; R = H*PC gates on it.")
+    ks = result["kstar"]; cx = result["complexity"]; c = result["corr"]; p = result["transition"]["2:3"]
+    Hs = [d["H"] for d in p]; h_pct = 100.0 * (max(Hs) - min(Hs)) / (np.mean(Hs) + 1e-12)
+    print("\n  --- Study 7 headline (generative coupling: complexity sets the threshold) ---")
+    print("  harmonically-coupled phase oscillators; locking threshold K* (PC=0.5) by ratio:")
+    for l in ["2:3", "3:4", "4:5"]:
+        kk = ks.get(l, float("nan"))
+        print(f"    {l} (n*m={cx[l]:2d}):  K* = {('%.1f' % kk) if kk == kk else '>max'}")
+    print(f"    => K* RISES with ratio complexity (rho={c['kstar_vs_complexity']:+.2f}): "
+          f"complex ratios lock LATER (need stronger coupling)")
+    print(f"  H near-constant for 2:3 ({min(Hs):.2f}-{max(Hs):.2f}, {h_pct:.0f}%) -> blind to coupling; "
+          f"R = H*PC gates on the coupling.")
 
 
 def _figures(result):
     plt = C.setup_mpl()
-    tr = result["transition"]
+    tr = result["transition"]; ks = result["kstar"]; cx = result["complexity"]
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.4))
-    cols = {"2:3": "#6a1b9a", "3:4": "#1565c0", "4:5": "#00897b"}
+    cols = {"2:3": "#2e7d32", "3:4": "#1565c0", "4:5": "#b71c1c"}
 
+    # A: PC(K) transitions shift RIGHT with complexity; H flat (2:3)
     for label, rows in tr.items():
-        axes[0].plot([d["K"] for d in rows], [d["PC"] for d in rows], "o-",
-                     color=cols.get(label), label=f"PC {label}")
+        axes[0].plot([max(d["K"], 1.0) for d in rows], [d["PC"] for d in rows], "o-",
+                     color=cols.get(label), label=f"PC {label} (n·m={cx[label]})")
     p = tr["2:3"]; Hn = np.array([d["H"] for d in p], float); Hn = Hn / (Hn.max() + 1e-12)
-    axes[0].plot([d["K"] for d in p], Hn, "s--", color="#E69F00", label="H (2:3, norm)")
-    axes[0].set_xlabel("coupling strength K"); axes[0].set_ylabel("PC  /  H (norm)")
-    axes[0].set_title("A. Polyrhythmic phase coupling rises with K\n(H flat: blind to coupling)", fontsize=10)
-    axes[0].legend(fontsize=7)
+    axes[0].plot([max(d["K"], 1.0) for d in p], Hn, "s--", color="#E69F00", label="H (2:3, norm)")
+    axes[0].axhline(0.5, color="grey", ls=":", lw=0.7)
+    axes[0].set_xscale("log"); axes[0].set_xlabel("coupling strength K (log)")
+    axes[0].set_ylabel("PC  /  H (norm)")
+    axes[0].set_title("A. Complex ratios lock LATER\n(H flat: blind to coupling)", fontsize=10)
+    axes[0].legend(fontsize=6.5)
 
-    for key, color, lbl in [("H", "#E69F00", "H"), ("PC", "#6a1b9a", "PC"), ("R", "#D55E00", "R = H*PC")]:
-        v = np.array([d[key] for d in p], float); v = v / (v.max() + 1e-12)
-        axes[1].plot([d["K"] for d in p], v, "o-", color=color, label=lbl)
-    c = result["corr"]
-    axes[1].set_xlabel("coupling strength K"); axes[1].set_ylabel("normalized")
-    axes[1].set_title(f"B. R tracks emergent coupling (2:3)\nrho(PC,K)={c['PC_vs_K']:+.2f}, rho(H,K)={c['H_vs_K']:+.2f}", fontsize=10)
-    axes[1].legend(fontsize=8)
-    fig.suptitle("Study 7 - Generative polyrhythmic coupling: framework PC/R track the n:m synchronization "
-                 "transition; H is blind", fontweight="bold", fontsize=10)
+    # B: locking threshold K* rises with ratio complexity
+    labels = ["2:3", "3:4", "4:5"]
+    xs = [cx[l] for l in labels]; ys = [ks[l] for l in labels]
+    axes[1].plot(xs, ys, "o-", color="#6a1b9a", ms=8)
+    for l in labels:
+        if ks[l] == ks[l]:
+            axes[1].annotate(l, (cx[l], ks[l]), fontsize=8, xytext=(5, 2), textcoords="offset points")
+    axes[1].set_xlabel("ratio complexity  n·m"); axes[1].set_ylabel("locking threshold K* (PC=0.5)")
+    axes[1].set_title(f"B. Threshold rises with complexity\n(ρ={result['corr']['kstar_vs_complexity']:+.2f})", fontsize=10)
+
+    fig.suptitle("Study 7 — Generative coupling: complex ratios lock at higher coupling; H is blind",
+                 fontweight="bold", fontsize=10)
     fig.tight_layout()
     C.save_fig(fig, "study7_coupled_oscillators")
 
