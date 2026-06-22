@@ -76,6 +76,16 @@ pairs the `harmsim` harmonic kernel and the `fraction` ratio kernel with the
 convention-correct `nm_plv_canonical` coupling metric. Cross-signal and connectivity
 analyses use `compute_cross_resonance` / `compute_cross_resonance_connectivity`.
 
+**What the coupling is measured on.** Phase coupling is a **phase–phase, polyrhythmic**
+quantity computed between *pairs of spectral components*: the STFT phase estimator gives
+the instantaneous phase θ(f,t) at each frequency bin, the ratio kernel picks the nearest
+rational n:m of f_j/f_i, and the coupling metric measures how consistently the
+generalized phase difference **n·θ_i − m·θ_j** stays fixed over time. This is evaluated
+*within a signal* (cross-frequency coupling between its own peaks → the PC(f) spectrum),
+*between two signals* (`compute_cross_resonance`), and *across channels* (the connectivity
+matrix). It is therefore distinct from 1:1 coherence and from phase–amplitude coupling —
+it detects n:m (polyrhythmic) phase relations between oscillatory components.
+
 **Surrogate inference (factor-level).** Inference compares an observed spectrum to an
 ensemble of phase-randomizing surrogates (AAFT for single signals; IAAFT for
 cross-channel), forming a per-frequency z-score. Crucially, we z-score **each factor (H,
@@ -107,6 +117,10 @@ locking (ρ(PC, κ) = +0.49). The one honest asymmetry: PC is **not** ratio-blin
 (ρ(PC, complexity) = −0.47), because stable mode-locking is physically easier at simple
 ratios (the Arnold-tongue structure, §3.6). So H and PC are conceptually distinct
 measurements — cleanly so for H — but not statistically independent in a real oscillator.
+The dissociation also holds **generatively**: in detuned n:m Kuramoto oscillator pairs, as
+coupling K rises the framework's PC climbs through the synchronization transition
+(PC(2:3): 0.02 → 0.99, ρ(PC,K) = +1.0; same for 3:4, 4:5) while H stays near-constant
+(varies ~6%) — H is blind to the emergent polyrhythmic coupling that PC captures (Fig 1D).
 
 ### 3.2 Why R = H·PC *(Fig 2; Study 23)*
 Two results justify the product. **(i) Operator analysis.** With H and PC sampled as
@@ -120,7 +134,9 @@ gate.** Phase-scrambling a harmonic signal preserves its power spectrum exactly,
 *unchanged* (AUC coherent-vs-scrambled = 0.50, blind) while R collapses (AUC = 1.00): R
 adds the phase-coherence requirement H lacks. **Honest scope:** when the factors co-occur
 (coupled oscillators), R does not out-*detect* PC — its value is the interpretable
-decomposition, not detection beyond PC.
+decomposition, not detection beyond PC. The conjunction also holds generatively: in the
+detuned n:m Kuramoto pairs, R = H·PC rises with the emergent coupling while H stays flat
+(Fig 2D) — the dynamical analog of the phase-scramble.
 
 ### 3.3 Ground-truth recovery *(Fig 3; Studies 1, 5, 6)*
 Mean harmonicity increases monotonically with known harmonic richness (Spearman ρ =
@@ -211,8 +227,8 @@ is STFT-only; Hilbert/wavelet estimators (registry slots present) are a natural 
 One command reproduces every number and figure.
 
 ## Figures
-- **Fig 1 — The construct** (`method_Fig1_dissociation`): H phase-blind (ρ(H,κ)=0.00); PC tracks κ; R interpretive (specificity AUC R 0.66 < PC 0.78).
-- **Fig 2 — Why R = H·PC** (`method_Fig2_R_justification`): conjunction beats both factors & disjunctions; phase-scramble shows R adds the phase gate H lacks.
+- **Fig 1 — The construct** (`method_Fig1_dissociation`): H phase-blind (ρ(H,κ)=0.00); PC tracks κ; independence bars; **generative panel** — detuned n:m Kuramoto, PC(2:3/3:4/4:5) rises with coupling while H flat.
+- **Fig 2 — Why R = H·PC** (`method_Fig2_R_justification`): conjunction beats both factors & disjunctions; phase-scramble shows R adds the phase gate H lacks; **generative panel** — 2:3 Kuramoto, R rises with emergent coupling, H flat.
 - **Fig 3 — Ground-truth recovery** (`method_Fig3_ground_truth`): H richness ρ=0.98; n:m coupling AUC≈1.0; polyrhythm 1.0.
 - **Fig 4 — Operating characteristics** (`method_Fig4_operating`): detection AUC vs SNR; PC_z null calibration; runtime vs n_freqs.
 - **Fig 5 — Baselines** (`method_Fig5_baselines`): PC_z vs raw n:m PLV; H vs HNR.

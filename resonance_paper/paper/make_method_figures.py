@@ -158,23 +158,24 @@ def figure2():
     ax.set_title("Independence"); ax.legend(loc="lower left")
     panel(ax, "C")
 
-    # D: specificity — R does NOT beat PC (honest)
+    # D: GENERATIVE dissociation — detuned n:m Kuramoto: PC (n:m phase coupling)
+    #    rises with coupling K, H stays ~flat (spectrum, blind to emergent coupling).
     ax = axes[3]
-    keys = ["H", "PC", "R"]; cols = [ORANGE, PURPLE, RED]
-    aucs = [sp[k]["auc"] for k in keys]
-    los = [sp[k]["auc"] - sp[k]["lo"] for k in keys]
-    his = [sp[k]["hi"] - sp[k]["auc"] for k in keys]
-    ax.bar(range(3), aucs, color=cols, alpha=0.9, yerr=[los, his], capsize=3,
-           error_kw=dict(lw=0.8))
-    ax.axhline(0.5, color="k", ls="--", lw=0.7)
-    ax.set_xticks(range(3)); ax.set_xticklabels(keys); ax.set_ylim(0, 1.05)
-    ax.set_ylabel("specificity AUC")
-    ax.set_title("R = H·PC is interpretive\n(does not beat PC)")
+    s7 = load("study7_coupled_oscillators.json"); tr = s7["transition"]
+    kcols = {"2:3": PURPLE, "3:4": BLUE, "4:5": GREEN}
+    for label, rows in tr.items():
+        ax.plot([d["K"] for d in rows], [d["PC"] for d in rows], "o-", color=kcols.get(label),
+                ms=3, lw=1.2, label=f"PC {label}")
+    p = tr["2:3"]; Hn = np.array([d["H"] for d in p], float); Hn = Hn / (Hn.max() + 1e-12)
+    ax.plot([d["K"] for d in p], Hn, "s--", color=ORANGE, ms=3, label="H (norm)")
+    ax.set_xlabel("coupling strength K"); ax.set_ylabel("PC  /  H (norm)")
+    ax.set_title("Generative (n:m Kuramoto):\nPC rises, H flat")
+    ax.legend(fontsize=5.5)
     panel(ax, "D")
 
-    fig.suptitle("Figure 1 — The construct: harmonicity is phase-blind, phase coupling tracks locking, "
-                 "and R is an interpretive decomposition",
-                 fontsize=9.5, fontweight="bold", y=1.05)
+    fig.suptitle("Figure 1 — The construct: harmonicity is phase-blind, phase coupling tracks locking "
+                 "(synthetic grid + generative n:m oscillators)",
+                 fontsize=9, fontweight="bold", y=1.05)
     fig.tight_layout()
     save(fig, "method_Fig1_dissociation")
 
@@ -234,14 +235,14 @@ def figure3():
 def figure4():
     s4 = load("study4_strategy_comparison.json"); s8 = load("study8_arnold_tongues.json")
     table = s4["table"]; rt = s4["runtime_per_call_s"]
-    fig, axes = plt.subplots(1, 4, figsize=(COL2 * 1.28, 2.6))
+    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.6))
 
-    # A: ALL 20 configs — accuracy saturates (choice barely matters on this task);
-    #    the honest message is "every strategy works; differentiate on speed (B)".
+    # A: ALL 20 configs — accuracy saturates; the practical decision is runtime, noted inline.
     aucs = sorted(r["auc_mean"] for r in table)
     best_label = "harmsim|fraction|nm_plv_canonical"
     rec = next((r["auc_mean"] for r in table if r["label"] == best_label), max(aucs))
     worst = min(table, key=lambda r: r["auc_mean"])
+    speed = rt.get("subharm_tension", np.nan) / max(rt.get("harmsim", np.nan), 1e-9)
     x = np.arange(len(aucs))
     axes[0].scatter(x, aucs, s=18, color=GREY, alpha=0.8, zorder=2)
     axes[0].scatter([len(aucs) - 1], [rec], s=40, color=GREEN, zorder=3, label="recommended")
@@ -249,42 +250,31 @@ def figure4():
     axes[0].set_ylim(0.975, 1.004); axes[0].set_xticks([])
     axes[0].set_xlabel("20 kernel × metric configs (sorted)")
     axes[0].set_ylabel("mean AUC")
-    axes[0].set_title(f"Accuracy saturates\n(all configs {min(aucs):.3f}–{max(aucs):.3f})")
+    axes[0].set_title(f"Accuracy saturates ({min(aucs):.3f}–{max(aucs):.3f})\n→ choose on speed (harmsim ~{speed:.0f}× faster)")
     axes[0].legend(loc="lower right", fontsize=6)
-    axes[0].annotate(worst["label"].replace("nm_", "").replace("|", "\n"),
-                     (0, worst["auc_mean"]), xytext=(8, -2), textcoords="offset points", fontsize=5.2)
     panel(axes[0], "A")
 
-    # B: runtime — the real differentiator (harmsim vs subharm_tension per call)
-    hs, sub = rt.get("harmsim", np.nan), rt.get("subharm_tension", np.nan)
-    axes[1].bar([0, 1], [hs, sub], color=[GREEN, GREY], alpha=0.85, width=0.6)
-    for i, v in enumerate([hs, sub]):
-        axes[1].text(i, v, f"{v:.2f}s", ha="center", va="bottom", fontsize=7)
-    axes[1].set_xticks([0, 1]); axes[1].set_xticklabels(["harmsim", "subharm_\ntension"], fontsize=7)
-    axes[1].set_ylabel("runtime / call (s)")
-    axes[1].set_title(f"Speed is the differentiator\n(harmsim ~{sub / max(hs, 1e-9):.0f}× faster)")
+    # B: devil's staircase
+    st = s8["staircase"]
+    axes[1].plot([d["Omega"] for d in st], [d["rho"] for d in st], ".", color=BLUE, ms=2.5)
+    axes[1].set_xlabel("drive ratio  Ω"); axes[1].set_ylabel("rotation number  ρ")
+    axes[1].set_title("Devil's staircase\n(forced Van der Pol)")
     panel(axes[1], "B")
 
-    # C: devil's staircase
-    st = s8["staircase"]
-    axes[2].plot([d["Omega"] for d in st], [d["rho"] for d in st], ".", color=BLUE, ms=2.5)
-    axes[2].set_xlabel("drive ratio  Ω"); axes[2].set_ylabel("rotation number  ρ")
-    axes[2].set_title("Devil's staircase\n(forced Van der Pol)")
-    panel(axes[2], "C")
-
-    # D: tongue width vs complexity, colored by harmonicity
+    # C: tongue width vs complexity, colored by harmonicity
     t = s8["tongues"]
     comps = np.array([r["complexity"] for r in t]); widths = np.array([r["width"] for r in t])
     hs = np.array([r["harmsim_pair"] for r in t])
-    sc = axes[3].scatter(comps, widths, c=hs, cmap="viridis", s=55, edgecolor="k", linewidth=0.5, zorder=3)
-    cb = plt.colorbar(sc, ax=axes[3], fraction=0.046, pad=0.03); cb.set_label("harmonicity", fontsize=7)
-    axes[3].set_xlabel("ratio complexity  p·q"); axes[3].set_ylabel("Arnold tongue width")
+    sc = axes[2].scatter(comps, widths, c=hs, cmap="viridis", s=55, edgecolor="k", linewidth=0.5, zorder=3)
+    cb = plt.colorbar(sc, ax=axes[2], fraction=0.046, pad=0.03); cb.set_label("harmonicity", fontsize=7)
+    axes[2].set_xlabel("ratio complexity  p·q"); axes[2].set_ylabel("Arnold tongue width")
     c = s8["corr"]
-    axes[3].set_title(f"Lockability vs complexity\nρ={c['width_vs_complexity']:+.2f}")
-    panel(axes[3], "D")
+    axes[2].set_title(f"Lockability vs complexity\nρ={c['width_vs_complexity']:+.2f}")
+    panel(axes[2], "C")
 
-    fig.suptitle("Figure 6 — Method choices (strategy registry) and the mechanism: harmonic simplicity governs lockability",
-                 fontsize=9.5, fontweight="bold", y=1.05)
+    fig.suptitle("Figure 6 — Method choices (strategy registry; accuracy saturates, choose on speed) "
+                 "and the mechanism: harmonic simplicity governs lockability",
+                 fontsize=9, fontweight="bold", y=1.05)
     fig.tight_layout()
     save(fig, "method_Fig6_strategy_mechanism")
 
@@ -374,7 +364,7 @@ def figure7():
     s = load("study23_R_justification.json"); A = s["part_a"]; B = s["part_b"]
     rules = ["product", "geomean", "harmmean", "min", "max", "mean"]
     conj = {"product", "geomean", "harmmean", "min"}
-    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.7))
+    fig, axes = plt.subplots(1, 4, figsize=(COL2 * 1.32, 2.7))
 
     keys = ["H", "PC"] + [f"R[{r}]" for r in rules]
     aucs = [A["auc"][k] for k in keys]
@@ -402,8 +392,18 @@ def figure7():
     axes[2].set_ylabel("AUC (coherent vs scrambled)"); axes[2].set_title("R adds the phase gate\nH lacks")
     panel(axes[2], "C")
 
-    fig.suptitle("Figure 2 — Why R = H·PC: a conjunction (beats both factors under independence) "
-                 "gating harmonicity by phase coherence", fontsize=9.5, fontweight="bold", y=1.04)
+    # D: GENERATIVE — detuned n:m (2:3) Kuramoto: as coupling K rises, R = H·PC rises
+    #    (it gates on the emergent coupling) while H stays flat. The dynamical analog of B.
+    s7 = load("study7_coupled_oscillators.json"); p = s7["transition"]["2:3"]
+    for key, color, lbl in [("H", ORANGE, "H"), ("PC", PURPLE, "PC"), ("R", RED, "R = H·PC")]:
+        v = np.array([d[key] for d in p], float); v = v / (v.max() + 1e-12)
+        axes[3].plot([d["K"] for d in p], v, "o-", color=color, ms=3, label=lbl)
+    axes[3].set_xlabel("coupling strength K"); axes[3].set_ylabel("normalized")
+    axes[3].set_title("Generative (2:3 Kuramoto):\nR tracks emergent coupling, H flat")
+    axes[3].legend(fontsize=6); panel(axes[3], "D")
+
+    fig.suptitle("Figure 2 — Why R = H·PC: a conjunction (beats both factors; gates harmonicity by phase "
+                 "coherence) — shown abstractly and generatively", fontsize=9, fontweight="bold", y=1.04)
     fig.tight_layout(); save(fig, "method_Fig2_R_justification")
 
 

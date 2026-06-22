@@ -26,6 +26,7 @@ def main():
         study1_ground_truth, study2_eeg_states,
         study3_cross_modality, study4_strategy_comparison,
         study5_cross_signal, study6_resonance_conjunction,
+        study7_coupled_oscillators,
         study8_arnold_tongues, study9_reservoir,
         study10_criticality, study11_reservoir_criticality,
         study12_ei_network, study13_anesthesia, study14_sleep,
@@ -43,6 +44,7 @@ def main():
         4: ("Strategy comparison", study4_strategy_comparison.run),
         5: ("Cross-signal coupling recovery", study5_cross_signal.run),
         6: ("Polyrhythm recovery", study6_resonance_conjunction.run),
+        7: ("Generative polyrhythmic coupling (n:m Kuramoto)", study7_coupled_oscillators.run),
         8: ("Arnold tongues / harmonic complexity", study8_arnold_tongues.run),
         9: ("Reservoir: resonance vs computation", study9_reservoir.run),
         10: ("Criticality (branching network)", study10_criticality.run),
@@ -65,12 +67,13 @@ def main():
         # 20b real-data FFR companion (downloads OSF 5puhb on first run; --only 20b)
         "20b": ("Real EEG: FFR consonance harmonicity (Study 20b)", study20b_ffr_consonance.run),
     }
-    # Study 7 omitted from the default sweep (Direction B confounded; see file).
+    # Study 7 = generative polyrhythmic coupling (Direction A; the confounded Direction B
+    # was dropped — Study 8 covers ratio-complexity -> lockability).
     # 13-16 + 20b download real EEG (Chennu/Sleep-EDF/ds004541/OSF-5puhb) on first run;
     # 16 and 20b are investigations/companions (kept out of the default sweep, run via --only).
     def _key(s):
         return int(s) if s.isdigit() else s
-    todo = [_key(args.only)] if args.only else [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15,
+    todo = [_key(args.only)] if args.only else [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
                                                 17, 18, 19, 20, 21, 22, 23, 24, 25]
     print(f"=== Resonance validation suite ({'PAPER' if args.paper else 'QUICK'} mode) ===\n")
     for n in todo:
