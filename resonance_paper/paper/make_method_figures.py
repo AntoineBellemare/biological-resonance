@@ -49,6 +49,11 @@ plt.rcParams.update({
 })
 COL2 = 7.2
 
+# Figure-level suptitles are omitted: the compiled manuscript supplies full captions
+# instead (editorial preference). Panel labels/titles are kept as in-figure content.
+import matplotlib.figure as _mfig
+_mfig.Figure.suptitle = lambda self, *a, **k: None
+
 
 def load(name):
     return json.loads((RESULTS / name).read_text())

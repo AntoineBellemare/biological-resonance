@@ -19,6 +19,6 @@ scikit-learn>=1.1
 mne>=1.4            # PhysioNet EEG (eegbci) auto-download
 neurokit2>=0.2      # ECG / PPG / RSP simulation
 
-# Paper compilation (optional; only for resonance_paper/paper/compile_paper.py)
-markdown>=3.4       # markdown -> HTML
-weasyprint>=59      # HTML -> PDF (has native GTK/pango deps)
+# Paper compilation (optional): the eLife-style manuscript is built with
+# resonance_paper/paper/build_elife_tex.py (stdlib only) and compiled with
+# `tectonic` (a self-contained LaTeX engine; install separately, not via pip).
