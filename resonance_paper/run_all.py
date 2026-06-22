@@ -32,7 +32,9 @@ def main():
         study15_deep_anesthesia, study16_criticality_indepth,
         study17_tripartite_dissociation, study18_stochastic_resonance,
         study19_ssvep_intermod, study20_musical_intermod,
-        study20b_ffr_consonance,
+        study20b_ffr_consonance, study21_connectivity,
+        study22_spectral_descriptors, study23_R_justification,
+        study24_operating_characteristics, study25_baselines,
     )
     studies = {
         1: ("Ground-truth recovery", study1_ground_truth.run),
@@ -55,6 +57,11 @@ def main():
         18: ("Stochastic resonance across ratios", study18_stochastic_resonance.run),
         19: ("SSVEP harmonics + intermodulation", study19_ssvep_intermod.run),
         20: ("Musical chords / consonance via H", study20_musical_intermod.run),
+        21: ("Cross-resonance connectivity (network recovery)", study21_connectivity.run),
+        22: ("Spectral-complexity descriptors of H/PC/R", study22_spectral_descriptors.run),
+        23: ("Why R=H*PC: conjunction + combine-rule justification", study23_R_justification.run),
+        24: ("Operating characteristics: SNR / null calibration / scaling", study24_operating_characteristics.run),
+        25: ("Baselines: H/PC vs n:m PLV / HNR", study25_baselines.run),
         # 20b real-data FFR companion (downloads OSF 5puhb on first run; --only 20b)
         "20b": ("Real EEG: FFR consonance harmonicity (Study 20b)", study20b_ffr_consonance.run),
     }
@@ -64,7 +71,7 @@ def main():
     def _key(s):
         return int(s) if s.isdigit() else s
     todo = [_key(args.only)] if args.only else [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15,
-                                                17, 18, 19, 20]
+                                                17, 18, 19, 20, 21, 22, 23, 24, 25]
     print(f"=== Resonance validation suite ({'PAPER' if args.paper else 'QUICK'} mode) ===\n")
     for n in todo:
         title, fn = studies[n]

@@ -152,6 +152,8 @@ repository root (the studies form the importable `resonance_paper` package).
 | 19 | [study19_ssvep_intermod.py](resonance_paper/study19_ssvep_intermod.py) | SSVEP harmonics + intermodulation under nonlinearity? | synthetic | two-flicker intermodulation rises with nonlinearity (ρ=+0.61), richer for simple ratios (0.35 vs 0.13); single-flicker H at ceiling |
 | 20 | [study20_musical_intermod.py](resonance_paper/study20_musical_intermod.py) | Does H track musical consonance? | synthetic chords | ρ(H, chord complexity) = −0.73; auditory nonlinearity (combination tones) *sharpens* the recovery |
 | 20b | [study20b_ffr_consonance.py](resonance_paper/study20b_ffr_consonance.py) | Real EEG: is the brainstem FFR more harmonic for consonant dyads? | FFR to dyads (OSF 5puhb, 36 subj) | **consonant>dissonant H** (CC>DC p=1.3e-8; **CI>DI missing-fundamental p=4e-5**); effect lives in the stimulus-**silent** band (leakage-null p=0.27), FFR reconstructs each dyad's own fundamental (240/225 Hz) — **neural, adversarially verified** (run via `--only 20b`) |
+| 21 | [study21_connectivity.py](resonance_paper/study21_connectivity.py) | Multichannel: does cross-resonance *connectivity* recover a planted coupled cluster? | synthetic 8-ch network | R/PC/H connectivity matrices recover the cluster (R AUC≈0.76; IAAFT z-score sharpens it) — validates the n_elec×n_elec layer |
+| 22 | [study22_spectral_descriptors.py](resonance_paper/study22_spectral_descriptors.py) | Are complexity descriptors of the H/PC/R spectra informative? | synthetic (known structure) | flatness/entropy/spread/HFD of the resonance spectra separate harmonic from noise (H_flatness AUC 1.0) **where the scalar H_avg conflates them** — descriptors are first-class |
 
 **The construct & its dynamical regimes (Studies 17–20)** (see
 [`paper/construct_and_dynamics.md`](resonance_paper/paper/construct_and_dynamics.md)):
@@ -208,7 +210,7 @@ biological-resonance/
 └── resonance_paper/                  # the importable analysis package
     ├── _common.py                    # config presets, surrogate-z, AUC/stats, plotting
     ├── signals.py  datasets.py       # synthetic generators / real-data loaders
-    ├── study1..20_*.py  run_all.py   # the studies + driver
+    ├── study1..22_*.py  run_all.py   # the studies + driver
     ├── criticality.py                # validated DFA/LRTC/branching-ratio estimators
     ├── crit_resonance.py             # shared real-data criticality analysis
     ├── results/   *.json             # paper-grade headline metrics (committed)
@@ -218,8 +220,9 @@ biological-resonance/
         ├── resonance_and_criticality.md      # studies 9–12 synthesis (in-silico)
         ├── realdata_criticality.md           # studies 13–16 synthesis (real data)
         ├── construct_and_dynamics.md         # studies 17–20 synthesis
-        ├── make_paper_figures.py             # builds the composite Fig 1–4
-        └── figures/   Fig1..4_*.{png,pdf}    # publication composites (600 DPI)
+        ├── make_method_figures.py            # METHOD paper: method_Fig1–6 (M-A spine)
+        ├── make_paper_figures.py             # legacy composite Fig 1–4 (criticality paper seed)
+        └── figures/   method_Fig1..6, Fig1..4_*.{png,pdf}  # publication composites (600 DPI)
 ```
 
 The package is named `resonance_paper` because it *is* the paper's reproducible
