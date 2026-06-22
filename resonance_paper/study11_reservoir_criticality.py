@@ -141,6 +141,15 @@ def run(quick=True):
     def loc(m):
         d = C.argmax_location_ci(rhos, mat(m)); return d["point"], [d["lo"], d["hi"]]
     pHG, cHG = loc("H_gain"); pPK, cPK = loc("peakedness_gain"); pMC, cMC = loc("memory_capacity")
+    # dissociation: is the GENERATION peak (H_gain) separated from the COMPUTATION peak (MC)?
+    s_arr = np.array(rhos, float); MHG, MMC = mat("H_gain"), mat("memory_capacity")
+    nb = min(MHG.shape[1], MMC.shape[1]); rng3 = np.random.default_rng(2); dsep = []
+    for _ in range(2000):
+        idx = rng3.integers(0, nb, nb)
+        dg = s_arr[int(np.nanargmax(np.nanmean(MHG[:, idx], axis=1)))]
+        dm = s_arr[int(np.nanargmax(np.nanmean(MMC[:, idx], axis=1)))]
+        dsep.append(dg - dm)
+    dsep = np.array(dsep); dslo, dshi = float(np.percentile(dsep, 2.5)), float(np.percentile(dsep, 97.5))
     # is generation significant? peak-rho H_gain CI vs 0
     i_pk = int(np.nanargmax([r["H_gain"] for r in rows]))
     hgain_peak = rows[i_pk]["H_gain"]; hgain_peak_ci = rows[i_pk]["H_gain_ci"]
@@ -155,7 +164,9 @@ def run(quick=True):
                    rho_at_max_MC=pMC, rho_at_max_MC_ci=cMC,
                    H_input_baseline=float(np.nanmean([r["H_input"] for r in rows])),
                    Hgain_peak=float(hgain_peak), Hgain_peak_ci=hgain_peak_ci,
-                   generation_significant=bool(hgain_peak_ci[0] > 0))
+                   generation_significant=bool(hgain_peak_ci[0] > 0),
+                   Hgain_minus_MC_peak=float(np.mean(dsep)), Hgain_minus_MC_ci=[dslo, dshi],
+                   generation_separated_from_computation=bool(not (dslo <= 0.0 <= dshi)))
     result = dict(quick=quick, n_res=n_res, rows=rows, summary=summary)
     C.save_json(result, "study11_reservoir_criticality.json")
     _figures(result)
@@ -186,6 +197,11 @@ def _headline(result):
         print("  => No significant harmonic generation (H_gain CI includes 0): the reservoir")
         print("     adds little integer-harmonic structure to noise (see peakedness_gain for")
         print("     generic spectral structuring without harmonicity).")
+    if "Hgain_minus_MC_ci" in s:
+        d = s["Hgain_minus_MC_ci"]
+        print(f"  DISSOCIATION generation vs computation: rho(H_gain peak) - rho(MC peak) = "
+              f"{s['Hgain_minus_MC_peak']:+.2f} [{d[0]:+.2f},{d[1]:+.2f}] -> "
+              f"{'SEPARATED' if s['generation_separated_from_computation'] else 'not separated'}")
 
 
 def _figures(result):

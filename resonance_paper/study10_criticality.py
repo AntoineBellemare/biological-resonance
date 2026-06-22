@@ -144,12 +144,45 @@ def run(quick=True):
         d = C.argmax_location_ci(sigmas, mat(m)); return d["point"], [d["lo"], d["hi"]]
     pS, cS = loc("susceptibility"); pP, cP = loc("powerlaw_r2")
     pH, cH = loc("H_max"); pR, cR = loc("R_max")
+
+    # --- formal co-location: does the H_max peak coincide with the criticality peak? ---
+    from scipy.stats import spearmanr, wilcoxon
+    s_arr = np.array(sigmas, float)
+    MH, MS = mat("H_max"), mat("susceptibility")
+    nb = min(MH.shape[1], MS.shape[1]); rng2 = np.random.default_rng(1); pdiffs = []
+    for _ in range(2000):
+        idx = rng2.integers(0, nb, nb)
+        dh = s_arr[int(np.nanargmax(np.nanmean(MH[:, idx], axis=1)))]
+        ds = s_arr[int(np.nanargmax(np.nanmean(MS[:, idx], axis=1)))]
+        pdiffs.append(dh - ds)
+    pdiffs = np.array(pdiffs); plo, phi = float(np.percentile(pdiffs, 2.5)), float(np.percentile(pdiffs, 97.5))
+    # per-seed Spearman(H_max, criticality proximity = -|branching_est - 1|) across sigma:
+    # both peak at sigma=1, so a POSITIVE rho means H tracks proximity to criticality.
+    rhos_hp = []
+    for j in range(len(seeds)):
+        Hj = [per["H_max"][i][j] for i in range(len(sigmas))]
+        proxj = [-abs(per["branching_est"][i][j] - 1.0) for i in range(len(sigmas))]
+        if all(np.isfinite(Hj)) and all(np.isfinite(proxj)):
+            rr = spearmanr(proxj, Hj)[0]
+            if np.isfinite(rr):
+                rhos_hp.append(rr)
+    hp = C.mean_ci(rhos_hp) if len(rhos_hp) >= 3 else dict(mean=float("nan"), lo=float("nan"), hi=float("nan"))
+    try:
+        hp_p = float(wilcoxon(rhos_hp).pvalue) if len(rhos_hp) >= 3 else float("nan")
+    except ValueError:
+        hp_p = float("nan")
+
     summary = dict(
         n_seeds=len(seeds),
         sigma_at_max_susceptibility=pS, sigma_at_max_susceptibility_ci=cS,
         sigma_at_max_powerlaw=pP, sigma_at_max_powerlaw_ci=cP,
         sigma_at_max_R=pR, sigma_at_max_R_ci=cR,
         sigma_at_max_H=pH, sigma_at_max_H_ci=cH,
+        H_susc_peak_diff=float(np.mean(pdiffs)), H_susc_peak_diff_ci=[plo, phi],
+        H_peak_coincides=bool(plo <= 0.0 <= phi),
+        H_tracks_prox_rho=hp["mean"], H_tracks_prox_ci=[hp["lo"], hp["hi"]],
+        H_tracks_prox_p=hp_p, H_tracks_prox_n=len(rhos_hp),
+        H_tracks_prox_frac_pos=float(np.mean(np.array(rhos_hp) > 0)) if rhos_hp else float("nan"),
     )
     result = dict(quick=quick, N=N, T=T, rows=rows, summary=summary)
     C.save_json(result, "study10_criticality.json")
@@ -172,6 +205,13 @@ def _headline(result):
           f"[{cS[0]:.2f},{cS[1]:.2f}], avalanche power-law -> sigma={s['sigma_at_max_powerlaw']:.2f}")
     print(f"  HARMONICITY H_max peaks at sigma={s['sigma_at_max_H']:.2f} "
           f"[{cH[0]:.2f},{cH[1]:.2f}] (criticality signature in H).")
+    if "H_susc_peak_diff_ci" in s:
+        d = s["H_susc_peak_diff_ci"]
+        print(f"    CO-LOCATION: H_peak - susceptibility_peak = {s['H_susc_peak_diff']:+.3f} "
+              f"[{d[0]:+.2f},{d[1]:+.2f}] -> peaks {'COINCIDE' if s['H_peak_coincides'] else 'DIFFER'}")
+        print(f"    H tracks criticality proximity: rho={s['H_tracks_prox_rho']:+.2f} "
+              f"[{s['H_tracks_prox_ci'][0]:+.2f},{s['H_tracks_prox_ci'][1]:+.2f}] "
+              f"p={s['H_tracks_prox_p']:.2g} ({int(s['H_tracks_prox_frac_pos']*100)}%+, n={s['H_tracks_prox_n']})")
     print("  RESONANCE R_max ~ 0 throughout: pure avalanche dynamics are scale-free but NOT")
     print("    oscillatory/phase-locked, so the phase-coupling factor (and R) stays near zero.")
     print("  => Criticality is reflected in HARMONICITY, not in phase-coupling resonance, for a")

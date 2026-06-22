@@ -139,12 +139,17 @@ def _citemap():
         ym = re.search(r"\((\d{4})", r)
         if not ym:
             continue
-        year = ym.group(1); head = r[:ym.start()]
-        full_surname = head.split(",")[0].strip().lstrip("*").strip()
-        first_tok = re.split(r"[\s,\-]+", head.strip().lstrip("*"))[0]
-        base = _ascii(first_tok).lower()
-        etal = ("&" in head) or (head.count(",") >= 2)
-        mp[(base, year)] = f"{full_surname} et al." if etal else full_surname
+        year = ym.group(1); head = r[:ym.start()].lstrip("*").strip()
+        surnames = re.findall(r"([A-Z][a-zA-Z'\-]+),", head)   # "Surname," tokens (skips initials)
+        first_full = head.split(",")[0].strip()
+        if len(surnames) >= 3 or head.count("&") > 1:
+            disp = f"{first_full} et al."
+        elif len(surnames) == 2:
+            disp = f"{first_full} \\& {surnames[1]}"
+        else:
+            disp = first_full
+        key_tok = re.split(r"[\s,\-]+", head)[0]
+        mp[(_ascii(key_tok).lower(), year)] = disp
     return mp
 
 

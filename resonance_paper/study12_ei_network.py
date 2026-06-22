@@ -92,7 +92,7 @@ def run(quick=True):
     seeds = list(range(3) if quick else range(12))      # network realizations -> CIs
     gs = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4] if quick else \
          [0.45, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.9, 1.0, 1.15, 1.3, 1.5]
-    METRICS = ["order_param", "susceptibility", "autocorr_time",
+    METRICS = ["order_param", "susceptibility", "susceptibility_norm", "autocorr_time",
                "crossEI_H", "crossEI_PC", "crossEI_R"]
 
     per = {m: [] for m in METRICS}
@@ -106,6 +106,9 @@ def run(quick=True):
             env = np.abs(hilbert(E - E.mean()))         # order parameter
             acc["order_param"].append(float(env.mean()))
             acc["susceptibility"].append(float(np.var(env)))
+            # normalized susceptibility (var/mean^2): the edge as RELATIVE fluctuation,
+            # not raw envelope variance (which trivially grows with oscillation amplitude)
+            acc["susceptibility_norm"].append(float(np.var(env) / (env.mean() ** 2 + 1e-12)))
             acc["autocorr_time"].append(autocorr_time(E))
             H, PC, R, _ = cross_EI_resonance(E, I)      # E<->I cross-resonance (PING)
             acc["crossEI_H"].append(H); acc["crossEI_PC"].append(PC); acc["crossEI_R"].append(R)
@@ -129,7 +132,7 @@ def run(quick=True):
         k = min(len(a) for a in per[m]); return np.array([a[:k] for a in per[m]])
     def loc(m):
         d = C.argmax_location_ci(gs, mat(m)); return d["point"], [d["lo"], d["hi"]]
-    gC, cGC = loc("susceptibility"); gAC, cAC = loc("autocorr_time")
+    gC, cGC = loc("susceptibility"); gCn, cGCn = loc("susceptibility_norm"); gAC, cAC = loc("autocorr_time")
     gR, cR = loc("crossEI_R"); gPC, cPC = loc("crossEI_PC"); gH, cH = loc("crossEI_H")
     i_c = int(np.argmax([r["susceptibility"] for r in rows]))
     pc_gc = rows[i_c]["crossEI_PC"]
@@ -143,6 +146,7 @@ def run(quick=True):
 
     summary = dict(n_seeds=len(seeds),
                    g_critical=gC, g_critical_ci=cGC, g_at_max_susceptibility=gC,
+                   g_at_max_susceptibility_norm=gCn, g_at_max_susceptibility_norm_ci=cGCn,
                    g_at_max_autocorr=gAC, g_at_max_autocorr_ci=cAC,
                    g_at_max_R=gR, g_at_max_R_ci=cR,
                    g_at_max_PC=gPC, g_at_max_PC_ci=cPC,
@@ -167,6 +171,10 @@ def _headline(result):
     print(f"\n  (n_seeds={s.get('n_seeds','?')}; 95% bootstrap-over-seeds CIs in brackets)")
     print(f"  Edge of synchronization g_c (susceptibility peak) = {s['g_critical']:.2f} "
           f"[{cGC[0]:.2f},{cGC[1]:.2f}]")
+    if "g_at_max_susceptibility_norm" in s:
+        cn = s.get("g_at_max_susceptibility_norm_ci", [np.nan, np.nan])
+        print(f"  NORMALIZED susceptibility (var/mean^2) peaks at g={s['g_at_max_susceptibility_norm']:.2f} "
+              f"[{cn[0]:.2f},{cn[1]:.2f}] (edge as RELATIVE fluctuation, not amplitude growth)")
     print(f"  E<->I phase coupling is NOT zero sub-threshold: asynchronous baseline PC = "
           f"{s['baseline_PC']:.3f}.")
     print(f"  It RISES to PC={s['PC_at_g_critical']:.3f} at g_c, i.e. dPC=+{s['delta_PC_at_g_critical']:.3f} "
