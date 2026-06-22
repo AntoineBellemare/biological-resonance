@@ -94,23 +94,33 @@ CAPS = {
     r"scalar summaries miss."),
 }
 
-PREAMBLE = r"""\documentclass[10pt]{article}
-\usepackage[a4paper,margin=2.1cm]{geometry}
+PREAMBLE = r"""\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.3cm]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{graphicx,xcolor,booktabs,amsmath,amssymb}
-\usepackage[labelfont={bf,color=elifeblue},font=small]{caption}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{graphicx,xcolor,booktabs}
+\usepackage[labelfont={bf,color=elifeblue},font=small,labelsep=period]{caption}
 \usepackage{titlesec}
-\usepackage{lineno}
+\usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
 \definecolor{elifeblue}{HTML}{1A4F63}
+\definecolor{rulegray}{HTML}{B8B8B8}
 \titleformat{\section}{\sffamily\bfseries\large\color{elifeblue}}{}{0em}{}
-\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{black}}{}{0em}{}
-\titlespacing*{\section}{0pt}{14pt}{4pt}
-\titlespacing*{\subsection}{0pt}{10pt}{2pt}
-\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
-\renewcommand{\familydefault}{\rmdefault}
-\linenumbers
+\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{black!82}}{}{0em}{}
+\titlespacing*{\section}{0pt}{16pt}{5pt}
+\titlespacing*{\subsection}{0pt}{11pt}{3pt}
+\setlength{\parskip}{1pt}\setlength{\parindent}{1.4em}
+\linespread{1.05}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\itshape Harmonic resonance spectra of biosignals}
+\fancyhead[R]{\footnotesize\thepage}
+\captionsetup{justification=justified,singlelinecheck=false}
 \begin{document}
 """
 
@@ -192,14 +202,17 @@ def figure_tex(n):
 def main():
     s = {k: decite(v) for k, v in SECT.items()}
     parts = [PREAMBLE]
-    parts.append(rf"""\begin{{center}}
+    parts.append(rf"""\thispagestyle{{plain}}
+\begin{{center}}
 {{\LARGE\sffamily\bfseries\color{{elifeblue}} {TITLE}\par}}
-\vspace{{8pt}}{{\large {AUTHORS}\par}}
-\vspace{{4pt}}{{\small {AFFIL}\par}}
+\vspace{{11pt}}{{\large {AUTHORS}\par}}
+\vspace{{5pt}}{{\small\itshape {AFFIL}\par}}
 \end{{center}}
-\vspace{{6pt}}
+\vspace{{3pt}}{{\color{{rulegray}}\hrule height 0.6pt}}\vspace{{8pt}}
+\noindent{{\sffamily\bfseries\color{{elifeblue}}Abstract}}\par\vspace{{2pt}}
+{{\small {s['abstract']}\par}}
+\vspace{{7pt}}{{\color{{rulegray}}\hrule height 0.6pt}}\vspace{{10pt}}
 """)
-    parts.append(r"\section*{Abstract}" + "\n" + s["abstract"] + "\n")
     parts.append(r"\section{Introduction}" + "\n" + s["introduction"] + "\n")
     parts.append(r"\section{Results}" + "\n")
     for key, head, fign in RESULTS:

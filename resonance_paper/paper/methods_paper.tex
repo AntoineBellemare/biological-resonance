@@ -1,31 +1,42 @@
-\documentclass[10pt]{article}
-\usepackage[a4paper,margin=2.1cm]{geometry}
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.3cm]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{graphicx,xcolor,booktabs,amsmath,amssymb}
-\usepackage[labelfont={bf,color=elifeblue},font=small]{caption}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{graphicx,xcolor,booktabs}
+\usepackage[labelfont={bf,color=elifeblue},font=small,labelsep=period]{caption}
 \usepackage{titlesec}
-\usepackage{lineno}
+\usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
 \definecolor{elifeblue}{HTML}{1A4F63}
+\definecolor{rulegray}{HTML}{B8B8B8}
 \titleformat{\section}{\sffamily\bfseries\large\color{elifeblue}}{}{0em}{}
-\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{black}}{}{0em}{}
-\titlespacing*{\section}{0pt}{14pt}{4pt}
-\titlespacing*{\subsection}{0pt}{10pt}{2pt}
-\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
-\renewcommand{\familydefault}{\rmdefault}
-\linenumbers
+\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{black!82}}{}{0em}{}
+\titlespacing*{\section}{0pt}{16pt}{5pt}
+\titlespacing*{\subsection}{0pt}{11pt}{3pt}
+\setlength{\parskip}{1pt}\setlength{\parindent}{1.4em}
+\linespread{1.05}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\itshape Harmonic resonance spectra of biosignals}
+\fancyhead[R]{\footnotesize\thepage}
+\captionsetup{justification=justified,singlelinecheck=false}
 \begin{document}
 
+\thispagestyle{plain}
 \begin{center}
 {\LARGE\sffamily\bfseries\color{elifeblue} Harmonic Resonance Spectra of Biosignals: Separable Harmonicity and Phase-Coupling Axes with a Validated, Swappable-Strategy Toolbox\par}
-\vspace{8pt}{\large Antoine Bellemare-Pepin\textsuperscript{1,2}, Karim Jerbi\textsuperscript{1}\par}
-\vspace{4pt}{\small \textsuperscript{1}CoCo Lab, Psychology Department, University of Montr\'eal, Canada \\ \textsuperscript{2}Music Department, Concordia University, Montr\'eal, Canada\par}
+\vspace{11pt}{\large Antoine Bellemare-Pepin\textsuperscript{1,2}, Karim Jerbi\textsuperscript{1}\par}
+\vspace{5pt}{\small\itshape \textsuperscript{1}CoCo Lab, Psychology Department, University of Montr\'eal, Canada \\ \textsuperscript{2}Music Department, Concordia University, Montr\'eal, Canada\par}
 \end{center}
-\vspace{6pt}
-
-\section*{Abstract}
-Biological time series are densely organized by harmonic relationships: the QRS complex generates an integer-harmonic series, cortical rhythms show overtones and cross-frequency relationships, and many physiological oscillators are weakly phase-coupled across frequency. Yet there is no unified, testable way to ask \emph{how harmonically organized} a signal is, and at which frequencies. We present and validate a harmonic resonance framework that decomposes a single- or multi-channel time series into two per-frequency spectra and their product: a harmonicity spectrum $H(f)$, which scores how close spectral peaks sit to integer ratios, and a phase-coupling spectrum $\mathrm{PC}(f)$, which scores how stably oscillatory components hold an $n{:}m$ phase relation, together with a resonance spectrum $R(f) = H(f)\cdot\mathrm{PC}(f)$, complexity descriptors, and a channel-by-channel connectivity extension. Our claim is methodological: harmonicity and phase coupling are \emph{separable} axes that merit measurement as distinct spectra. We show that $H$ is exactly phase-blind ($\rho(H,\kappa) = 0.00$) while $\mathrm{PC}$ tracks phase locking; that under independently varied factors the conjunction $R$ beats both single factors (specificity AUC $\approx 0.99$ vs $\leq 0.76$) and adds a phase-coherence requirement $H$ lacks (phase-scramble AUC: $H$ $0.50$ vs $R$ $1.00$); that the framework recovers known harmonic structure ($\rho = 0.98$) and $n{:}m$ coupling (AUC $\approx 1.0$); and that it is competitive with established measures and discriminates real biosignals, matching band power. The implementation is a swappable strategy registry of harmonic kernels, coupling metrics, and combine rules. We build on prior harmonicity measures, $n{:}m$ coupling, and synchronization theory; our contribution is their unification, validation, and tooling. We are explicit about scope: $R$ is an interpretable decomposition, not a superior detector, and the framework adds a harmonic axis without replacing band power on amplitude tasks.
+\vspace{3pt}{\color{rulegray}\hrule height 0.6pt}\vspace{8pt}
+\noindent{\sffamily\bfseries\color{elifeblue}Abstract}\par\vspace{2pt}
+{\small Biological time series are densely organized by harmonic relationships: the QRS complex generates an integer-harmonic series, cortical rhythms show overtones and cross-frequency relationships, and many physiological oscillators are weakly phase-coupled across frequency. Yet there is no unified, testable way to ask \emph{how harmonically organized} a signal is, and at which frequencies. We present and validate a harmonic resonance framework that decomposes a single- or multi-channel time series into two per-frequency spectra and their product: a harmonicity spectrum $H(f)$, which scores how close spectral peaks sit to integer ratios, and a phase-coupling spectrum $\mathrm{PC}(f)$, which scores how stably oscillatory components hold an $n{:}m$ phase relation, together with a resonance spectrum $R(f) = H(f)\cdot\mathrm{PC}(f)$, complexity descriptors, and a channel-by-channel connectivity extension. Our claim is methodological: harmonicity and phase coupling are \emph{separable} axes that merit measurement as distinct spectra. We show that $H$ is exactly phase-blind ($\rho(H,\kappa) = 0.00$) while $\mathrm{PC}$ tracks phase locking; that under independently varied factors the conjunction $R$ beats both single factors (specificity AUC $\approx 0.99$ vs $\leq 0.76$) and adds a phase-coherence requirement $H$ lacks (phase-scramble AUC: $H$ $0.50$ vs $R$ $1.00$); that the framework recovers known harmonic structure ($\rho = 0.98$) and $n{:}m$ coupling (AUC $\approx 1.0$); and that it is competitive with established measures and discriminates real biosignals, matching band power. The implementation is a swappable strategy registry of harmonic kernels, coupling metrics, and combine rules. We build on prior harmonicity measures, $n{:}m$ coupling, and synchronization theory; our contribution is their unification, validation, and tooling. We are explicit about scope: $R$ is an interpretable decomposition, not a superior detector, and the framework adds a harmonic axis without replacing band power on amplitude tasks.\par}
+\vspace{7pt}{\color{rulegray}\hrule height 0.6pt}\vspace{10pt}
 
 \section{Introduction}
 Biological time series are rich in \emph{harmonic} structure. The QRS complex of the electrocardiogram generates a dense series of integer harmonics; cortical rhythms display overtones and systematic cross-frequency relationships; and many physiological oscillators, from cardiorespiratory coupling to nested cortical rhythms, are weakly phase-coupled across frequency. A unifying, interpretable way to quantify \emph{how harmonically organized} a signal is, and at which frequencies that organization lives, would let investigators compare states, modalities, and channels on a common axis. Such an axis is conceptually distinct from the amplitude-based summaries that dominate practice: two signals can carry identical band power yet differ sharply in how their components relate to one another by simple integer ratios and in how stably those components hold a phase relationship over time.
