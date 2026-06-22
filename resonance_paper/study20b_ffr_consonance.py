@@ -217,6 +217,56 @@ def _contrast(rows, run, cond_a, cond_b, key="H"):
                 frac_a_gt_b=float(np.mean(va > vb)), p=p)
 
 
+def _brain_behavior(rows, sample, resp):
+    """Claim (D): does the per-listener NEURAL consonance advantage scale with
+    musicianship / behavioral consonance sensitivity? Correlates each listener's
+    active-run H advantage (consonant - dissonant) with trait/behavioral measures:
+      * amma  — Advanced Measures of Music Audiation (music aptitude / musicianship)
+      * pract — years of musical practice/training
+      * dprime_mean — mean behavioral sensitivity (Buttonpress d', across conditions)."""
+    from scipy.stats import spearmanr
+
+    def adv_by_listener(ca, cb):
+        a, b = {}, {}
+        for r in rows:
+            if r["run"] != 1 or not np.isfinite(r["H"]):
+                continue
+            if r["cond"] == ca:
+                a[r["listener"]] = r["H"]
+            elif r["cond"] == cb:
+                b[r["listener"]] = r["H"]
+        return {l: a[l] - b[l] for l in set(a) & set(b)}
+
+    advs = {"incomplete": adv_by_listener("CI", "DI"),   # missing-fundamental = NEURAL
+            "complete": adv_by_listener("CC", "DC")}
+
+    traits = {}
+    if sample is not None:
+        for nm in ["amma", "pract", "pitch"]:
+            try:
+                traits[nm] = np.array(sample[nm][0, 0]).ravel().astype(float)
+            except Exception:
+                pass
+    if resp is not None:
+        try:
+            dp = np.array(resp["dprime"][0, 0]).astype(float)   # (n_listeners, 4 conditions)
+            traits["dprime_mean"] = np.nanmean(dp, axis=1)
+        except Exception:
+            pass
+
+    out = {}
+    for advname, adv in advs.items():
+        ls = sorted(adv)
+        for tname, tv in traits.items():
+            pairs = [(tv[l], adv[l]) for l in ls if l < len(tv)
+                     and np.isfinite(tv[l]) and np.isfinite(adv[l])]
+            if len(pairs) >= 8:
+                xv, yv = np.array([p[0] for p in pairs]), np.array([p[1] for p in pairs])
+                rho, p = spearmanr(xv, yv)
+                out[f"{advname}_vs_{tname}"] = dict(rho=float(rho), p=float(p), n=len(pairs))
+    return out
+
+
 def run(quick=True):
     ffr, stim, sample, resp = load()
     n_listeners = ffr.shape[0]
@@ -276,12 +326,15 @@ def run(quick=True):
         n_contrasts_for_mc=8,    # 4 contrasts x 2 runs (Bonferroni note)
     )
 
+    brain_behavior = _brain_behavior(rows, sample, resp)
+
     summary = _summarize(contrasts, stim_H, attn)
     cfg = dict(target_sf=TARGET_SF, n_peaks=N_PEAKS, maxdenom=MAXDENOM,
                full_band=FULL_BAND, low_band=LOW_BAND, high_band=HIGH_BAND)
     result = dict(quick=quick, n_listeners=n_listeners, used=list(use),
                   cfg=cfg, stim_H=stim_H, rows=rows, contrasts=contrasts,
-                  attention=attn, controls=controls, summary=summary)
+                  attention=attn, controls=controls, brain_behavior=brain_behavior,
+                  summary=summary)
     C.save_json(result, "study20b_ffr_consonance.json")
     _figures(result)
     _headline(result)
@@ -408,6 +461,11 @@ def _headline(result):
         ni = ctrl["snr_noise_injection"]["incomplete"]
         print(f"  SNR noise-injection control (CI floor raised to DI): CI>DI low-band delta="
               f"{ni['delta']:+.3f} p={ni['p']:.3g}  (effect survives = not an SNR artifact)")
+    bb = result.get("brain_behavior", {})
+    if bb:
+        print("  BRAIN-BEHAVIOR (neural consonance advantage vs trait/behavior, Spearman):")
+        for k, v in bb.items():
+            print(f"    {k:28s} rho={v['rho']:+.2f} p={v['p']:.3g} (n={v['n']})")
     print("  => CI>DI lives in the stimulus-SILENT band and is frequency-specific:")
     print("     the consonance harmonicity advantage is NEURALLY generated, not leakage.")
 

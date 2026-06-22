@@ -76,14 +76,41 @@ def run(quick=True):
         print(f"  {name} done", flush=True)
 
     from scipy.stats import spearmanr
-    out = {}
-    for tag in ("linear", "nonlinear"):
+    rng = np.random.default_rng(0)
+
+    def stats(tag):
         rr = [r for r in rows if r["condition"] == tag]
-        rho = spearmanr([r["complexity"] for r in rr], [r["H_max"] for r in rr])[0]
-        out[tag] = float(rho)   # expect NEGATIVE: more complex (dissonant) -> lower H
-    summary = dict(rho_H_vs_complexity_linear=out["linear"],
-                   rho_H_vs_complexity_nonlinear=out["nonlinear"],
-                   nonlinearity_sharpens=bool(abs(out["nonlinear"]) > abs(out["linear"])))
+        comp = np.array([r["complexity"] for r in rr]); H = np.array([r["H_max"] for r in rr])
+        m = len(comp); rho = float(spearmanr(comp, H)[0])
+        bs = []
+        for _ in range(5000):
+            idx = rng.integers(0, m, m)
+            if len(set(comp[idx])) > 2:
+                bs.append(spearmanr(comp[idx], H[idx])[0])
+        bs = np.array([b for b in bs if np.isfinite(b)])
+        perm = np.array([spearmanr(comp, rng.permutation(H))[0] for _ in range(5000)])
+        p = float((np.sum(np.abs(perm) >= abs(rho)) + 1) / (len(perm) + 1))   # two-sided
+        return dict(rho=rho, lo=float(np.percentile(bs, 2.5)), hi=float(np.percentile(bs, 97.5)), p=p)
+
+    st = {tag: stats(tag) for tag in ("linear", "nonlinear")}
+    # is the nonlinear "sharpening" (|rho_nl| - |rho_lin|) above chance? paired chord bootstrap
+    lin = sorted([r for r in rows if r["condition"] == "linear"], key=lambda r: r["chord"])
+    nl = sorted([r for r in rows if r["condition"] == "nonlinear"], key=lambda r: r["chord"])
+    comp = np.array([r["complexity"] for r in lin])
+    Hl = np.array([r["H_max"] for r in lin]); Hn = np.array([r["H_max"] for r in nl])
+    md = len(comp); sharp = []
+    for _ in range(5000):
+        idx = rng.integers(0, md, md)
+        if len(set(comp[idx])) > 2:
+            sharp.append(abs(spearmanr(comp[idx], Hn[idx])[0]) - abs(spearmanr(comp[idx], Hl[idx])[0]))
+    sharp = np.array([s for s in sharp if np.isfinite(s)])
+    summary = dict(rho_H_vs_complexity_linear=st["linear"]["rho"],
+                   rho_H_vs_complexity_nonlinear=st["nonlinear"]["rho"],
+                   linear_ci=[st["linear"]["lo"], st["linear"]["hi"]], linear_p=st["linear"]["p"],
+                   nonlinear_ci=[st["nonlinear"]["lo"], st["nonlinear"]["hi"]], nonlinear_p=st["nonlinear"]["p"],
+                   sharpen_delta=float(np.mean(sharp)),
+                   sharpen_ci=[float(np.percentile(sharp, 2.5)), float(np.percentile(sharp, 97.5))],
+                   nonlinearity_sharpens=bool(np.percentile(sharp, 2.5) > 0))
     result = dict(quick=quick, rows=rows, summary=summary)
     C.save_json(result, "study20_musical_intermod.json")
     _figures(result)

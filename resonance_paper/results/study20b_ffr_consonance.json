@@ -5370,6 +5370,48 @@
     },
     "n_contrasts_for_mc": 8
   },
+  "brain_behavior": {
+    "incomplete_vs_amma": {
+      "rho": 0.0446424083183007,
+      "p": 0.7959977402987792,
+      "n": 36
+    },
+    "incomplete_vs_pract": {
+      "rho": -0.12543636725600252,
+      "p": 0.4660361292130698,
+      "n": 36
+    },
+    "incomplete_vs_pitch": {
+      "rho": -0.3095636504054576,
+      "p": 0.0661723167723017,
+      "n": 36
+    },
+    "incomplete_vs_dprime_mean": {
+      "rho": -0.17201288695895783,
+      "p": 0.32311631908541427,
+      "n": 35
+    },
+    "complete_vs_amma": {
+      "rho": -0.01045096842133629,
+      "p": 0.9517618950009937,
+      "n": 36
+    },
+    "complete_vs_pract": {
+      "rho": -0.013234408279712053,
+      "p": 0.9389359494463556,
+      "n": 36
+    },
+    "complete_vs_pitch": {
+      "rho": -0.32423735358475997,
+      "p": 0.0537001295182942,
+      "n": 36
+    },
+    "complete_vs_dprime_mean": {
+      "rho": -0.05070738198627258,
+      "p": 0.7723669490852061,
+      "n": 35
+    }
+  },
   "summary": {
     "stim_consonance_effect": 21.472563276442585,
     "neural_consonance_complete_delta": 3.5837377196824685,

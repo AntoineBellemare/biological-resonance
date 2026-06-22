@@ -21,14 +21,30 @@ Outputs: results/study19_ssvep_intermod.json, figures/study19_*.{png,pdf}
 """
 from __future__ import annotations
 
+from fractions import Fraction
+
 import numpy as np
-from scipy.signal import welch
+from scipy.signal import welch, butter, filtfilt, hilbert
 
 from resonance_paper import _common as C
 from resonance_paper.signals import _norm, pink_noise
 from biotuner.resonance import compute_resonance
 
 SF = 500.0
+
+
+def nm_phase_coupling(y, f1, f2, sf=SF, bw=1.5):
+    """n:m phase coupling between the two driven SSVEP components of the response —
+    the framework's phase-phase coupling face of intermodulation. Bandpass + Hilbert
+    at f1 and f2, then PLV of q*phi(f1) - p*phi(f2) with f2/f1 = q/p. As neural
+    nonlinearity creates intermodulation products, the two components phase-lock and
+    this rises (the n:m reading of 'intermodulation = nonlinear binding')."""
+    fr = Fraction(f2 / f1).limit_denominator(16); q, p = fr.numerator, fr.denominator
+
+    def ph(f):
+        b, a = butter(4, [(f - bw) / (sf / 2), (f + bw) / (sf / 2)], btype="band")
+        return np.angle(hilbert(filtfilt(b, a, y)))
+    return float(np.abs(np.mean(np.exp(1j * (q * ph(f1) - p * ph(f2))))))
 
 
 def nonlinear_response(freqs, g_nl, dur=20.0, noise_db=12.0, seed=0):
@@ -81,24 +97,31 @@ def run(quick=True):
     partB = []
     for label, (f1, f2) in pairs.items():
         for g in gs:
-            ims, Hs = [], []
+            ims, Hs, pcs = [], [], []
             for s in seeds:
                 y, _ = nonlinear_response([f1, f2], g, seed=s)
                 ims.append(intermod_index(y, f1, f2))
                 Hs.append(float(compute_resonance(y, sf=SF, config=cfg).summaries["H"]["max"]))
-            partB.append(dict(pair=label, f1=f1, f2=f2, g=g,
-                              im_index=float(np.mean(ims)), H_max=float(np.mean(Hs))))
+                pcs.append(nm_phase_coupling(y, f1, f2))
+            pc = float(np.mean(pcs)); H = float(np.mean(Hs))
+            partB.append(dict(pair=label, f1=f1, f2=f2, g=g, im_index=float(np.mean(ims)),
+                              H_max=H, PC=pc, R=H * pc))
         print(f"  [B] {label} done", flush=True)
 
     from scipy.stats import spearmanr
     a_rho = spearmanr([r["g"] for r in partA], [r["H_max"] for r in partA])[0]
     im_rho = spearmanr([r["g"] for r in partB], [r["im_index"] for r in partB])[0]
-    # IM at full nonlinearity: simple vs complex pairs
+    pc_rho = spearmanr([r["g"] for r in partB], [r["PC"] for r in partB])[0]
+    # IM / PC at full nonlinearity: simple vs complex pairs
     gmax = gs[-1]
     simple_im = np.mean([r["im_index"] for r in partB if r["g"] == gmax and r["pair"].startswith("simple")])
     complex_im = np.mean([r["im_index"] for r in partB if r["g"] == gmax and r["pair"].startswith("complex")])
+    simple_pc = np.mean([r["PC"] for r in partB if r["g"] == gmax and r["pair"].startswith("simple")])
+    complex_pc = np.mean([r["PC"] for r in partB if r["g"] == gmax and r["pair"].startswith("complex")])
     summary = dict(H_vs_nonlinearity=float(a_rho), IM_vs_nonlinearity=float(im_rho),
-                   IM_simple_at_gmax=float(simple_im), IM_complex_at_gmax=float(complex_im))
+                   PC_vs_nonlinearity=float(pc_rho),
+                   IM_simple_at_gmax=float(simple_im), IM_complex_at_gmax=float(complex_im),
+                   PC_simple_at_gmax=float(simple_pc), PC_complex_at_gmax=float(complex_pc))
     result = dict(quick=quick, partA=partA, partB=partB, summary=summary)
     C.save_json(result, "study19_ssvep_intermod.json")
     _figures(result)
@@ -112,9 +135,12 @@ def _headline(result):
     print(f"  (A) single flicker: H_max is at CEILING (~1.3, invariant to nonlinearity): "
           f"rho={s['H_vs_nonlinearity']:+.2f} but range is trivial")
     print("      H_max by g: " + ", ".join(f"{r['g']:.2f}:{r['H_max']:.2f}" for r in result["partA"]))
-    print(f"  (B) two flicker: rho(nonlinearity, IM index) = {s['IM_vs_nonlinearity']:+.2f}")
+    print(f"  (B) two flicker: rho(nonlinearity, IM index) = {s['IM_vs_nonlinearity']:+.2f}; "
+          f"rho(nonlinearity, n:m PC) = {s['PC_vs_nonlinearity']:+.2f}")
     print(f"      IM index at max nonlinearity: simple={s['IM_simple_at_gmax']:.3f} "
           f"complex={s['IM_complex_at_gmax']:.3f}")
+    print(f"      n:m PC  at max nonlinearity: simple={s['PC_simple_at_gmax']:.3f} "
+          f"complex={s['PC_complex_at_gmax']:.3f}  (IM as n:m phase coupling)")
     print("  => single-flicker H saturates (a periodic drive is already trivially harmonic);")
     print("     the discriminating signal is two-flicker INTERMODULATION, which rises with")
     print("     nonlinearity and is richer for simpler ratios.")

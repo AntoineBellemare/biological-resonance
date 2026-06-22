@@ -125,6 +125,21 @@
   "summary": {
     "rho_H_vs_complexity_linear": -0.705170430668875,
     "rho_H_vs_complexity_nonlinear": -0.7294866524160775,
-    "nonlinearity_sharpens": true
+    "linear_ci": [
+      -0.9968503858773891,
+      -0.11985614927696712
+    ],
+    "linear_p": 0.028994201159768047,
+    "nonlinear_ci": [
+      -1.0,
+      -0.16079907353792763
+    ],
+    "nonlinear_p": 0.022395520895820836,
+    "sharpen_delta": 0.027313612601127465,
+    "sharpen_ci": [
+      0.0,
+      0.18867924528301883
+    ],
+    "nonlinearity_sharpens": false
   }
 }
