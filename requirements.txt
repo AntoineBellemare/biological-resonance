@@ -18,3 +18,7 @@ scikit-learn>=1.1
 # Real-data acquisition / simulation
 mne>=1.4            # PhysioNet EEG (eegbci) auto-download
 neurokit2>=0.2      # ECG / PPG / RSP simulation
+
+# Paper compilation (optional; only for resonance_paper/paper/compile_paper.py)
+markdown>=3.4       # markdown -> HTML
+weasyprint>=59      # HTML -> PDF (has native GTK/pango deps)
