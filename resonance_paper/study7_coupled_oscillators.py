@@ -204,8 +204,9 @@ def framework_nm_plv(x1, x2, f1, f2, bw=2.0):
 
 
 def run(quick=True):
-    seeds = range(3) if quick else range(6)
-    K_list = [0.0, 2.0, 5.0, 10.0, 20.0, 40.0, 80.0]
+    seeds = range(3) if quick else range(12)
+    K_list = ([0.0, 2.0, 5.0, 10.0, 20.0, 40.0, 80.0] if quick else
+              [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 10.0, 14.0, 20.0, 28.0, 40.0, 56.0, 80.0])
     DETUNE = 0.03
     RATIOS = [(1.5, "2:3"), (4.0 / 3.0, "3:4"), (1.25, "4:5")]
 

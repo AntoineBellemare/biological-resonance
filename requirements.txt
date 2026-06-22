@@ -1,9 +1,12 @@
 # Core dependency: the biotuner resonance engine.
 # IMPORTANT: the resonance fixes used by this suite (phase-row alignment,
 # factor-level surrogate z) landed on biotuner `main` AFTER the v0.4.1 PyPI
-# release and the version was not bumped — so `pip install biotuner` (0.4.1)
-# does NOT reproduce these results. Install biotuner from `main`:
-biotuner @ git+https://github.com/AntoineBellemare/biotuner.git@main
+# release and the version was NOT bumped — so `pip install biotuner` (0.4.1)
+# does NOT reproduce these results, and `biotuner.__version__` reads 0.4.1 even
+# on main (so the version string cannot distinguish them). We therefore PIN an
+# immutable commit (main HEAD, 2026-06-20). For active biotuner development,
+# swap the SHA below back to `@main`.
+biotuner @ git+https://github.com/AntoineBellemare/biotuner.git@fc158c3a92b499d4020c8db9527a0b1cea33788e
 
 # Scientific stack
 numpy>=1.23

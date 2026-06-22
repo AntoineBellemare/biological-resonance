@@ -199,7 +199,7 @@ def figure3():
     axes[0].axhline(0.5, color="k", ls="--", lw=0.7)
     axes[0].set_xticks(x); axes[0].set_xticklabels(labels)
     axes[0].set_ylim(0, 1.05); axes[0].set_ylabel("decoding AUC (LOSO)")
-    axes[0].set_title("EEG state decoding\n(= band power: honest scope)")
+    axes[0].set_title("EEG state decoding (LOSO AUC)\n(EO/EC ≈ band power)")
     axes[0].legend(loc="lower right")
     panel(axes[0], "A")
 
@@ -227,7 +227,7 @@ def figure3():
     axes[2].legend(fontsize=6)
     panel(axes[2], "C")
 
-    fig.suptitle("Figure 7 — Real biosignals: resonance discriminates states (= band power) and fingerprints modality",
+    fig.suptitle("Figure 7 — Real biosignals: resonance discriminates states (≈ band power on EO/EC) and fingerprints modality",
                  fontsize=9.5, fontweight="bold", y=1.04)
     fig.tight_layout()
     save(fig, "method_Fig7_real_biosignals")
@@ -260,7 +260,7 @@ def figure4():
     st = s8["staircase"]
     axes[1].plot([d["Omega"] for d in st], [d["rho"] for d in st], ".", color=BLUE, ms=2.5)
     axes[1].set_xlabel("drive ratio  Ω"); axes[1].set_ylabel("rotation number  ρ")
-    axes[1].set_title("Devil's staircase\n(forced Van der Pol)")
+    axes[1].set_title("Rotation number ρ(Ω)\n(forced Van der Pol: 1:1 lock)")
     panel(axes[1], "B")
 
     # C: tongue width vs complexity, colored by harmonicity
@@ -271,11 +271,11 @@ def figure4():
     cb = plt.colorbar(sc, ax=axes[2], fraction=0.046, pad=0.03); cb.set_label("harmonicity", fontsize=7)
     axes[2].set_xlabel("ratio complexity  p·q"); axes[2].set_ylabel("Arnold tongue width")
     c = s8["corr"]
-    axes[2].set_title(f"Lockability vs complexity\nρ={c['width_vs_complexity']:+.2f}")
+    axes[2].set_title(f"Lockability vs complexity\nρ_s={c['width_vs_complexity']:+.2f}")
     panel(axes[2], "C")
 
     fig.suptitle("Figure 6 — Method choices (strategy registry; accuracy saturates, choose on speed) "
-                 "and the mechanism: harmonic simplicity governs lockability",
+                 "and the mechanism: harmonic simplicity sets lockability (classical Arnold-tongue)",
                  fontsize=9, fontweight="bold", y=1.05)
     fig.tight_layout()
     save(fig, "method_Fig6_strategy_mechanism")
@@ -309,7 +309,8 @@ def figure5():
         panel(a, l)
 
     fig.suptitle("Figure 8 — Cross-resonance connectivity recovers a planted coupled cluster "
-                 "(overlap-driven; surrogate-z isolates pure phase)", fontsize=9, fontweight="bold", y=1.04)
+                 "(overlap-driven; pure phase needs the IAAFT surrogate-z variant, see §3.8)",
+                 fontsize=9, fontweight="bold", y=1.04)
     fig.tight_layout()
     save(fig, "method_Fig8_connectivity")
 
@@ -330,7 +331,7 @@ def figure6():
     for p, k in zip(bp["boxes"], classes):
         p.set_facecolor(cols[k]); p.set_alpha(0.8)
     axes[0].set_xticks(range(1, len(classes) + 1)); axes[0].set_xticklabels(classes, rotation=35, fontsize=6.5)
-    axes[0].set_ylabel("H-spectrum flatness"); axes[0].set_title("Structured → low flatness")
+    axes[0].set_ylabel("H-spectrum flatness"); axes[0].set_title("H-flatness separates classes\n(harmonic 0.17 → noise 0.92)")
     panel(axes[0], "A")
 
     # B: the resonance-descriptor FINGERPRINT — z-scored (per row) descriptor × class
@@ -351,7 +352,7 @@ def figure6():
         ys = [r["H_spread"] for r in rows if r["kind"] == k]
         axes[2].scatter(xs, ys, color=cols[k], s=20, alpha=0.8, label=k, edgecolor="none")
     axes[2].set_xlabel("H-spectrum flatness"); axes[2].set_ylabel("H-spectrum spread")
-    axes[2].set_title("Shape space (beyond H_avg)"); axes[2].legend(fontsize=5.5)
+    axes[2].set_title("Shape space: flatness × spread"); axes[2].legend(fontsize=5.5)
     panel(axes[2], "C")
 
     fig.suptitle("Figure 9 — Complexity descriptors (flatness/entropy/spread/HFD) of the H/PC/R spectra are first-class features",
@@ -366,7 +367,7 @@ def figure7():
     s = load("study23_R_justification.json"); A = s["part_a"]; B = s["part_b"]
     rules = ["product", "geomean", "harmmean", "min", "max", "mean"]
     conj = {"product", "geomean", "harmmean", "min"}
-    fig, axes = plt.subplots(1, 4, figsize=(COL2 * 1.32, 2.7))
+    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.7))
 
     keys = ["H", "PC"] + [f"R[{r}]" for r in rules]
     aucs = [A["auc"][k] for k in keys]
@@ -378,6 +379,8 @@ def figure7():
     axes[0].set_ylabel("specificity AUC"); axes[0].set_title("Conjunctions beat both\nfactors & disjunctions")
     panel(axes[0], "A")
 
+    # B: phase-scramble (preserves |FFT| → H fixed; phases destroyed → PC & R collapse).
+    #    R adds the phase gate H lacks: AUC(coherent vs scrambled) H=0.50 vs R=1.00.
     x = np.arange(3); w = 0.38
     hc = B["H_coherent"]
     coh = [1.0, B["PC_coherent"], B["R_coherent"] / hc]
@@ -385,25 +388,24 @@ def figure7():
     axes[1].bar(x - w/2, coh, w, color=GREEN, label="coherent")
     axes[1].bar(x + w/2, scr, w, color=GREY, label="phase-scrambled")
     axes[1].set_xticks(x); axes[1].set_xticklabels(["H\n(norm)", "PC", "R\n(norm)"])
-    axes[1].set_ylabel("factor (H-normalized)"); axes[1].set_title("Phase-scramble: H fixed,\nPC & R collapse")
+    axes[1].set_ylabel("factor (H-normalized)")
+    axes[1].set_title(f"Phase-scramble: H fixed, PC & R\ncollapse (R gate AUC {B['auc_H']:.2f}→{B['auc_R']:.2f})")
     axes[1].legend(fontsize=7); panel(axes[1], "B")
 
-    axes[2].bar([0, 1], [B["auc_H"], B["auc_R"]], color=[ORANGE, RED], width=0.6)
-    axes[2].axhline(0.5, color="k", ls="--", lw=0.7); axes[2].set_ylim(0, 1.05)
-    axes[2].set_xticks([0, 1]); axes[2].set_xticklabels(["H", "R = H·PC"])
-    axes[2].set_ylabel("AUC (coherent vs scrambled)"); axes[2].set_title("R adds the phase gate\nH lacks")
-    panel(axes[2], "C")
-
-    # D: GENERATIVE — harmonically-coupled 2:3 oscillators: as coupling K rises, PC and
-    #    R = H·PC rise (R gates on the emergent coupling) while H stays high throughout —
-    #    R is low when phase coherence is absent despite present harmonicity. Analog of B.
+    # C: GENERATIVE — harmonically-coupled 2:3 oscillators (Study 7): as coupling K rises,
+    #    PC and R = H·PC climb while H stays high — R is low when phase coherence is absent
+    #    despite present harmonicity (the dynamical analog of B). Log-K: the gate is at low K.
     s7 = load("study7_coupled_oscillators.json"); p = s7["transition"]["2:3"]
+    Kx = np.array([max(d["K"], 0.5) for d in p], float)   # epsilon so K=0 plots on log axis
     for key, color, lbl in [("H", ORANGE, "H"), ("PC", PURPLE, "PC"), ("R", RED, "R = H·PC")]:
         v = np.array([d[key] for d in p], float); v = v / (v.max() + 1e-12)
-        axes[3].plot([d["K"] for d in p], v, "o-", color=color, ms=3, label=lbl)
-    axes[3].set_xlabel("coupling strength K"); axes[3].set_ylabel("normalized")
-    axes[3].set_title("Generative (2:3 oscillators):\nR gates H by emergent coupling")
-    axes[3].legend(fontsize=6); panel(axes[3], "D")
+        axes[2].plot(Kx, v, "o-", color=color, ms=3, label=lbl)
+    kstar = s7["kstar"]["2:3"]
+    axes[2].axvline(kstar, color="grey", ls="--", lw=0.6); axes[2].axhline(0.5, color="grey", ls=":", lw=0.6)
+    axes[2].annotate(f"K*={kstar:.1f}", (kstar, 0.04), fontsize=6, ha="left")
+    axes[2].set_xscale("log"); axes[2].set_xlabel("coupling strength K (log)"); axes[2].set_ylabel("normalized")
+    axes[2].set_title("Generative (2:3): R gates H\non emergent phase locking")
+    axes[2].legend(fontsize=6); panel(axes[2], "C")
 
     fig.suptitle("Figure 2 — Why R = H·PC: a conjunction (beats both factors; gates harmonicity by phase "
                  "coherence) — shown abstractly and generatively", fontsize=9, fontweight="bold", y=1.04)
@@ -426,13 +428,13 @@ def figure8():
     axes[1].bar([0, 1], [B["fpr_005"], B["fpr_001"]], color=GREEN, width=0.6, alpha=0.85)
     axes[1].axhline(0.05, color="k", ls="--", lw=0.8); axes[1].axhline(0.01, color=GREY, ls=":", lw=0.8)
     axes[1].set_xticks([0, 1]); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
-    axes[1].set_ylabel("per-frequency false-positive rate")
-    axes[1].set_title("PC_z null calibration\n(targets dashed)"); panel(axes[1], "B")
+    axes[1].set_ylabel("per-instance false-positive rate")
+    axes[1].set_title("PC_z null calibration\n(n=120 pairs; targets dashed)"); panel(axes[1], "B")
 
     nf = [r["n_freqs"] for r in sc["by_resolution"]]; ms = [r["sec_per_call"] * 1000 for r in sc["by_resolution"]]
     axes[2].plot(nf, ms, "o-", color=RED)
     axes[2].set_xlabel("n frequency bins"); axes[2].set_ylabel("runtime (ms/call)")
-    axes[2].set_title("Scaling: set by n_freqs\n(flat in signal length)"); panel(axes[2], "C")
+    axes[2].set_title("Scaling: runtime set by n_freqs"); panel(axes[2], "C")
 
     fig.suptitle("Figure 4 — Operating characteristics: SNR robustness, null calibration, scaling",
                  fontsize=9.5, fontweight="bold", y=1.04)
@@ -447,7 +449,7 @@ def figure9():
 
     axes[0].plot(cpl["snrs"], cpl["PCz_auc"], "o-", color=PURPLE, label="framework PC_z")
     axes[0].plot(cpl["snrs"], cpl["rawPLV_auc"], "s--", color=GREY, label="raw n:m PLV")
-    axes[0].axhline(0.5, color="k", ls=":", lw=0.7); axes[0].set_ylim(0.4, 1.05)
+    axes[0].axhline(0.5, color="k", ls=":", lw=0.7); axes[0].set_ylim(0.30, 1.05)
     axes[0].set_xlabel("SNR (dB)"); axes[0].set_ylabel("coupling AUC")
     axes[0].set_title("Coupling: PC_z vs raw PLV"); axes[0].legend(fontsize=7); panel(axes[0], "A")
 

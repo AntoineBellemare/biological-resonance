@@ -162,8 +162,8 @@ def _figures(result):
     axes[1].bar([0, 1], [B["fpr_005"], B["fpr_001"]], color="#009E73", width=0.6, alpha=0.85)
     axes[1].axhline(0.05, color="k", ls="--", lw=0.8); axes[1].axhline(0.01, color="grey", ls=":", lw=0.8)
     axes[1].set_xticks([0, 1]); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
-    axes[1].set_ylabel("per-frequency false-positive rate")
-    axes[1].set_title("B. Null calibration of PC_z\n(targets = dashed)", fontsize=10)
+    axes[1].set_ylabel("per-instance false-positive rate")
+    axes[1].set_title("B. Null calibration of PC_z\n(n=120 pairs; targets = dashed)", fontsize=10)
 
     nf = [r["n_freqs"] for r in sc["by_resolution"]]; ms = [r["sec_per_call"] * 1000 for r in sc["by_resolution"]]
     axes[2].plot(nf, ms, "o-", color="#D55E00")
