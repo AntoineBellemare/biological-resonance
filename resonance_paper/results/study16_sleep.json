@@ -56,6 +56,14 @@
       "frac_pos": 0.0,
       "n": 8
     },
+    "H_full_noslow_vs_prox_m": {
+      "rho": -0.09311531861590502,
+      "lo": -0.1730860390576831,
+      "hi": -0.008578745201582276,
+      "p": 0.109375,
+      "frac_pos": 0.25,
+      "n": 8
+    },
     "H_aval_vs_prox_m": {
       "rho": 0.07317073274686473,
       "lo": -0.01845640503517216,
@@ -84,8 +92,9 @@
   "criticality_p_bh": {
     "H_aval_vs_prox_m": 0.3125,
     "R_aval_vs_prox_m": 0.3125,
-    "R_full_vs_prox_m": 0.015625,
-    "H_full_vs_prox_m": 0.015625
+    "H_full_noslow_vs_prox_m": 0.18229166666666666,
+    "R_full_vs_prox_m": 0.01953125,
+    "H_full_vs_prox_m": 0.01953125
   },
   "paired_dissociation": {
     "across": {

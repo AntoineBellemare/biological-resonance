@@ -77,8 +77,9 @@ def fig1_schematic():
     ax.text(1.0, 1.08, "critical", color="k", fontsize=8, ha="center", fontweight="bold")
     ax.text(1.6, 1.02, "supercritical /\nsynchronized", color=RED, fontsize=7.5, ha="center")
     ax.set_xlabel("control parameter (branching ratio / coupling / gain)")
-    ax.set_ylabel("normalized observable"); ax.set_ylim(0, 1.2); ax.set_xticks([])
-    ax.legend(fontsize=6.4, loc="upper right")
+    ax.set_ylabel("normalized observable"); ax.set_ylim(0, 1.25); ax.set_xticks([])
+    # legend in the empty lower-left (curve tails are ~0 there), clear of the region labels on top
+    ax.legend(fontsize=6.4, loc="lower left", bbox_to_anchor=(0.01, 0.04), framealpha=0.9)
     panel(ax, "A")
     fig.tight_layout(); save(fig, "crit_Fig1_schematic")
 
@@ -174,40 +175,45 @@ def fig4_ei():
     if not s:
         return
     rows = s["rows"]; sm = s["summary"]; g = [r["g"] for r in rows]
-    fig, ax = plt.subplots(1, 3, figsize=(COL2 * 1.05, 2.7))
-    gc, cgc = sm.get("g_critical"), sm.get("g_critical_ci")
+    fig, ax = plt.subplots(1, 3, figsize=(COL2 * 1.08, 2.7))
+    edge = sm.get("g_at_max_susceptibility_norm") or sm.get("g_critical")
+    edge_ci = sm.get("g_at_max_susceptibility_norm_ci")
 
-    for k, c, mk, lab in [("order_param", "#455a64", "o", "order parameter"),
-                          ("susceptibility_norm", BLUE, "^", "susceptibility (var/mean²)"),
-                          ("autocorr_time", GREEN, "x", "autocorr time")]:
-        if any(k in r for r in rows):
-            ax[0].plot(g, _norm([r.get(k, np.nan) for r in rows]), mk + "-", color=c, ms=4, label=lab)
-    if gc:
-        ax[0].axvline(gc, color=RED, ls="--", lw=1.0, label=f"g_c={gc:.2f}")
-        if cgc:
-            ax[0].axvspan(cgc[0], cgc[1], color=RED, alpha=0.12)
+    def mark(a):
+        if edge_ci:
+            a.axvspan(edge_ci[0], edge_ci[1], color=RED, alpha=0.12)
+        if edge:
+            a.axvline(edge, color=RED, ls="--", lw=1.0)
+
+    # A: locate the edge — relative-fluctuation susceptibility + critical slowing
+    ax[0].plot(g, _norm([r["order_param"] for r in rows]), "o-", color="#90a4ae", ms=3, alpha=0.7, label="order parameter")
+    ax[0].plot(g, _norm([r.get("susceptibility_norm", np.nan) for r in rows]), "^-", color=BLUE, ms=4, label="susceptibility (var/mean²)")
+    ax[0].plot(g, _norm([r["autocorr_time"] for r in rows]), "x-", color=GREEN, ms=4, label="autocorr time")
+    mark(ax[0])
     ax[0].set_xlabel("coupling gain  g"); ax[0].set_ylabel("normalized")
-    ax[0].set_title("Edge of synchronization"); ax[0].legend(fontsize=6); panel(ax[0], "A")
+    ax[0].set_title(f"Edge of synchronization\n(g≈{edge:.2f}: relative fluctuation + slowing)")
+    ax[0].legend(fontsize=5.6); panel(ax[0], "A")
 
-    for k, c, mk, lab in [("crossEI_PC", PURPLE, "v", "E↔I phase coupling PC"),
-                          ("crossEI_R", RED, "s", "E↔I resonance R")]:
-        ax[1].errorbar(g, [r[k] for r in rows], yerr=[r.get(k + "_sem", 0) for r in rows],
-                       fmt=mk + "-", color=c, capsize=2, label=lab)
+    # B: the resonance factors vs the edge — H, PC, R together (the key relationship)
+    for k, c, mk, lab in [("crossEI_H", ORANGE, "d", "harmonicity H"),
+                          ("crossEI_PC", PURPLE, "v", "phase coupling PC"),
+                          ("crossEI_R", RED, "s", "resonance R = H·PC")]:
+        ax[1].plot(g, _norm([r[k] for r in rows]), mk + "-", color=c, ms=4, label=lab)
+    mark(ax[1])
+    ax[1].set_xlabel("coupling gain  g"); ax[1].set_ylabel("normalized  H / PC / R")
+    ax[1].set_title("PC rises and R peaks at the edge\n(only model where R is placeable)")
+    ax[1].legend(fontsize=5.8, loc="lower right"); panel(ax[1], "B")
+
+    # C: absolute PC rise (PLV units) above the asynchronous baseline
+    ax[2].errorbar(g, [r["crossEI_PC"] for r in rows], yerr=[r.get("crossEI_PC_sem", 0) for r in rows],
+                   fmt="v-", color=PURPLE, capsize=2, label="E↔I PC (PLV)")
     bp = sm.get("baseline_PC")
     if bp is not None:
-        ax[1].axhline(bp, color=PURPLE, ls=":", lw=1.0, label=f"async baseline {bp:.2f}")
-    if gc:
-        ax[1].axvline(gc, color=RED, ls="--", lw=1.0)
-    ax[1].set_xlabel("coupling gain  g"); ax[1].set_ylabel("coupling (PLV) / R")
+        ax[2].axhline(bp, color=PURPLE, ls=":", lw=1.0, label=f"async baseline {bp:.2f}")
+    mark(ax[2])
     dpc = sm.get("delta_PC_at_g_critical", float("nan"))
-    ax[1].set_title(f"PC rises at the onset (ΔPC=+{dpc:.2f})"); ax[1].legend(fontsize=6); panel(ax[1], "B")
-
-    ax[2].errorbar(g, [r["crossEI_H"] for r in rows], yerr=[r.get("crossEI_H_sem", 0) for r in rows],
-                   fmt="d-", color=ORANGE, capsize=2, label="harmonicity H")
-    if gc:
-        ax[2].axvline(gc, color=RED, ls="--", lw=1.0, label=f"g_c={gc:.2f}")
-    ax[2].set_xlabel("coupling gain  g"); ax[2].set_ylabel("E↔I harmonicity H")
-    ax[2].set_title("R is placeable here (oscillatory)"); ax[2].legend(fontsize=6); panel(ax[2], "C")
+    ax[2].set_xlabel("coupling gain  g"); ax[2].set_ylabel("phase coupling PC (PLV)")
+    ax[2].set_title(f"PC rises from baseline\n(ΔPC = +{dpc:.2f})"); ax[2].legend(fontsize=6); panel(ax[2], "C")
     fig.tight_layout(); save(fig, "crit_Fig4_ei_network")
 
 
@@ -267,51 +273,65 @@ def fig6_resolution():
     s = load("study16_sleep.json"); sp = load("study16_propofol.json")
     if not s:
         return
-    fig, ax = plt.subplots(1, 3, figsize=(COL2 * 1.05, 2.7))
+    fig, ax = plt.subplots(1, 4, figsize=(COL2 * 1.4, 2.7))
 
-    # A: the sign flip — H_full (raw, reverses) vs H_aval (scale-free, recovers), across datasets
-    def get(d, key):
+    def cval(d, key):
         v = (d or {}).get("criticality", {}).get(key, {})
-        return v.get("rho", np.nan), v.get("rho", np.nan) - v.get("lo", np.nan), v.get("hi", np.nan) - v.get("rho", np.nan)
+        rho = v.get("rho", np.nan)
+        return rho, rho - v.get("lo", np.nan), v.get("hi", np.nan) - rho, v.get("p", np.nan)
+
+    def sig(p):
+        return p == p and p < 0.05
+
+    # A: the sign flip — raw H reverses, scale-free H recovers (sleep, +propofol); * = p<0.05
     sets = [("sleep", s)] + ([("propofol", sp)] if sp else [])
     xs = np.arange(len(sets)); w = 0.38
-    fr = [get(d, "H_full_vs_prox_m") for _, d in sets]
-    av = [get(d, "H_aval_vs_prox_m") for _, d in sets]
-    ax[0].bar(xs - w / 2, [a[0] for a in fr], w, yerr=[[a[1] for a in fr], [a[2] for a in fr]],
-              color=GREY, alpha=0.85, capsize=2, label="H_full (raw EEG)")
-    ax[0].bar(xs + w / 2, [a[0] for a in av], w, yerr=[[a[1] for a in av], [a[2] for a in av]],
-              color=GREEN, alpha=0.85, capsize=2, label="H_aval (scale-free)")
-    ax[0].axhline(0, color="k", lw=0.7)
-    ax[0].set_xticks(xs); ax[0].set_xticklabels([n for n, _ in sets], fontsize=7)
+    for off, key, col, lab in [(-w / 2, "H_full_vs_prox_m", GREY, "H_full (raw)"),
+                               (+w / 2, "H_aval_vs_prox_m", GREEN, "H_aval (scale-free)")]:
+        vv = [cval(d, key) for _, d in sets]
+        ax[0].bar(xs + off, [v[0] for v in vv], w, yerr=[[v[1] for v in vv], [v[2] for v in vv]],
+                  color=col, alpha=0.85, capsize=2, label=lab)
+        for x, v in zip(xs + off, vv):
+            if sig(v[3]):
+                ax[0].annotate("*", (x, v[0]), ha="center", va="bottom" if v[0] >= 0 else "top", fontsize=11)
+    ax[0].axhline(0, color="k", lw=0.7); ax[0].set_xticks(xs); ax[0].set_xticklabels([n for n, _ in sets], fontsize=7)
     ax[0].set_ylabel("ρ(H, m̂-proximity)")
     pd = s.get("paired_dissociation", {}).get("across", {})
-    ttl = "Observable flips the sign"
-    if pd.get("p") == pd.get("p"):
-        ttl += f"\n(paired p={pd['p']:.2g})"
-    ax[0].set_title(ttl); ax[0].legend(fontsize=6); panel(ax[0], "A")
+    ax[0].set_title(f"Observable flips the sign\n(sleep paired p={pd.get('p', float('nan')):.2g})")
+    ax[0].legend(fontsize=5.6); panel(ax[0], "A")
 
-    # B: partial correlation (H_aval vs prox controlling slow power) survives
+    # B: partial correlation controlling slow power — recovery survives (H_aval | slow)
     pa = s.get("partial", {})
-    keys = [("H_aval_vs_prox_m|slow_gfp", "H_aval\n| slow"), ("H_full_vs_prox_m|slow_raw", "H_full\n| slow")]
-    xs = np.arange(len(keys)); vals, los, his = [], [], []
-    for k, _ in keys:
-        v = pa.get(k, {}); vals.append(v.get("rho", np.nan))
-        los.append(v.get("rho", np.nan) - v.get("lo", np.nan)); his.append(v.get("hi", np.nan) - v.get("rho", np.nan))
-    ax[1].bar(xs, vals, yerr=[los, his], color=[GREEN, GREY], alpha=0.85, capsize=3)
-    ax[1].axhline(0, color="k", lw=0.7)
-    ax[1].set_xticks(xs); ax[1].set_xticklabels([l for _, l in keys], fontsize=6.5)
+    keys = [("H_aval_vs_prox_m|slow_gfp", "H_aval\n| slow", GREEN), ("H_full_vs_prox_m|slow_raw", "H_full\n| slow", GREY)]
+    for i, (k, lab, col) in enumerate(keys):
+        v = pa.get(k, {}); rho = v.get("rho", np.nan); p = v.get("p", np.nan)
+        ax[1].bar(i, rho, yerr=[[rho - v.get("lo", np.nan)], [v.get("hi", np.nan) - rho]], color=col, alpha=0.85, capsize=3)
+        ax[1].annotate(("*  " if sig(p) else "") + f"p={p:.2g}", (i, rho), ha="center",
+                       va="bottom" if rho >= 0 else "top", fontsize=6.3)
+    ax[1].axhline(0, color="k", lw=0.7); ax[1].set_xticks(range(len(keys))); ax[1].set_xticklabels([l for _, l, _ in keys], fontsize=6.5)
     ax[1].set_ylabel("partial ρ (slow-power controlled)")
     ax[1].set_title("Recovery survives the\nslow-power confound"); panel(ax[1], "B")
 
-    # C: sleep by-state H_full vs H_aval (raw rises into N3; scale-free does not)
+    # C: slow-band-removal control — the raw-EEG reversal vanishes when the slow band is removed
+    full = cval(s, "H_full_vs_prox_m"); ns = cval(s, "H_full_noslow_vs_prox_m")
+    for i, (v, col) in enumerate([(full, GREY), (ns, SKY)]):
+        ax[2].bar(i, v[0], yerr=[[v[1]], [v[2]]], color=col, alpha=0.85, capsize=3)
+        ax[2].annotate(("*  " if sig(v[3]) else "n.s. ") + f"p={v[3]:.2g}", (i, v[0]), ha="center",
+                       va="top" if v[0] < 0 else "bottom", fontsize=6.3)
+    ax[2].axhline(0, color="k", lw=0.7); ax[2].set_xticks([0, 1])
+    ax[2].set_xticklabels(["H_full\n(raw)", "H_full\n(no slow band)"], fontsize=6.5)
+    ax[2].set_ylabel("ρ(H_full, m̂-proximity)")
+    ax[2].set_title("Reversal is the slow-wave band\n(remove it → it vanishes)"); panel(ax[2], "C")
+
+    # D: by-state mechanism — raw H inflates in deep N3; scale-free H does not
     bs = s.get("by_state", {})
     order = [k for k in ["W", "Wake", "N1", "N2", "N3", "REM"] if k in bs] or list(bs)
     xs = np.arange(len(order))
-    ax[2].plot(xs, [bs[k].get("H_full", np.nan) for k in order], "s-", color=GREY, label="H_full (raw)")
-    ax[2].plot(xs, [bs[k].get("H_aval", np.nan) for k in order], "o-", color=GREEN, label="H_aval (scale-free)")
-    ax[2].set_xticks(xs); ax[2].set_xticklabels(order, fontsize=6.5)
-    ax[2].set_ylabel("harmonicity H"); ax[2].set_title("Raw H inflates in deep N3;\nscale-free H does not")
-    ax[2].legend(fontsize=6); panel(ax[2], "C")
+    ax[3].plot(xs, [bs[k].get("H_full", np.nan) for k in order], "s-", color=GREY, label="H_full (raw)")
+    ax[3].plot(xs, [bs[k].get("H_aval", np.nan) for k in order], "o-", color=GREEN, label="H_aval (scale-free)")
+    ax[3].set_xticks(xs); ax[3].set_xticklabels(order, fontsize=6.5)
+    ax[3].set_ylabel("harmonicity H"); ax[3].set_title("Raw H inflates in deep N3;\nscale-free H does not")
+    ax[3].legend(fontsize=6); panel(ax[3], "D")
     fig.tight_layout(); save(fig, "crit_Fig6_resolution")
 
 

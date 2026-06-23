@@ -51,12 +51,15 @@ CAPS = {
     r"beyond the edge (generation onset marked). \textbf{(C)} Generation (harmonicity gain) "
     r"dissociates from computation (memory capacity): their peaks fall at different $\rho$."),
 "crit_Fig4_ei_network": (
-    r"\textbf{At the synchronization onset, phase coupling becomes a marker.} \textbf{(A)} Order "
-    r"parameter, normalized susceptibility (var/mean$^2$) and autocorrelation time locate the "
-    r"synchronization onset $g_c$. \textbf{(B)} E$\leftrightarrow$I phase coupling rises above its "
-    r"non-zero asynchronous baseline at the onset ($\Delta\mathrm{PC}$); resonance $R$ becomes "
-    r"non-trivial. \textbf{(C)} Harmonicity across $g$: this is the one model where $R$ is placeable, "
-    r"because oscillations and criticality coexist."),
+    r"\textbf{At the synchronization onset, phase coupling and resonance become placeable.} "
+    r"\textbf{(A)} The edge of synchronization, located by the relative-fluctuation susceptibility "
+    r"(var/mean$^2$) and the autocorrelation time (critical slowing), which peak together near "
+    r"$g\approx0.65$ (shaded); raw envelope-variance susceptibility peaks later, an amplitude confound. "
+    r"\textbf{(B)} The resonance factors against the edge: harmonicity $H$, phase coupling $\mathrm{PC}$, "
+    r"and $R=H\cdot\mathrm{PC}$ (normalized); $\mathrm{PC}$ rises through the edge and $R$ peaks at it --- "
+    r"this is the only one of the three models where $R$ is non-trivial, because sustained oscillations "
+    r"and criticality coexist. \textbf{(C)} The absolute rise of E$\leftrightarrow$I phase coupling (PLV) "
+    r"above its non-zero asynchronous baseline ($\Delta\mathrm{PC}=+0.40$)."),
 "crit_Fig5_realdata_tension": (
     r"\textbf{In human EEG the prediction reverses.} \textbf{(A)} In sleep, raw-EEG harmonicity "
     r"$H_{\max}$ is \emph{highest} in deep N3 --- the most subcritical state (branching $\hat m$ "
@@ -65,12 +68,17 @@ CAPS = {
     r"and deep anaesthesia barely traverse criticality (small $\hat m$ range), so they cannot test "
     r"the law; the real-data test rests on the sleep traversal."),
 "crit_Fig6_resolution": (
-    r"\textbf{The reversal is an observable-choice effect.} \textbf{(A)} On the scale-free "
-    r"population signal ($H_\mathrm{aval}$) harmonicity tracks criticality \emph{positively}, while "
-    r"on the raw oscillatory signal ($H_\mathrm{full}$) it reverses --- a paired per-subject sign "
-    r"dissociation. \textbf{(B)} The scale-free recovery survives controlling for slow-band power "
-    r"(partial $\rho$). \textbf{(C)} Across sleep stages, raw $H$ rises into N3 while the scale-free "
-    r"$H$ does not, recovering the model prediction on the correct observable."),
+    r"\textbf{The reversal is an observable-choice effect.} Stars denote $p<0.05$. \textbf{(A)} On the "
+    r"scale-free population signal ($H_\mathrm{aval}$) harmonicity tracks criticality proximity, while "
+    r"on the raw oscillatory signal ($H_\mathrm{full}$) it reverses (sleep paired sign-dissociation "
+    r"$p=0.016$); propofol does not traverse criticality and is null on both. \textbf{(B)} The "
+    r"scale-free recovery survives controlling for slow-band power (partial $\rho=+0.16$, $p=0.023$), "
+    r"whereas the raw reversal does not. \textbf{(C)} Mechanistic control: removing the slow-wave band "
+    r"from the raw signal substantially attenuates the reversal and removes its significance "
+    r"($\rho$ $-0.24\rightarrow-0.09$, $p$ $0.008\rightarrow0.11$) --- it was largely carried by the "
+    r"slow-wave harmonic series. "
+    r"\textbf{(D)} Across sleep stages, raw $H$ inflates into deep N3 (the most subcritical state) while "
+    r"the scale-free $H$ does not."),
 }
 
 PREAMBLE = r"""\documentclass[11pt]{article}

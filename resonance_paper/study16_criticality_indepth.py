@@ -22,7 +22,7 @@ from __future__ import annotations
 import sys
 import numpy as np
 from scipy.stats import spearmanr, wilcoxon, rankdata
-from scipy.signal import welch
+from scipy.signal import welch, butter, filtfilt
 
 from resonance_paper import _common as C
 from resonance_paper import crit_resonance as CR
@@ -55,14 +55,25 @@ def _rel_slow_power(x, sf, lo=0.5, hi=4.0):
     return float(band / tot)
 
 
+def _highpass(x, sf, cut=4.0):
+    """High-pass above the slow-wave band, to test whether the in-vivo H reversal is
+    carried by the slow-wave harmonic series (strongest in synchronized, subcritical states)."""
+    b, a = butter(4, cut / (sf / 2.0), btype="high")
+    return filtfilt(b, a, x)
+
+
 def _window(it, cfg):
     X = np.atleast_2d(it["X"]); sf = it["sf"]; hidx = it.get("h_idx") or list(range(min(5, len(X))))
     # raw-EEG (oscillatory) resonance: mean over frontal channels
-    Hf, Rf = [], []
+    Hf, Rf, Hf_ns = [], [], []
     for ci in hidx:
         sn = (X[ci] - X[ci].mean()) / (X[ci].std() + 1e-12)
         r = compute_resonance(sn.astype(np.float64), sf=sf, config=cfg)
         Hf.append(float(r.summaries["H"]["max"])); Rf.append(float(r.summaries["R"]["max"]))
+        # slow-band-REMOVED raw-EEG harmonicity (high-pass >4 Hz strips the slow-wave series)
+        sn2 = _highpass(sn, sf); sn2 = (sn2 - sn2.mean()) / (sn2.std() + 1e-12)
+        rns = compute_resonance(sn2.astype(np.float64), sf=sf, config=cfg)
+        Hf_ns.append(float(rns.summaries["H"]["max"]))
     raw_mean = X[hidx].mean(0) if len(hidx) else X.mean(0)
     # avalanche / population-activity (scale-free) resonance: GFP of all channels
     gfp = Cr.population_activity(X, sf, mode="gfp")
@@ -71,6 +82,7 @@ def _window(it, cfg):
     m = Cr.eeg_branching_ratio(X, sf)
     return dict(subject=it["subject"], state=it["state"],
                 H_full=float(np.nanmean(Hf)), R_full=float(np.nanmean(Rf)),
+                H_full_noslow=float(np.nanmean(Hf_ns)),       # raw-EEG H with slow band removed
                 H_aval=float(rg.summaries["H"]["max"]), R_aval=float(rg.summaries["R"]["max"]),
                 slow_pow_raw=_rel_slow_power(raw_mean, sf),   # delta power of the raw (H_full) signal
                 slow_pow_gfp=_rel_slow_power(gz, sf),         # delta power of the GFP (H_aval) signal
@@ -202,8 +214,10 @@ def run(dataset="sleep", quick=True):
     states = sorted(set(r["state"] for r in rows))
     by_state = {s: {k: float(np.nanmean([r[k] for r in rows if r["state"] == s]))
                     for k in ["H_full", "H_aval", "R_full", "R_aval", "m_hat"]} for s in states}
-    # #1/#2/#6 — oscillatory vs scale-free resonance vs criticality (across-state)
-    crit = {f"{feat}_vs_prox_m": _agg(rows, feat) for feat in ["H_full", "H_aval", "R_full", "R_aval"]}
+    # #1/#2/#6 — oscillatory vs scale-free resonance vs criticality (across-state);
+    # H_full_noslow tests whether the raw-EEG reversal is carried by the slow-wave band
+    crit = {f"{feat}_vs_prox_m": _agg(rows, feat)
+            for feat in ["H_full", "H_full_noslow", "H_aval", "R_full", "R_aval"]}
     # #4 — WITHIN-state per-window correlations (controls between-state confounds)
     within = {feat: _within_state_agg(rows, feat) for feat in ["H_full", "H_aval", "R_full", "R_aval"]}
     # PAIRED sign-dissociation test (scale-free H_aval vs raw H_full), across- and within-state
@@ -225,10 +239,11 @@ def run(dataset="sleep", quick=True):
 def _headline(result):
     print(f"\n  --- Study 16 [{result['dataset']}] headline ---")
     print("  Oscillatory (raw-EEG) vs scale-free (avalanche/GFP) resonance vs criticality (m̂-proximity):")
-    for k in ["H_full_vs_prox_m", "H_aval_vs_prox_m", "R_full_vs_prox_m", "R_aval_vs_prox_m"]:
-        v = result["criticality"][k]
+    for k in ["H_full_vs_prox_m", "H_full_noslow_vs_prox_m", "H_aval_vs_prox_m", "R_full_vs_prox_m", "R_aval_vs_prox_m"]:
+        v = result["criticality"].get(k, {})
         if np.isfinite(v.get("rho", np.nan)):
-            print(f"    {k:20s} rho={v['rho']:+.2f} [{v['lo']:+.2f},{v['hi']:+.2f}] p={v['p']:.2g} ({int(v['frac_pos']*100)}%+)")
+            print(f"    {k:24s} rho={v['rho']:+.2f} [{v['lo']:+.2f},{v['hi']:+.2f}] p={v['p']:.2g} ({int(v['frac_pos']*100)}%+)")
+    print("    (slow-band-removed H_full should LOSE the reversal if it is the slow-wave confound)")
     print("  by-state H_full vs H_aval (does the avalanche signal behave differently?):")
     for s, b in result["by_state"].items():
         print(f"    {s:12s} H_full={b['H_full']:.3f} H_aval={b['H_aval']:.3f} m_hat={b['m_hat']:.3f}")
