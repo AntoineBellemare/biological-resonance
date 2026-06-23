@@ -97,6 +97,48 @@ _anchor = "the harmonic structure that tracks it lives in the emergent signal."
 if "Formal definitions" not in d["methods"] and _anchor in d["methods"]:
     d["methods"] = d["methods"].replace(_anchor, _anchor + "\n\n" + DEFINITIONS, 1)
 
+# --- discussion: report the spiking-network result (was future work) + specificity caveat ---
+_disc_old = (
+    r"Two directions follow. The decisive model test is an E/I spiking network that exhibits both "
+    r"avalanches and oscillations: the bare branching model is scale-free but non-oscillatory, and the "
+    r"reservoir oscillates but is not a spiking neural system, so neither can place $R$ against a "
+    r"branching ground truth. A balanced spiking network with both ingredients would let us test $R$ "
+    r"directly against $\hat m$, asking whether the oscillation-gated factor adds information about the "
+    r"synchronization face of criticality beyond what $H$ captures of the avalanche face."
+)
+_disc_new = (
+    r"Two directions follow, one of which we pursued directly. To place $R$ against a branching ground "
+    r"truth we built a spiking E/I network of the Brunel type in which power-law avalanches and a "
+    r"sustained population oscillation coexist at low firing rate, and swept its excitatory branching "
+    r"parameter through the avalanche-critical point. The outcome sharpens the division of labour: $R$ "
+    r"and its phase-coupling factor $\mathrm{PC}$ peaked not at the avalanche-critical point but higher, "
+    r"in the strongly synchronized regime---$R$ tracked synchronization, not the avalanche-critical "
+    r"point, and its per-condition correlation with the avalanche power-law was essentially null, while "
+    r"$\mathrm{PC}$ saturated as the network synchronized. $H$ and $R$ are thus separable not only in "
+    r"principle but within a single system where both faces of criticality are present: the avalanche "
+    r"face is indexed by $H$, the synchronization face by $R$, and the two need not co-locate. (This "
+    r"network also makes plain why we anchor the model criticality axis on the avalanche power-law and "
+    r"crackling-scaling statistics rather than on $\hat m$ there: a strong superimposed rhythm biases "
+    r"the multistep-regression branching estimator, an estimator-scope caveat in its own right.)"
+)
+if _disc_old in d["discussion"]:
+    d["discussion"] = d["discussion"].replace(_disc_old, _disc_new, 1)
+
+_spec_anchor = "a reminder that not every plausible distance metric survives validation."
+_spec_caveat = (
+    r" Relatedly, a surrogate battery shows that $H$'s criticality-tracking is specific to the real "
+    r"dynamics---phase-randomized, amplitude-matched and slope-matched surrogates do not reproduce the "
+    r"criticality peak---but also that it reflects the emergence of structured spectral peaks at the "
+    r"transition rather than a tuning to exact integer ratios: a fair surrogate that relocates peaks "
+    r"off integer ratios is not abolished, and in the pure branching process the harmonicity at "
+    r"criticality is only modestly above the matched-slope floor (the effect is most pronounced where a "
+    r"genuine oscillation emerges). We therefore read $H$ as an index of structured spectral "
+    r"organization maximized near criticality, retaining the term harmonicity for the operational "
+    r"metric without claiming exact-harmonic tuning."
+)
+if _spec_anchor in d["discussion"] and "surrogate battery shows" not in d["discussion"]:
+    d["discussion"] = d["discussion"].replace(_spec_anchor, _spec_anchor + _spec_caveat, 1)
+
 d["abstract"] = ABSTRACT
 d["specificity"] = SPECIFICITY
 P.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
