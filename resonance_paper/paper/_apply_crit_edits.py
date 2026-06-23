@@ -26,11 +26,12 @@ ABSTRACT = (
     r"the model-matched, scale-free population observable, within sleep state and controlling for "
     r"slow-wave power, where it tracked the wake-to-sleep traversal of criticality. The effect was "
     r"modest and rested on this sleep traversal; propofol sedation and deep anaesthesia, which barely "
-    r"traverse the critical region according to our estimator, were boundary nulls. Finally, the "
-    r"oscillation-gated companion $R = H\cdot\mathrm{PC}$ tracked synchronization rather than avalanche "
-    r"criticality: in a spiking network where avalanches and oscillations coexist, $R$ peaked with "
-    r"synchronization, above the avalanche-critical point --- so $H$ and $R$ are separable axes, and it "
-    r"is $H$, not $R$, that serves as the candidate criticality observable. $H$ is thus a candidate, "
+    r"traverse the critical region according to our estimator, were boundary nulls. Finally, in a "
+    r"spiking network where avalanches and oscillations coexist, harmonicity read off the population "
+    r"signal tracked the emergent synchronization rather than the avalanche-critical point---the same "
+    r"observable-mixing that drives the raw-EEG reversal---so the criticality signal in $H$ is exposed "
+    r"only on a scale-free observable, while $R=H\cdot\mathrm{PC}$ is its oscillation-gated "
+    r"synchronization index. $H$ is thus a candidate, "
     r"single-channel index of proximity to criticality whose in-vivo evidence remains preliminary and "
     r"conditional, but whose model-side construct validity is strong and surrogate-controlled."
 )
@@ -98,31 +99,52 @@ if "Formal definitions" not in d["methods"] and _anchor in d["methods"]:
     d["methods"] = d["methods"].replace(_anchor, _anchor + "\n\n" + DEFINITIONS, 1)
 
 # --- discussion: report the spiking-network result (was future work) + specificity caveat ---
-_disc_old = (
-    r"Two directions follow. The decisive model test is an E/I spiking network that exhibits both "
-    r"avalanches and oscillations: the bare branching model is scale-free but non-oscillatory, and the "
-    r"reservoir oscillates but is not a spiking neural system, so neither can place $R$ against a "
-    r"branching ground truth. A balanced spiking network with both ingredients would let us test $R$ "
-    r"directly against $\hat m$, asking whether the oscillation-gated factor adds information about the "
-    r"synchronization face of criticality beyond what $H$ captures of the avalanche face."
-)
-_disc_new = (
+_disc_corrected = (
     r"Two directions follow, one of which we pursued directly. To place $R$ against a branching ground "
     r"truth we built a spiking E/I network of the Brunel type in which power-law avalanches and a "
     r"sustained population oscillation coexist at low firing rate, and swept its excitatory branching "
-    r"parameter through the avalanche-critical point. The outcome sharpens the division of labour: $R$ "
-    r"and its phase-coupling factor $\mathrm{PC}$ peaked not at the avalanche-critical point but higher, "
-    r"in the strongly synchronized regime---$R$ tracked synchronization, not the avalanche-critical "
-    r"point, and its per-condition correlation with the avalanche power-law was essentially null, while "
-    r"$\mathrm{PC}$ saturated as the network synchronized. $H$ and $R$ are thus separable not only in "
-    r"principle but within a single system where both faces of criticality are present: the avalanche "
-    r"face is indexed by $H$, the synchronization face by $R$, and the two need not co-locate. (This "
-    r"network also makes plain why we anchor the model criticality axis on the avalanche power-law and "
-    r"crackling-scaling statistics rather than on $\hat m$ there: a strong superimposed rhythm biases "
-    r"the multistep-regression branching estimator, an estimator-scope caveat in its own right.)"
+    r"gain through the avalanche-critical point. The result cuts against an over-simple reading: the "
+    r"resonance observables computed on the population signal---$H$, $\mathrm{PC}$ and $R$ alike---all "
+    r"rose with synchronization and peaked \emph{above} the avalanche-critical point (best power-law / "
+    r"lowest distance-to-criticality at low gain), with $R$ uncorrelated with the avalanche power-law "
+    r"across conditions ($\rho\approx-0.06$). Once a strong oscillation is present in the signal, its "
+    r"harmonics dominate harmonicity, so $H$ read off the oscillation-laden population activity follows "
+    r"the rhythm rather than the scale-free avalanche structure---precisely the mechanism behind the "
+    r"raw-EEG reversal, now reproduced in a model with known ground truth. It is therefore the "
+    r"observable (scale-free versus oscillation-laden), not the metric, that determines whether $H$ "
+    r"reads the avalanche face of criticality: $H$ indexes avalanche criticality only when computed on "
+    r"a scale-free signal---the branching model and the scale-free EEG observable---while $R$, the "
+    r"oscillation-gated factor, is a synchronization index throughout. (The network also exposes an "
+    r"estimator caveat: a strong superimposed rhythm biases the multistep-regression branching "
+    r"estimator, which is why we anchor its criticality axis on the avalanche power-law and "
+    r"crackling-scaling statistics rather than on $\hat m$.)"
 )
-if _disc_old in d["discussion"]:
-    d["discussion"] = d["discussion"].replace(_disc_old, _disc_new, 1)
+_disc_priors = [
+    (r"Two directions follow. The decisive model test is an E/I spiking network that exhibits both "
+     r"avalanches and oscillations: the bare branching model is scale-free but non-oscillatory, and the "
+     r"reservoir oscillates but is not a spiking neural system, so neither can place $R$ against a "
+     r"branching ground truth. A balanced spiking network with both ingredients would let us test $R$ "
+     r"directly against $\hat m$, asking whether the oscillation-gated factor adds information about the "
+     r"synchronization face of criticality beyond what $H$ captures of the avalanche face."),
+    (r"Two directions follow, one of which we pursued directly. To place $R$ against a branching ground "
+     r"truth we built a spiking E/I network of the Brunel type in which power-law avalanches and a "
+     r"sustained population oscillation coexist at low firing rate, and swept its excitatory branching "
+     r"parameter through the avalanche-critical point. The outcome sharpens the division of labour: $R$ "
+     r"and its phase-coupling factor $\mathrm{PC}$ peaked not at the avalanche-critical point but higher, "
+     r"in the strongly synchronized regime---$R$ tracked synchronization, not the avalanche-critical "
+     r"point, and its per-condition correlation with the avalanche power-law was essentially null, while "
+     r"$\mathrm{PC}$ saturated as the network synchronized. $H$ and $R$ are thus separable not only in "
+     r"principle but within a single system where both faces of criticality are present: the avalanche "
+     r"face is indexed by $H$, the synchronization face by $R$, and the two need not co-locate. (This "
+     r"network also makes plain why we anchor the model criticality axis on the avalanche power-law and "
+     r"crackling-scaling statistics rather than on $\hat m$ there: a strong superimposed rhythm biases "
+     r"the multistep-regression branching estimator, an estimator-scope caveat in its own right.)"),
+]
+if "harmonics dominate harmonicity" not in d["discussion"]:
+    for _o in _disc_priors:
+        if _o in d["discussion"]:
+            d["discussion"] = d["discussion"].replace(_o, _disc_corrected, 1)
+            break
 
 _spec_anchor = "a reminder that not every plausible distance metric survives validation."
 _spec_caveat = (
@@ -139,6 +161,40 @@ _spec_caveat = (
 if _spec_anchor in d["discussion"] and "surrogate battery shows" not in d["discussion"]:
     d["discussion"] = d["discussion"].replace(_spec_anchor, _spec_anchor + _spec_caveat, 1)
 
+OSCILLATORY = (
+    r"The branching, reservoir and Wilson--Cowan systems each isolate one ingredient---avalanches "
+    r"without oscillations, an emergent mode without spikes, or oscillations whose criticality is read "
+    r"through susceptibility---so none lets the oscillation-gated factor $R$ be tested against a "
+    r"branching ground truth in a spiking network. We therefore built a current-based "
+    r"excitatory--inhibitory spiking network of the Brunel type, tuned to a fluctuation-driven, "
+    r"low-rate regime in which power-law avalanches and a sustained $\sim$8--13~Hz population rhythm "
+    r"coexist (Fig.~\ref{fig:crit_Fig8_oscillatory}A). Its control parameter is the recurrent "
+    r"excitatory branching gain $\sigma$; we located the avalanche-critical point by the avalanche "
+    r"power-law goodness of fit and the crackling-scaling deviation (best near $\sigma\approx0.6$, "
+    r"before the largest avalanches run away into system-spanning events), and read $H$, $\mathrm{PC}$ "
+    r"and $R$ off the population spike-count signal and the E/I cross-spectrum with the same "
+    r"configuration as the Wilson--Cowan model." "\n\n"
+    r"The result is informative precisely because it is not the tidy one. Across the sweep, $H$, "
+    r"$\mathrm{PC}$ and $R$ all rose with synchronization and peaked \emph{above} the avalanche-critical "
+    r"point, in the strongly synchronized regime (Fig.~\ref{fig:crit_Fig8_oscillatory}B); $R$ was "
+    r"uncorrelated with the avalanche power-law across conditions (per-seed Spearman $\rho=-0.06$, "
+    r"95\% CI $[-0.15,+0.05]$, $n=8$), and $H$ on this oscillation-laden signal in fact \emph{anti}"
+    r"-tracked avalanche criticality ($\rho=-0.74$). This is the same observable confound that produces "
+    r"the raw-EEG reversal, now in a model with known ground truth: when a strong oscillation is "
+    r"present, its harmonic series dominates harmonicity, so $H$ computed on the oscillation-laden "
+    r"population signal follows the rhythm rather than the scale-free avalanche structure. The contrast "
+    r"with the branching network---where $H$ on the non-oscillatory avalanche signal peaked sharply at "
+    r"criticality (Fig.~\ref{fig:crit_Fig8_oscillatory}C)---makes the lesson explicit: it is the "
+    r"observable, scale-free versus oscillation-laden, not the metric, that sets whether $H$ reads the "
+    r"avalanche face of criticality. $R$, the oscillation-gated factor, indexes synchronization "
+    r"throughout and sits at the floor in the non-oscillatory branching model; it is thus a marker of "
+    r"the synchronization face of criticality, complementary to---not a substitute for---$H$ on a "
+    r"scale-free observable. A strong superimposed rhythm also biases the multistep-regression "
+    r"branching ratio, so we anchor this model's criticality axis on the avalanche power-law and "
+    r"crackling scaling rather than on $\hat m$."
+)
+
+d["oscillatory"] = OSCILLATORY
 d["abstract"] = ABSTRACT
 d["specificity"] = SPECIFICITY
 P.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")

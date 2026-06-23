@@ -385,9 +385,54 @@ def fig7_specificity():
     fig.tight_layout(); save(fig, "crit_Fig7_specificity")
 
 
+# --------------------------------------------------------------------------- F8
+def fig8_oscillatory():
+    """Spiking E/I network where avalanches and oscillations coexist: R peaks with synchronization,
+    above the avalanche-critical point -> H and R are separable axes."""
+    s = load("study26_critical_oscillations.json")
+    if not s:
+        return
+    rows = s["rows"]; sm = s["summary"]; sig = [r["sigma"] for r in rows]
+    fig, ax = plt.subplots(1, 3, figsize=(COL2 * 1.05, 2.7))
+
+    # A: coexistence of avalanches + oscillation; supercritical runaway
+    a0 = ax[0]
+    a0.plot(sig, [r["powerlaw_r2"] for r in rows], "^-", color=GREEN, ms=4, label="avalanche power-law R²")
+    a0b = a0.twinx()
+    a0b.plot(sig, _norm([r["peak_prom"] for r in rows]), "o-", color=PURPLE, ms=3, label="oscillation prominence")
+    a0b.plot(sig, _norm([r["max_aval"] for r in rows]), "s:", color=RED, ms=3, label="max avalanche (runaway)")
+    a0.set_xlabel("branching gain  σ"); a0.set_ylabel("avalanche power-law R²", color=GREEN, fontsize=7)
+    a0b.set_ylabel("normalized", fontsize=7)
+    a0.set_title("Avalanches + oscillation coexist")
+    h0, l0 = a0.get_legend_handles_labels(); h1, l1 = a0b.get_legend_handles_labels()
+    a0.legend(h0 + h1, l0 + l1, fontsize=5.3, loc="center right"); panel(a0, "A")
+
+    # B: H, PC, R vs sigma; avalanche-critical point vs R peak
+    sc = sm["sigma_at_max_crit"]; sR = sm["sigma_at_max_R"]
+    for k, c, mk in [("H", ORANGE, "d"), ("PC", SKY, "o"), ("R", PURPLE, "^")]:
+        ax[1].plot(sig, _norm([r[k] for r in rows]), mk + "-", color=c, ms=3, label=k)
+    ax[1].axvline(sc, color=GREEN, ls="--", lw=0.9, label="avalanche-critical σ")
+    ax[1].axvline(sR, color=PURPLE, ls=":", lw=0.9, label="R peak")
+    ax[1].set_xlabel("branching gain  σ"); ax[1].set_ylabel("normalized")
+    ax[1].set_title("R peaks above the critical point"); ax[1].legend(fontsize=5.5); panel(ax[1], "B")
+
+    # C: cross-observable contrast — same metric (H), opposite sign, set by the observable
+    s10 = load("study10_criticality.json")
+    rho_branch = (s10["summary"].get("H_tracks_prox_rho", float("nan")) if s10 else float("nan"))
+    rho_spik = sm["H_tracks_crit"]["rho"]
+    labels = ["H on scale-free\navalanche signal\n(branching)", "H on oscillation-laden\npop. signal\n(spiking net)"]
+    vals = [rho_branch, rho_spik]; cols = [GREEN, PURPLE]
+    ax[2].bar(np.arange(2), vals, color=cols, width=0.6)
+    ax[2].axhline(0, color="k", lw=0.7); ax[2].set_xticks(np.arange(2))
+    ax[2].set_xticklabels(labels, fontsize=5.6)
+    ax[2].set_ylabel("ρ(H, avalanche-criticality)")
+    ax[2].set_title("The observable sets the sign"); panel(ax[2], "C")
+    fig.tight_layout(); save(fig, "crit_Fig8_oscillatory")
+
+
 def main():
     fig1_schematic(); fig2_branching(); fig3_reservoir(); fig4_ei()
-    fig5_realdata_tension(); fig6_resolution(); fig7_specificity()
+    fig5_realdata_tension(); fig6_resolution(); fig7_specificity(); fig8_oscillatory()
     print(f"  Done -> {FIGDIR}")
 
 

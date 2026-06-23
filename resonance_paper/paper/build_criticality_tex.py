@@ -27,6 +27,7 @@ RESULTS = [
     ("branching",  "Harmonicity peaks at the critical point of a branching network", "crit_Fig2_branching"),
     ("reservoir",  "Criticality generates harmonicity from structureless noise",     "crit_Fig3_reservoir"),
     ("ei",         "At the synchronization onset, phase coupling becomes placeable",  "crit_Fig4_ei_network"),
+    ("oscillatory","A spiking network dissociates H from R",                          "crit_Fig8_oscillatory"),
     ("specificity","Harmonicity's criticality peak is surrogate-specific",            "crit_Fig7_specificity"),
     ("tension",    "In human EEG the naive prediction reverses",                       "crit_Fig5_realdata_tension"),
     ("resolution", "The reversal is an observable-choice effect",                      "crit_Fig6_resolution"),
@@ -76,8 +77,8 @@ CAPS = {
     r"scale-free recovery survives controlling for slow-band power (partial $\rho=+0.16$, $p=0.023$), "
     r"whereas the raw reversal does not. \textbf{(C)} Mechanistic control: removing the slow-wave band "
     r"from the raw signal substantially attenuates the reversal and removes its significance "
-    r"($\rho$ $-0.24\rightarrow-0.09$, $p$ $0.008\rightarrow0.11$) --- it was largely carried by the "
-    r"slow-wave harmonic series. "
+    r"(Spearman $\rho$ from $-0.24$ to $-0.09$, $p$ from $0.008$ to $0.11$) --- it was largely carried "
+    r"by the slow-wave harmonic series. "
     r"\textbf{(D)} Across sleep stages, raw $H$ inflates into deep N3 (the most subcritical state) while "
     r"the scale-free $H$ does not."),
 "crit_Fig7_specificity": (
@@ -91,6 +92,18 @@ CAPS = {
     r"the real $H$ tracks criticality (per-seed $\rho$, 95\% CI); matched-slope noise does not. The "
     r"peak-warp null --- same peaks, relocated off integer ratios --- is not abolished, so $H$ indexes "
     r"the emergence of structured spectral peaks at criticality rather than exact integer-ratio tuning."),
+"crit_Fig8_oscillatory": (
+    r"\textbf{A spiking network dissociates $H$ from $R$.} A current-based E/I spiking network of the "
+    r"Brunel type in which power-law avalanches and a sustained population rhythm coexist at low firing "
+    r"rate; the control parameter is the excitatory branching gain $\sigma$. \textbf{(A)} Avalanches "
+    r"and oscillation coexist: the avalanche power-law goodness of fit (criticality, peaking at low "
+    r"$\sigma$) alongside the rising oscillation prominence and the runaway growth of the largest "
+    r"avalanche at high $\sigma$ (supercritical). \textbf{(B)} Normalized $H$, $\mathrm{PC}$, and "
+    r"$R=H\cdot\mathrm{PC}$ against $\sigma$: $\mathrm{PC}$ and $R$ peak in the synchronized regime, "
+    r"\emph{above} the avalanche-critical point (green line) marked by the power-law optimum. "
+    r"\textbf{(C)} Per-seed Spearman $\rho$ between each resonance factor and avalanche-criticality "
+    r"proximity (95\% CI): $R$ does not track avalanche criticality (null), confirming that $R$ indexes "
+    r"oscillatory synchronization rather than the branching/avalanche face of criticality."),
 }
 
 PREAMBLE = r"""\documentclass[11pt]{article}
