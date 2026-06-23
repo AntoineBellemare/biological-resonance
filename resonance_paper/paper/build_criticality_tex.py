@@ -65,7 +65,7 @@ CAPS = {
     r"non-trivial here---the only one of the three models where it does---though $R$ is maximal in the "
     r"synchronized regime above the edge, not exactly at it. \textbf{(C)} The absolute rise of "
     r"E$\leftrightarrow$I phase coupling (PLV) "
-    r"above its non-zero asynchronous baseline ($\Delta\mathrm{PC}=+0.40$)."),
+    r"above its non-zero asynchronous baseline ($\Delta\mathrm{PC}=+0.39$)."),
 "crit_Fig5_realdata_tension": (
     r"\textbf{In human EEG the prediction reverses.} \textbf{(A)} In sleep, raw-EEG harmonicity "
     r"$H_{\max}$ is \emph{highest} in deep N3 --- the most subcritical state (branching $\hat m$ "

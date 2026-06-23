@@ -35,7 +35,7 @@ ABSTRACT = (
     r"observable-mixing that drives the raw-EEG reversal---so the criticality signal in $H$ is exposed "
     r"only on a scale-free observable, while $R=H\cdot\mathrm{PC}$ is its oscillation-gated "
     r"synchronization index. $H$ is thus a candidate, "
-    r"single-channel index of proximity to criticality whose in-vivo evidence remains preliminary and "
+    r"single-signal index of proximity to criticality whose in-vivo evidence remains preliminary and "
     r"conditional, but whose model-side construct validity is strong and surrogate-controlled."
 )
 
@@ -179,8 +179,14 @@ _subs = {
          "whereas $R$ is an oscillation-gated synchronization index: it becomes placeable near a "
          "synchronization transition but indexes synchronization rather than avalanche criticality, "
          "and sits at the floor in non-oscillatory systems."),
+        ("only when $H$ is read off the correct, scale-free observable",
+         "only when $H$ is read off the model-matched, scale-free observable"),
     ],
     "ei": [
+        ("Does $R$ behave as a criticality observable when oscillations and criticality genuinely "
+         "coexist?",
+         "Does $R$ become placeable when oscillations and a synchronization transition coexist?"),
+        ("$\\Delta\\mathrm{PC}=+0.40$ ($[0.32,0.50]$)", "$\\Delta\\mathrm{PC}=+0.39$ ($[0.21,0.66]$)"),
         ("to $g\\approx0.65$ (95\\% interval $[0.45,0.65]$)",
          "to $g\\approx0.60$ (95\\% interval $[0.50,0.60]$)"),
         ("the autocorrelation time, our measure of critical slowing down, peaked at the same gain.",
@@ -207,6 +213,13 @@ _subs = {
          "only when oscillations and criticality coexist---switching on at the synchronization onset "
          "that the deterministic eigenvalue, normalized susceptibility, and critical slowing jointly "
          "fix---and that proper normalization of the susceptibility is essential to locate that onset."),
+    ],
+    "methods": [
+        ("isolating the periodic, harmonically organized structure.",
+         "isolating the periodic, harmonically organized structure. Concretely, the aperiodic "
+         "component was estimated as a power law $\\hat p(f)=a\\,f^{b}$ fit to the PSD by nonlinear "
+         "least squares (SciPy \\texttt{curve\\_fit}) and subtracted, with $H$ computed on the "
+         "positive periodic residual."),
     ],
     "resolution": [
         ("the convergence is exact: read off the correct observable, the human brain reproduces the "
@@ -261,6 +274,24 @@ TAXONOMY = (
 )
 if "keep three axes distinct" not in d["introduction"]:
     d["introduction"] = d["introduction"].rstrip() + "\n\n" + TAXONOMY
+
+# surrogate definitions in Methods (reviewer: explicit surrogate procedures)
+SURROGATES = (
+    r"\textbf{Spectrum-matched surrogates.} The specificity of $H$ "
+    r"(Fig.~\ref{fig:crit_Fig7_specificity}) was tested with four surrogate families generated from "
+    r"each signal, each preserving one nuisance property and analysed through the identical $H$ "
+    r"pipeline. (i) \emph{Phase-randomized}: Fourier magnitudes retained, phases replaced by "
+    r"independent uniform draws (identical PSD; because $H$ is phase-blind it must be unchanged---a "
+    r"positive control). (ii) \emph{AAFT} (amplitude-adjusted Fourier transform): the signal is "
+    r"rank-mapped to a Gaussian, phase-randomized, and rank-mapped back, preserving both the PSD and "
+    r"the amplitude distribution. (iii) \emph{Matched-slope}: colored noise with the same fitted "
+    r"power-law exponent $b$ and no peaks. (iv) \emph{Peak-warp}: the $1/f$ background and the "
+    r"detected spectral peaks (their count and heights) are preserved, but each peak frequency is "
+    r"multiplied by an independent jitter in $[0.80,1.22]$, destroying integer-ratio relationships "
+    r"while preserving peakiness---the fair test of whether $H$ requires exact small-integer ratios."
+)
+if "Spectrum-matched surrogates" not in d["methods"]:
+    d["methods"] = d["methods"].rstrip() + "\n\n" + SURROGATES
 
 # --- "What H is and is not" closing paragraph (#10) + exploratory labelling (#9) ---
 WHATIS = (
