@@ -5,6 +5,9 @@ from pathlib import Path
 
 P = Path(__file__).resolve().parent / "_crit_sections.json"
 d = json.loads(P.read_text(encoding="utf-8"))
+# strip stray carriage returns: earlier non-raw strings ate the '\r' of \rho / \rightarrow,
+# leaving literal CR chars (e.g. "$\x0dho$ ... \x0dightarrow"). They are never legitimate here.
+d = {k: (v.replace("\r", "") if isinstance(v, str) else v) for k, v in d.items()}
 
 ABSTRACT = (
     r"Criticality --- the idea that cortex operates near a phase transition between order and "
@@ -18,10 +21,10 @@ ABSTRACT = (
     r"truth, $H$ peaked when the system was tuned to its critical point: a branching network at its "
     r"critical branching ratio, a noise-driven echo-state reservoir at the edge of chaos, and a "
     r"Wilson--Cowan excitatory/inhibitory network at the edge of synchronization. A surrogate battery "
-    r"showed this peak is specific to the real dynamics --- it is reproduced neither by "
-    r"phase-randomized signals (confirming $H$ is phase-blind) nor by slope-, power- and "
-    r"peakiness-matched spectra --- although it reflects the emergence of structured spectral peaks at "
-    r"criticality rather than exact integer-ratio tuning. We then tested the prediction in human EEG. "
+    r"showed this peak is a property of the power spectrum rather than of phase, and is not reproduced "
+    r"by slope-, power- and peakiness-matched null spectra --- although it reflects the emergence of "
+    r"structured spectral peaks at criticality rather than exact integer-ratio tuning. We then tested "
+    r"the prediction in human EEG. "
     r"A naive test reversed the model result; the prediction was recovered only when $H$ was read off "
     r"the model-matched, scale-free population observable, within sleep state and controlling for "
     r"slow-wave power, where it tracked the wake-to-sleep traversal of criticality. The effect was "
@@ -170,6 +173,13 @@ if "harmonics dominate harmonicity" not in d["discussion"]:
 
 # --- soften residual overstatements (#8) + clarify single-channel (#4) ---
 _subs = {
+    "introduction": [
+        ("whereas $R$ tracks criticality only when oscillations are present and sits at the floor "
+         "otherwise.",
+         "whereas $R$ is an oscillation-gated synchronization index: it becomes placeable near a "
+         "synchronization transition but indexes synchronization rather than avalanche criticality, "
+         "and sits at the floor in non-oscillatory systems."),
+    ],
     "ei": [
         ("to $g\\approx0.65$ (95\\% interval $[0.45,0.65]$)",
          "to $g\\approx0.60$ (95\\% interval $[0.50,0.60]$)"),
@@ -206,8 +216,16 @@ _subs = {
          "proximity to criticality---the harmonicity computation is single-signal, though here it is "
          "applied to global field power, a population-level observable."),
         ("the correct in-vivo analogue", "the model-matched in-vivo analogue"),
+        ("$ho$ $-0.24ightarrow-0.09$, $p$ $0.008ightarrow0.11$",
+         r"Spearman $\rho$ from $-0.24$ to $-0.09$, $p$ from $0.008$ to $0.11$"),
     ],
     "discussion": [
+        ("behaves, across three independent model systems, as a single-channel observable of "
+         "proximity to criticality.",
+         "behaves, across three independent model systems, as a candidate single-signal observable of "
+         "proximity to criticality."),
+        (r"$H_\mathrm{aval}$ tracks criticality; raw $H$ reverses",
+         r"$H_\mathrm{aval}$ modestly tracks estimated criticality; raw $H$ reverses"),
         ("The correct empirical analogue of that signal is not the",
          "The model-matched empirical analogue of that signal is not the"),
         ("$H$ is the spectral criticality factor---it is maximized at the critical point of an "
@@ -219,8 +237,30 @@ _subs = {
 }
 for _sec, _pairs in _subs.items():
     for _a, _b in _pairs:
-        if _a in d[_sec]:
+        if _b not in d[_sec] and _a in d[_sec]:   # idempotent: skip if already applied
             d[_sec] = d[_sec].replace(_a, _b, 1)
+
+# dedupe the deterministic-Jacobian sentence if a prior non-idempotent run doubled it
+_jac = ("Critically, this critical point is fixed independently by the deterministic system itself: "
+        "the leading eigenvalue of the noise-free Wilson--Cowan Jacobian crosses zero---the Hopf "
+        "bifurcation---at $g=0.66$, computed with no reference to harmonicity or resonance and "
+        "coinciding with the normalized-susceptibility and critical-slowing peaks.")
+while (_jac + " " + _jac) in d["ei"]:
+    d["ei"] = d["ei"].replace(_jac + " " + _jac, _jac, 1)
+
+# conceptual taxonomy paragraph (reviewer #3): three distinct axes
+TAXONOMY = (
+    r"It helps to keep three axes distinct. \emph{Avalanche/branching criticality} is the approach to "
+    r"a branching ratio $\hat m\to1$ with scale-free avalanches; \emph{synchronization} is the onset "
+    r"of collective oscillation at a Hopf-like transition; and the \emph{observable} is the signal "
+    r"from which $H$ is read. As we will show, $H$ tracks avalanche criticality only when computed on "
+    r"a scale-free population observable; when a strong oscillation dominates the signal, $H$ instead "
+    r"follows the oscillatory harmonic series. $R$, by construction, indexes the synchronization axis "
+    r"and is not expected to track avalanche criticality. Conflating these axes is the source of the "
+    r"apparent in-vivo contradiction we resolve below."
+)
+if "keep three axes distinct" not in d["introduction"]:
+    d["introduction"] = d["introduction"].rstrip() + "\n\n" + TAXONOMY
 
 # --- "What H is and is not" closing paragraph (#10) + exploratory labelling (#9) ---
 WHATIS = (

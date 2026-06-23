@@ -37,8 +37,9 @@ CAPS = {
 "crit_Fig1_schematic": (
     r"\textbf{The hypothesis.} As a system crosses its critical point, classical markers "
     r"(branching ratio $\hat m\to1$, susceptibility) peak; we predict that spectral harmonicity "
-    r"$H$ peaks there too, whereas phase coupling and $R=H\cdot\mathrm{PC}$ rise only where "
-    r"sustained oscillations coexist with the transition (supercritical / synchronized regime)."),
+    r"$H$ peaks there too, whereas phase coupling and $R=H\cdot\mathrm{PC}$ rise with synchronization "
+    r"(supercritical / synchronized regime) and index the synchronization axis rather than avalanche "
+    r"criticality per se."),
 "crit_Fig2_branching": (
     r"\textbf{Harmonicity peaks at criticality in a branching network.} \textbf{(A)} Classical "
     r"criticality markers (susceptibility, avalanche power-law $R^2$, branching estimate $\hat m$) "

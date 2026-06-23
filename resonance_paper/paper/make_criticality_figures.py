@@ -71,7 +71,7 @@ def fig1_schematic():
     ax.plot(x, 0.92 * np.exp(-((x - 1.02) ** 2) / (2 * 0.16 ** 2)), color=ORANGE, lw=2.2,
             label="harmonicity H (prediction)")
     Rcurve = 0.9 / (1 + np.exp(-(x - 1.25) / 0.12)) * (x > 0.95)
-    ax.plot(x, Rcurve, color=PURPLE, lw=1.8, ls="--", label="phase coupling / R (needs oscillation)")
+    ax.plot(x, Rcurve, color=PURPLE, lw=1.8, ls="--", label="phase coupling / R (synchronization)")
     ax.axvline(1.0, color="grey", ls=":", lw=0.9)
     ax.text(0.42, 1.02, "subcritical", color=BLUE, fontsize=7.5, ha="center")
     ax.text(1.0, 1.08, "critical", color="k", fontsize=8, ha="center", fontweight="bold")
