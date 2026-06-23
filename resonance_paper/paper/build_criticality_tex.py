@@ -56,11 +56,14 @@ CAPS = {
     r"\textbf{At the synchronization onset, phase coupling and resonance become placeable.} "
     r"\textbf{(A)} The edge of synchronization, located by the relative-fluctuation susceptibility "
     r"(var/mean$^2$) and the autocorrelation time (critical slowing), which peak together near "
-    r"$g\approx0.65$ (shaded); raw envelope-variance susceptibility peaks later, an amplitude confound. "
+    r"$g\approx0.60$ (shaded), where the deterministic Jacobian's leading eigenvalue also crosses zero "
+    r"(Hopf bifurcation, $g=0.66$); raw envelope-variance susceptibility peaks later, an amplitude "
+    r"confound. "
     r"\textbf{(B)} The resonance factors against the edge: harmonicity $H$, phase coupling $\mathrm{PC}$, "
-    r"and $R=H\cdot\mathrm{PC}$ (normalized); $\mathrm{PC}$ rises through the edge and $R$ peaks at it --- "
-    r"this is the only one of the three models where $R$ is non-trivial, because sustained oscillations "
-    r"and criticality coexist. \textbf{(C)} The absolute rise of E$\leftrightarrow$I phase coupling (PLV) "
+    r"and $R=H\cdot\mathrm{PC}$ (normalized); $\mathrm{PC}$ rises through the edge and $R$ becomes "
+    r"non-trivial here---the only one of the three models where it does---though $R$ is maximal in the "
+    r"synchronized regime above the edge, not exactly at it. \textbf{(C)} The absolute rise of "
+    r"E$\leftrightarrow$I phase coupling (PLV) "
     r"above its non-zero asynchronous baseline ($\Delta\mathrm{PC}=+0.40$)."),
 "crit_Fig5_realdata_tension": (
     r"\textbf{In human EEG the prediction reverses.} \textbf{(A)} In sleep, raw-EEG harmonicity "

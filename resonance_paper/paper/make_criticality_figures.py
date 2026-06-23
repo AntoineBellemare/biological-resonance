@@ -189,10 +189,19 @@ def fig4_ei():
     ax[0].plot(g, _norm([r["order_param"] for r in rows]), "o-", color="#90a4ae", ms=3, alpha=0.7, label="order parameter")
     ax[0].plot(g, _norm([r.get("susceptibility_norm", np.nan) for r in rows]), "^-", color=BLUE, ms=4, label="susceptibility (var/mean²)")
     ax[0].plot(g, _norm([r["autocorr_time"] for r in rows]), "x-", color=GREEN, ms=4, label="autocorr time")
+    de_g = sm.get("det_eig_g"); de_re = sm.get("det_eig_re"); ghopf = sm.get("g_hopf")
+    if de_g and de_re:
+        axe = ax[0].twinx()
+        axe.plot(de_g, de_re, "-", color="#444444", lw=1.1, label="Re λ (eigenvalue)")
+        axe.axhline(0, color="#444444", ls=":", lw=0.7); axe.tick_params(labelsize=6)
+        axe.set_ylabel("Re λ (deterministic)", fontsize=6.5, color="#444444")
+        if ghopf and np.isfinite(ghopf):
+            ax[0].axvline(ghopf, color="#444444", ls="-.", lw=0.9)
     mark(ax[0])
     ax[0].set_xlabel("coupling gain  g"); ax[0].set_ylabel("normalized")
-    ax[0].set_title(f"Edge of synchronization\n(g≈{edge:.2f}: relative fluctuation + slowing)")
-    ax[0].legend(fontsize=5.6); panel(ax[0], "A")
+    ht = f"; Hopf g={ghopf:.2f}" if (ghopf and np.isfinite(ghopf)) else ""
+    ax[0].set_title(f"Edge of synchronization\n(g≈{edge:.2f}{ht})")
+    ax[0].legend(fontsize=5.3, loc="upper left"); panel(ax[0], "A")
 
     # B: the resonance factors vs the edge — H, PC, R together (the key relationship)
     for k, c, mk, lab in [("crossEI_H", ORANGE, "d", "harmonicity H"),
@@ -201,7 +210,7 @@ def fig4_ei():
         ax[1].plot(g, _norm([r[k] for r in rows]), mk + "-", color=c, ms=4, label=lab)
     mark(ax[1])
     ax[1].set_xlabel("coupling gain  g"); ax[1].set_ylabel("normalized  H / PC / R")
-    ax[1].set_title("PC rises and R peaks at the edge\n(only model where R is placeable)")
+    ax[1].set_title("PC rises at the edge; R is placeable\n(R maximal in the synchronized regime)")
     ax[1].legend(fontsize=5.8, loc="lower right"); panel(ax[1], "B")
 
     # C: absolute PC rise (PLV units) above the asynchronous baseline

@@ -94,9 +94,31 @@ DEFINITIONS = (
     r"$H$ and $R$ values are directly comparable."
 )
 
+PARAM_TABLE = (
+    r"\begin{table}[t]\centering\small" "\n"
+    r"\caption{Resonance parameters, fixed across all model and EEG analyses.}\label{tab:params}" "\n"
+    r"\begin{tabular}{lll}\toprule" "\n"
+    r"Step & Choice & Role \\ \midrule" "\n"
+    r"Power spectrum & Welch, aperiodic-removed & input $p(f)$ \\" "\n"
+    r"Frequency band & $2$--$60$/$80$~Hz (system-specific) & analysis range \\" "\n"
+    r"Resolution & $0.5$--$1$~Hz & bin spacing \\" "\n"
+    r"Harmonic kernel & $\mathrm{harmsim}$, $s=(a{+}b{-}1)/(ab)$ & rational simplicity \\" "\n"
+    r"Ratio reduction & lowest terms; $n{:}m$ denominator $\le 16$ & allowed integer ratios \\" "\n"
+    r"Spectral weight & min--max-scaled PSD, $\sum_f w=1$ & power weighting $w(f)$ \\" "\n"
+    r"Phase estimator & short-time Fourier transform & $\varphi_i(t)$ \\" "\n"
+    r"Coupling metric & $n{:}m$ phase-locking value & $\mathrm{PC}$ \\" "\n"
+    r"Reduction & power-weighted, self-excluded & pairwise to per-bin \\" "\n"
+    r"Combination & product $R=H\cdot\mathrm{PC}$ & resonance \\" "\n"
+    r"Summary & maximum over $f$ & $H_{\max}$, $R_{\max}$ \\ \bottomrule" "\n"
+    r"\end{tabular}\end{table}"
+)
+
 _anchor = "the harmonic structure that tracks it lives in the emergent signal."
 if "Formal definitions" not in d["methods"] and _anchor in d["methods"]:
     d["methods"] = d["methods"].replace(_anchor, _anchor + "\n\n" + DEFINITIONS, 1)
+if "label{tab:params}" not in d["methods"] and "are directly comparable." in d["methods"]:
+    d["methods"] = d["methods"].replace(
+        "are directly comparable.", "are directly comparable (Table~\\ref{tab:params}).\n\n" + PARAM_TABLE, 1)
 
 # --- discussion: report the spiking-network result (was future work) + specificity caveat ---
 _disc_corrected = (
@@ -148,6 +170,34 @@ if "harmonics dominate harmonicity" not in d["discussion"]:
 
 # --- soften residual overstatements (#8) + clarify single-channel (#4) ---
 _subs = {
+    "ei": [
+        ("to $g\\approx0.65$ (95\\% interval $[0.45,0.65]$)",
+         "to $g\\approx0.60$ (95\\% interval $[0.50,0.60]$)"),
+        ("the autocorrelation time, our measure of critical slowing down, peaked at the same gain.",
+         "the autocorrelation time, our measure of critical slowing down, peaked at the same gain. "
+         "Critically, this critical point is fixed independently by the deterministic system itself: "
+         "the leading eigenvalue of the noise-free Wilson--Cowan Jacobian crosses zero---the Hopf "
+         "bifurcation---at $g=0.66$, computed with no reference to harmonicity or resonance and "
+         "coinciding with the normalized-susceptibility and critical-slowing peaks."),
+        ("With the critical region fixed, both $H$ and $R$ tracked it. The harmonicity $H$ and the "
+         "oscillation-gated resonance $R$ peaked together at $g\\approx0.65$, co-located with the "
+         "normalized susceptibility and the autocorrelation maximum. This is the one model in which "
+         "$R$ is placeable, and it lands exactly where the criticality markers say it should.",
+         "With the critical region fixed independently, we asked where the resonance observables sit. "
+         "This is the one of the three models in which $R$ is non-trivial: harmonicity $H$ rises and "
+         "phase coupling switches on at the onset, so $R=H\\cdot\\mathrm{PC}$ becomes placeable rather "
+         "than sitting at the floor. $R$ does \\emph{not} sharply peak at the edge, however---it rises "
+         "through the onset and stays elevated across the synchronized regime, with its maximum well "
+         "into synchrony---foreshadowing the spiking-network result below that $R$ indexes "
+         "synchronization rather than the avalanche-critical point per se."),
+        ("Taken together, the E/I network shows that when oscillations and criticality genuinely "
+         "coexist, $R$ recovers the same critical point that $H$ marks, and that proper normalization "
+         "of the susceptibility is essential to read that point off correctly.",
+         "Taken together, the E/I network shows that $R$ becomes a placeable, non-trivial quantity "
+         "only when oscillations and criticality coexist---switching on at the synchronization onset "
+         "that the deterministic eigenvalue, normalized susceptibility, and critical slowing jointly "
+         "fix---and that proper normalization of the susceptibility is essential to locate that onset."),
+    ],
     "resolution": [
         ("the convergence is exact: read off the correct observable, the human brain reproduces the "
          "model law that $H$, not $R$, is the single-channel marker of proximity to criticality.",
@@ -189,6 +239,30 @@ WHATIS = (
 )
 if "What $H$ is and is not" not in d["discussion"]:
     d["discussion"] = d["discussion"].rstrip() + "\n\n" + WHATIS
+
+SUMMARY_TABLE = (
+    r"\begin{table}[t]\centering\footnotesize" "\n"
+    r"\caption{Each system, its independent (model) or estimated (EEG) criticality marker, the "
+    r"behaviour of $H$ and of $R=H\cdot\mathrm{PC}$, and the main caveat.}\label{tab:summary}" "\n"
+    r"\begin{tabular}{p{2.3cm}p{2.7cm}p{3.0cm}p{2.6cm}p{2.4cm}}\toprule" "\n"
+    r"System & Criticality marker & $H$ & $R$ & Caveat \\ \midrule" "\n"
+    r"Branching network & branching ratio $\hat m$ near 1; avalanche power-law & peaks at criticality "
+    r"(scale-free signal) & at the floor (no oscillation) & near-ceiling (construct validity) \\" "\n"
+    r"Echo-state reservoir & Lyapunov edge of chaos & harmonicity gain peaks near $\rho_c$ & --- "
+    r"(non-spiking) & relative measure ($H$ gain over input) \\" "\n"
+    r"Wilson--Cowan E/I & normalized susceptibility; Hopf eigenvalue ($g{=}0.66$) & rises at the onset "
+    r"& placeable; maximal in the synchronized regime & rate model; $R$ via E--I cross \\" "\n"
+    r"Spiking E/I (avalanches + oscillations) & avalanche power-law / crackling & tracks "
+    r"synchronization on the population signal & peaks above the avalanche-critical point & "
+    r"observable-dependent (oscillation-laden) \\" "\n"
+    r"Sleep EEG & $\hat m$, DFA traversal & $H_\mathrm{aval}$ tracks criticality; raw $H$ reverses & "
+    r"oscillation-gated & modest; single traversal \\" "\n"
+    r"Propofol / deep anaesthesia & $\hat m$ (barely traverses) & null & null & boundary null "
+    r"(no traversal) \\ \bottomrule" "\n"
+    r"\end{tabular}\end{table}"
+)
+if "tab:summary" not in d["discussion"]:
+    d["discussion"] = SUMMARY_TABLE + "\n\n" + d["discussion"]
 
 _spec_anchor = "a reminder that not every plausible distance metric survives validation."
 _spec_caveat = (

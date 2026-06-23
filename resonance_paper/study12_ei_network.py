@@ -88,6 +88,44 @@ def autocorr_time(x, max_lag=200):
     return float(below[0]) if len(below) else float(max_lag)
 
 
+# ---------------------------------------------------------------------------
+# Deterministic bifurcation analysis: the critical point WITHOUT reference to H/R.
+# The leading eigenvalue of the noise-free Wilson-Cowan Jacobian at its fixed point crosses
+# zero at the Hopf onset; this is an independent, a-priori marker of the transition, computed
+# entirely from the deterministic system (no stochastic simulation, no resonance).
+# ---------------------------------------------------------------------------
+_WC = dict(wEE=16.0, wEI=12.0, wIE=15.0, wII=3.0, PE=1.25, PI=0.0, tauE=0.010, tauI=0.020)
+_SIG = lambda x: 1.0 / (1.0 + np.exp(-(x - 4.0)))
+
+
+def _wc_leading_eig_real(g, p=_WC):
+    """Real part of the leading eigenvalue of the deterministic WC Jacobian at its fixed point."""
+    from scipy.optimize import fsolve
+    def f(v):
+        E, I = v
+        return [-E + _SIG(g * (p["wEE"] * E - p["wEI"] * I) + p["PE"]),
+                -I + _SIG(g * (p["wIE"] * E - p["wII"] * I) + p["PI"])]
+    E, I = fsolve(f, [0.2, 0.2])
+    aE = g * (p["wEE"] * E - p["wEI"] * I) + p["PE"]
+    aI = g * (p["wIE"] * E - p["wII"] * I) + p["PI"]
+    sE = _SIG(aE) * (1 - _SIG(aE)); sI = _SIG(aI) * (1 - _SIG(aI))
+    J = np.array([[(-1 + sE * g * p["wEE"]) / p["tauE"], (-sE * g * p["wEI"]) / p["tauE"]],
+                  [(sI * g * p["wIE"]) / p["tauI"], (-1 - sI * g * p["wII"]) / p["tauI"]]])
+    return float(np.max(np.linalg.eigvals(J).real))
+
+
+def wc_hopf_g(g_lo, g_hi, n=80):
+    """Deterministic Hopf onset: g at which the leading-eigenvalue real part crosses zero,
+    plus the (g, max Re lambda) curve for plotting."""
+    gg = np.linspace(g_lo, g_hi, n)
+    re = np.array([_wc_leading_eig_real(g) for g in gg])
+    g_hopf = float("nan")
+    for i in range(len(gg) - 1):
+        if np.isfinite(re[i]) and np.isfinite(re[i + 1]) and re[i] < 0 <= re[i + 1]:
+            g_hopf = float(gg[i] + (gg[i + 1] - gg[i]) * (0 - re[i]) / (re[i + 1] - re[i])); break
+    return g_hopf, gg.tolist(), re.tolist()
+
+
 def run(quick=True):
     seeds = list(range(3) if quick else range(12))      # network realizations -> CIs
     gs = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4] if quick else \
@@ -134,6 +172,7 @@ def run(quick=True):
         d = C.argmax_location_ci(gs, mat(m)); return d["point"], [d["lo"], d["hi"]]
     gC, cGC = loc("susceptibility"); gCn, cGCn = loc("susceptibility_norm"); gAC, cAC = loc("autocorr_time")
     gR, cR = loc("crossEI_R"); gPC, cPC = loc("crossEI_PC"); gH, cH = loc("crossEI_H")
+    g_hopf, det_g, det_eig = wc_hopf_g(min(gs), max(gs))   # deterministic Hopf (independent marker)
     i_c = int(np.argmax([r["susceptibility"] for r in rows]))
     pc_gc = rows[i_c]["crossEI_PC"]
     # bootstrap CI on the PC RISE (PC at g_c minus PC at baseline g)
@@ -152,7 +191,8 @@ def run(quick=True):
                    g_at_max_PC=gPC, g_at_max_PC_ci=cPC,
                    g_at_max_H=gH, g_at_max_H_ci=cH,
                    baseline_PC=base_pc, PC_at_g_critical=float(pc_gc),
-                   delta_PC_at_g_critical=float(pc_gc - base_pc), delta_PC_ci=dPC_ci)
+                   delta_PC_at_g_critical=float(pc_gc - base_pc), delta_PC_ci=dPC_ci,
+                   g_hopf=g_hopf, det_eig_g=det_g, det_eig_re=det_eig)
     result = dict(quick=quick, rows=rows, summary=summary)
     C.save_json(result, "study12_ei_network.json")
     _figures(result)
@@ -175,6 +215,9 @@ def _headline(result):
         cn = s.get("g_at_max_susceptibility_norm_ci", [np.nan, np.nan])
         print(f"  NORMALIZED susceptibility (var/mean^2) peaks at g={s['g_at_max_susceptibility_norm']:.2f} "
               f"[{cn[0]:.2f},{cn[1]:.2f}] (edge as RELATIVE fluctuation, not amplitude growth)")
+    if np.isfinite(s.get("g_hopf", float("nan"))):
+        print(f"  DETERMINISTIC Hopf bifurcation (leading-eigenvalue zero-crossing) at g={s['g_hopf']:.2f} "
+              f"-- an a-priori marker, computed without H/R, that locates the same onset.")
     print(f"  E<->I phase coupling is NOT zero sub-threshold: asynchronous baseline PC = "
           f"{s['baseline_PC']:.3f}.")
     print(f"  It RISES to PC={s['PC_at_g_critical']:.3f} at g_c, i.e. dPC=+{s['delta_PC_at_g_critical']:.3f} "
