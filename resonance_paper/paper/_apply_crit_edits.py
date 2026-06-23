@@ -64,7 +64,40 @@ SPECIFICITY = (
     r"relative gain $H_\mathrm{internal}-H_\mathrm{input}$ of the section above, not single-signal $H$)."
 )
 
+DEFINITIONS = (
+    r"\textbf{Formal definitions.} Let $p(f)$ be the Welch power spectral density restricted to "
+    r"$[f_{\min},f_{\max}]$. The aperiodic ($1/f$) component is removed (below) and the residual is "
+    r"min--max scaled and renormalized to a non-negative weight $w(f)$ with $\sum_f w(f)=1$. For an "
+    r"ordered pair of frequency bins $(f_i,f_j)$ the harmonic kernel scores the rational simplicity of "
+    r"their ratio: reducing $f_i/f_j$ to the lowest-terms fraction $a/b$ (continued-fraction "
+    r"approximation), "
+    r"\[ s(f_i,f_j)=\frac{a+b-1}{a\,b}, \] "
+    r"which equals $1$ for a unison/simple ratio and decreases as the integers grow "
+    r"($3{:}2\mapsto\tfrac{4}{6}$, $16{:}9\mapsto\tfrac{24}{144}$; Gill \& Purves, 2009; the "
+    r"implementation scales $s$ by $100$, immaterial after normalization). The harmonicity spectrum is "
+    r"the power-weighted, self-excluded reduction of this matrix, "
+    r"\[ H(f_i)=w(f_i)\sum_{j\neq i} s(f_i,f_j)\,w(f_j), \] "
+    r"so a bin scores highly when it stands in low-integer ratios with \emph{other} spectral power. "
+    r"The phase-coupling spectrum applies the same reduction to an $n{:}m$ phase-locking kernel, "
+    r"\[ \mathrm{PC}(f_i)=w(f_i)\sum_{j\neq i} \Big|\tfrac{1}{T}\sum_{t} "
+    r"e^{\,i\,(n\varphi_i(t)-m\varphi_j(t))}\Big|\,w(f_j), \] "
+    r"where $\varphi_i(t)$ is the short-time-Fourier-transform phase at $f_i$ and $(n,m)$ is the "
+    r"integer pair from reducing $f_i/f_j$ with denominator $\le 16$ (the harmonic kernel $s$ uses an "
+    r"effectively exact reduction, denominator $\le 1000$). The resonance spectrum is their "
+    r"per-frequency product, $R(f)=H(f)\cdot\mathrm{PC}(f)$, and we report the maxima "
+    r"$H_{\max}=\max_f H(f)$ (the headline harmonicity readout) and $R_{\max}$. Because $H$ depends "
+    r"only on $p(f)$ it is phase-blind and defined whether or not the signal oscillates, whereas "
+    r"$\mathrm{PC}$ (hence $R$) requires sustained, phase-stable rhythms. A single fixed configuration "
+    r"(harmonic kernel $s$; $n{:}m$ phase-locking value; ratio denominators $\le 16$; aperiodic removal "
+    r"on; identical $w$ normalization) was used across every model and EEG analysis, so all reported "
+    r"$H$ and $R$ values are directly comparable."
+)
+
+_anchor = "the harmonic structure that tracks it lives in the emergent signal."
+if "Formal definitions" not in d["methods"] and _anchor in d["methods"]:
+    d["methods"] = d["methods"].replace(_anchor, _anchor + "\n\n" + DEFINITIONS, 1)
+
 d["abstract"] = ABSTRACT
 d["specificity"] = SPECIFICITY
 P.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
-print("updated abstract + specificity in", P.name)
+print("updated abstract + specificity + methods definitions in", P.name)
