@@ -339,9 +339,55 @@ def fig6_resolution():
     fig.tight_layout(); save(fig, "crit_Fig6_resolution")
 
 
+# --------------------------------------------------------------------------- F7
+def fig7_specificity():
+    """Specificity: H's criticality peak is surrogate-specific and slope-independent. H(real)
+    tracks criticality; spectrum-matched surrogates (matched-slope noise, inharmonic peak-warp,
+    phase-randomized) preserve slope/power/peakiness but do NOT reproduce the criticality peak."""
+    s = load("study27_h_specificity.json")
+    if not s:
+        return
+    M = s["models"]
+    fig, ax = plt.subplots(1, 3, figsize=(COL2 * 1.05, 2.7))
+
+    def plot_model(a, name, plabel):
+        m = M[name]; rows = m["rows"]; x = [r["param"] for r in rows]
+        a.errorbar(x, [r["H_real"] for r in rows], yerr=[r.get("H_real_sem", 0) for r in rows],
+                   fmt="d-", color=ORANGE, capsize=2, ms=4, label="H (real)")
+        a.plot(x, [r["H_matched_slope"] for r in rows], "s--", color=GREY, ms=3, label="matched-slope noise")
+        a.plot(x, [r["H_peak_warp"] for r in rows], "^:", color=PURPLE, ms=3, label="peak-warp (inharmonic)")
+        a.plot(x, [r["H_phase_random"] for r in rows], "o-", color=SKY, ms=2, lw=0.8, alpha=0.7, label="phase-random")
+        a.axvline(m["crit"], color="grey", ls="--", lw=0.8)
+        a.set_xlabel(plabel); a.set_ylabel("harmonicity H_max")
+        tr = m["tracks"]["real"]; trs = m["tracks"]["matched_slope"]
+        a.text(0.03, 0.04, f"H tracks crit ρ={tr['rho']:+.2f}\nslope-null ρ={trs['rho']:+.2f}",
+               transform=a.transAxes, fontsize=6.3, va="bottom")
+
+    plot_model(ax[0], "branching", "branching ratio  σ")
+    ax[0].set_title("Branching process"); ax[0].legend(fontsize=5.5, loc="upper right"); panel(ax[0], "A")
+    plot_model(ax[1], "wilson_cowan", "coupling  g")
+    ax[1].set_title("Wilson–Cowan E/I"); panel(ax[1], "B")
+
+    # C: per-seed tracking-rho across surrogates -- only real H tracks criticality
+    names = ["branching", "wilson_cowan"]; kinds = ["real", "matched_slope", "peak_warp"]
+    kcol = {"real": ORANGE, "matched_slope": GREY, "peak_warp": PURPLE}
+    xpos = np.arange(len(names)); w = 0.26
+    for i, k in enumerate(kinds):
+        vals = [M[n]["tracks"][k]["rho"] for n in names]
+        los = [M[n]["tracks"][k]["rho"] - M[n]["tracks"][k]["lo"] for n in names]
+        his = [M[n]["tracks"][k]["hi"] - M[n]["tracks"][k]["rho"] for n in names]
+        ax[2].bar(xpos + (i - 1) * w, vals, w, color=kcol[k], label=k.replace("_", "-"),
+                  yerr=[los, his], capsize=2, error_kw=dict(lw=0.7))
+    ax[2].axhline(0, color="k", lw=0.7); ax[2].set_xticks(xpos)
+    ax[2].set_xticklabels(["branching", "Wilson–Cowan"], fontsize=6.5)
+    ax[2].set_ylabel("ρ(H, criticality proximity)")
+    ax[2].set_title("Only real H tracks criticality"); ax[2].legend(fontsize=5.6); panel(ax[2], "C")
+    fig.tight_layout(); save(fig, "crit_Fig7_specificity")
+
+
 def main():
     fig1_schematic(); fig2_branching(); fig3_reservoir(); fig4_ei()
-    fig5_realdata_tension(); fig6_resolution()
+    fig5_realdata_tension(); fig6_resolution(); fig7_specificity()
     print(f"  Done -> {FIGDIR}")
 
 
