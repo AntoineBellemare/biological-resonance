@@ -146,6 +146,50 @@ if "harmonics dominate harmonicity" not in d["discussion"]:
             d["discussion"] = d["discussion"].replace(_o, _disc_corrected, 1)
             break
 
+# --- soften residual overstatements (#8) + clarify single-channel (#4) ---
+_subs = {
+    "resolution": [
+        ("the convergence is exact: read off the correct observable, the human brain reproduces the "
+         "model law that $H$, not $R$, is the single-channel marker of proximity to criticality.",
+         "the alignment is preliminary: read off the model-matched observable, sleep EEG shows the "
+         "predicted ordering within state, with $H$ (not $R$) the candidate single-channel index of "
+         "proximity to criticality---the harmonicity computation is single-signal, though here it is "
+         "applied to global field power, a population-level observable."),
+        ("the correct in-vivo analogue", "the model-matched in-vivo analogue"),
+    ],
+    "discussion": [
+        ("The correct empirical analogue of that signal is not the",
+         "The model-matched empirical analogue of that signal is not the"),
+        ("$H$ is the spectral criticality factor---it is maximized at the critical point of an "
+         "avalanche system that never oscillates.",
+         "$H$ behaves as the spectral criticality factor in this division of labour: read off "
+         "scale-free avalanche activity, it is maximized at the critical point of a system that never "
+         "oscillates."),
+    ],
+}
+for _sec, _pairs in _subs.items():
+    for _a, _b in _pairs:
+        if _a in d[_sec]:
+            d[_sec] = d[_sec].replace(_a, _b, 1)
+
+# --- "What H is and is not" closing paragraph (#10) + exploratory labelling (#9) ---
+WHATIS = (
+    r"\textbf{What $H$ is and is not.} To prevent over-reading we state the scope compactly. $H$ is "
+    r"\emph{not} a direct estimator of the branching ratio $\hat m$; it is a complementary spectral "
+    r"readout that co-varies with proximity to criticality. $H$ is \emph{not} a classifier that "
+    r"outperforms band power, and we make no decoding claim. $H$ is \emph{not} evidence of exact "
+    r"integer-ratio tuning; the surrogate battery shows it indexes structured low-order spectral "
+    r"organization that often includes, but is not reducible to, exact integer ratios. What $H$ "
+    r"\emph{is}: a cheap, largely model-free spectral index of structured organization that peaks near "
+    r"independently defined critical transitions in three model systems and that---read off a "
+    r"scale-free population observable---shows preliminary, conditional alignment with estimated "
+    r"criticality in human sleep EEG. We did not preregister; the scale-free observable was dictated by "
+    r"the model construction rather than chosen to rescue the result, and the independent Sleep-EDF "
+    r"Telemetry cohort provides a fixed-pipeline replication of the dissociation."
+)
+if "What $H$ is and is not" not in d["discussion"]:
+    d["discussion"] = d["discussion"].rstrip() + "\n\n" + WHATIS
+
 _spec_anchor = "a reminder that not every plausible distance metric survives validation."
 _spec_caveat = (
     r" Relatedly, a surrogate battery shows that $H$'s criticality-tracking is specific to the real "
