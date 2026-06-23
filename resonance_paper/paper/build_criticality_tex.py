@@ -16,7 +16,7 @@ PAPER = Path(__file__).resolve().parent
 SECT = json.loads((PAPER / "_crit_sections.json").read_text(encoding="utf-8"))
 OUT = PAPER / "criticality_paper.tex"
 
-TITLE = ("Spectral harmonicity is an observable of proximity to criticality "
+TITLE = ("Spectral harmonicity as a candidate observable of proximity to criticality "
          "in models and human EEG")
 AUTHORS = r"Antoine Bellemare-Pepin\textsuperscript{1,2}, Karim Jerbi\textsuperscript{1}"
 AFFIL = (r"\textsuperscript{1}CoCo Lab, Psychology Department, University of Montr\'eal, Canada \\ "
@@ -27,6 +27,7 @@ RESULTS = [
     ("branching",  "Harmonicity peaks at the critical point of a branching network", "crit_Fig2_branching"),
     ("reservoir",  "Criticality generates harmonicity from structureless noise",     "crit_Fig3_reservoir"),
     ("ei",         "At the synchronization onset, phase coupling becomes placeable",  "crit_Fig4_ei_network"),
+    ("specificity","Harmonicity's criticality peak is surrogate-specific",            "crit_Fig7_specificity"),
     ("tension",    "In human EEG the naive prediction reverses",                       "crit_Fig5_realdata_tension"),
     ("resolution", "The reversal is an observable-choice effect",                      "crit_Fig6_resolution"),
 ]
@@ -79,6 +80,17 @@ CAPS = {
     r"slow-wave harmonic series. "
     r"\textbf{(D)} Across sleep stages, raw $H$ inflates into deep N3 (the most subcritical state) while "
     r"the scale-free $H$ does not."),
+"crit_Fig7_specificity": (
+    r"\textbf{Harmonicity's criticality peak is surrogate-specific.} For each model, $H_{\max}$ on the "
+    r"real signal is compared, across the control sweep, against spectrum-matched surrogates that each "
+    r"preserve one nuisance property. \textbf{(A)} Branching process and \textbf{(B)} Wilson--Cowan "
+    r"network: $H$(real) peaks at the critical point and tracks criticality proximity (per-seed "
+    r"Spearman $\rho$ inset), whereas the phase-randomized surrogate coincides with the real curve "
+    r"(confirming $H$ is phase-blind) and the slope-, power- and peakiness-matched surrogates "
+    r"(matched-slope colored noise; inharmonic peak-warp) stay comparatively flat. \textbf{(C)} Only "
+    r"the real $H$ tracks criticality (per-seed $\rho$, 95\% CI); matched-slope noise does not. The "
+    r"peak-warp null --- same peaks, relocated off integer ratios --- is not abolished, so $H$ indexes "
+    r"the emergence of structured spectral peaks at criticality rather than exact integer-ratio tuning."),
 }
 
 PREAMBLE = r"""\documentclass[11pt]{article}
