@@ -270,7 +270,7 @@ def fig5_realdata_tension():
 
 # --------------------------------------------------------------------------- F6
 def fig6_resolution():
-    s = load("study16_sleep.json"); sp = load("study16_propofol.json")
+    s = load("study16_sleep.json"); sst = load("study16_sleep_st.json"); sp = load("study16_propofol.json")
     if not s:
         return
     fig, ax = plt.subplots(1, 4, figsize=(COL2 * 1.4, 2.7))
@@ -283,8 +283,9 @@ def fig6_resolution():
     def sig(p):
         return p == p and p < 0.05
 
-    # A: the sign flip — raw H reverses, scale-free H recovers (sleep, +propofol); * = p<0.05
-    sets = [("sleep", s)] + ([("propofol", sp)] if sp else [])
+    # A: the sign flip — raw H reverses, scale-free H recovers; traversing cohorts (sleep,
+    #    sleep-ST) vs the non-traversing boundary case (propofol). * = p<0.05
+    sets = [("sleep", s)] + ([("sleep-ST", sst)] if sst else []) + ([("propofol", sp)] if sp else [])
     xs = np.arange(len(sets)); w = 0.38
     for off, key, col, lab in [(-w / 2, "H_full_vs_prox_m", GREY, "H_full (raw)"),
                                (+w / 2, "H_aval_vs_prox_m", GREEN, "H_aval (scale-free)")]:
@@ -297,7 +298,10 @@ def fig6_resolution():
     ax[0].axhline(0, color="k", lw=0.7); ax[0].set_xticks(xs); ax[0].set_xticklabels([n for n, _ in sets], fontsize=7)
     ax[0].set_ylabel("ρ(H, m̂-proximity)")
     pd = s.get("paired_dissociation", {}).get("across", {})
-    ax[0].set_title(f"Observable flips the sign\n(sleep paired p={pd.get('p', float('nan')):.2g})")
+    pdst = (sst or {}).get("paired_dissociation", {}).get("across", {})
+    ttl = f"Observable flips the sign\n(paired p: sleep {pd.get('p', float('nan')):.2g}"
+    ttl += f", ST {pdst['p']:.1g})" if pdst.get("p") == pdst.get("p") else ")"
+    ax[0].set_title(ttl)
     ax[0].legend(fontsize=5.6); panel(ax[0], "A")
 
     # B: partial correlation controlling slow power — recovery survives (H_aval | slow)

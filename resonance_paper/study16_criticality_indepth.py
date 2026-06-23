@@ -34,6 +34,10 @@ def _load(dataset, quick):
     if dataset == "sleep":
         from resonance_paper.study14_sleep import load_sleep
         return load_sleep(n_subjects=3 if quick else 8, max_epochs_per_stage=6 if quick else 15)
+    if dataset == "sleep_st":   # second, independent traversing cohort (Sleep Telemetry)
+        from resonance_paper.study14_sleep import load_sleep
+        return load_sleep(n_subjects=3 if quick else 12, max_epochs_per_stage=6 if quick else 15,
+                          cohort="temazepam")
     if dataset == "deepga":
         from resonance_paper import deep_anesthesia as D
         n = 2 if quick else 8

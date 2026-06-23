@@ -26,13 +26,23 @@ EVENT_STATE = {1: "Wake", 2: "N1", 3: "N2", 4: "N3", 5: "REM"}
 
 
 def load_sleep(n_subjects=6, channels=("EEG Fpz-Cz", "EEG Pz-Oz"),
-               max_epochs_per_stage=12, bandpass=(0.3, 45.0)):
-    """Multichannel 30 s sleep epochs labelled by stage (Sleep-EDF, via MNE)."""
+               max_epochs_per_stage=12, bandpass=(0.3, 45.0), cohort="age"):
+    """Multichannel 30 s sleep epochs labelled by stage (Sleep-EDF, via MNE).
+
+    cohort='age'       -> Sleep Cassette (natural sleep; the primary cohort);
+    cohort='temazepam' -> Sleep Telemetry, an INDEPENDENT set of subjects recorded with a
+                          different system in a separate PhysioNet study (a second traversing
+                          cohort; note these are a temazepam/placebo protocol, a mild benzo)."""
+    import re
     import mne
-    from mne.datasets.sleep_physionet.age import fetch_data
     rng = np.random.default_rng(0)
     items = []
-    paths = fetch_data(subjects=list(range(n_subjects)), recording=[1], on_missing="warn")
+    if cohort == "temazepam":
+        from mne.datasets.sleep_physionet.temazepam import fetch_data
+        paths = fetch_data(subjects=list(range(n_subjects)))
+    else:
+        from mne.datasets.sleep_physionet.age import fetch_data
+        paths = fetch_data(subjects=list(range(n_subjects)), recording=[1], on_missing="warn")
     for psg, hyp in paths:
         raw = mne.io.read_raw_edf(psg, preload=True, verbose="ERROR")
         annot = mne.read_annotations(hyp)
@@ -52,7 +62,7 @@ def load_sleep(n_subjects=6, channels=("EEG Fpz-Cz", "EEG Pz-Oz"),
         epo = mne.Epochs(raw, events, event_id={v: k for k, v in EVENT_STATE.items()},
                          tmin=0.0, tmax=30.0 - 1.0 / sf, baseline=None,
                          preload=True, verbose="ERROR", on_missing="ignore")
-        subj = str(psg).split("SC4")[-1][:4] if "SC4" in str(psg) else str(psg)[-8:]
+        _m = re.search(r"S[TC]\d+", str(psg)); subj = _m.group(0) if _m else str(psg)[-8:]
         data = epo.get_data(copy=True)             # (n_epochs, n_ch, n_times)
         codes = epo.events[:, 2]
         h_idx = [0]                                  # Fpz-Cz (frontal) for H/DFA
