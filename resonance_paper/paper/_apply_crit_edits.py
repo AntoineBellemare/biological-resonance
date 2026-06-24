@@ -233,6 +233,18 @@ _subs = {
          r"Spearman $\rho$ from $-0.24$ to $-0.09$, $p$ from $0.008$ to $0.11$"),
     ],
     "discussion": [
+        ("an appreciable range of criticality.",
+         "an appreciable range of criticality. The drop in effect size from models to scalp EEG is "
+         "expected rather than disappointing: the models read a near-noiseless mean-field signal, "
+         "whereas scalp global field power is volume-conducted, reference-dependent and spatially "
+         "smeared, so a small but reliable $\\rho$ is the proof-of-concept one should expect at this "
+         "signal-to-noise ratio."),
+        ("without claiming exact-harmonic tuning.",
+         "without claiming exact-harmonic tuning. Physically, such inharmonic but structured spectra "
+         "are the expected signature of multiple weakly-coupled modes and a broadening range of "
+         "timescales near a transition---mode proliferation and critical slowing produce several "
+         "non-commensurate peaks rather than a single clean harmonic stack---so $H$ reads the richness "
+         "of this multi-scale spectral organization, not a tuning to small-integer ratios."),
         ("behaves, across three independent model systems, as a single-channel observable of "
          "proximity to criticality.",
          "behaves, across three independent model systems, as a candidate single-signal observable of "
@@ -293,6 +305,22 @@ SURROGATES = (
 if "Spectrum-matched surrogates" not in d["methods"]:
     d["methods"] = d["methods"].rstrip() + "\n\n" + SURROGATES
 
+# robustness to aperiodic mis-fit (reviewer #1, this pass)
+ROBUSTNESS = (
+    r"\textbf{Robustness to aperiodic mis-estimation.} Because $H$ is read off the aperiodic-removed "
+    r"spectrum, we tested its sensitivity to the $1/f$ fit by injecting a controlled residual tilt "
+    r"$\delta$ (multiplying the amplitude spectrum by $f^{\delta}$) before the standard removal, in "
+    r"the branching model where the critical point is known (Fig.~\ref{fig:crit_Fig9_aperiodic}). The "
+    r"criticality-tracking of $H_{\max}$ is strong and stable under over-flattening ($\delta>0$), the "
+    r"default fit, and even with no removal at all ($\rho\approx0.8$--$0.9$); it weakens monotonically "
+    r"but does not reverse---and the $H$ peak stays at the critical point---even under strong residual "
+    r"\emph{steepening} ($\delta=-0.5$: $\rho=+0.15$), the under-removed-$1/f$ regime least favourable "
+    r"for the metric, which the in-vivo analysis further guards against by reading $H$ off the "
+    r"scale-free observable and controlling slow-wave power."
+)
+if "Robustness to aperiodic mis-estimation" not in d["methods"]:
+    d["methods"] = d["methods"].rstrip() + "\n\n" + ROBUSTNESS
+
 # --- "What H is and is not" closing paragraph (#10) + exploratory labelling (#9) ---
 WHATIS = (
     r"\textbf{What $H$ is and is not.} To prevent over-reading we state the scope compactly. $H$ is "
@@ -351,6 +379,9 @@ if _spec_anchor in d["discussion"] and "surrogate battery shows" not in d["discu
     d["discussion"] = d["discussion"].replace(_spec_anchor, _spec_anchor + _spec_caveat, 1)
 
 OSCILLATORY = (
+    r"This model is the mechanistic bridge to the in-vivo reversal reported below: with known ground "
+    r"truth it shows that whether $H$ reads avalanche criticality depends on the \emph{observable} "
+    r"(scale-free versus oscillation-laden), not on the metric. "
     r"The branching, reservoir and Wilson--Cowan systems each isolate one ingredient---avalanches "
     r"without oscillations, an emergent mode without spikes, or oscillations whose criticality is read "
     r"through susceptibility---so none lets the oscillation-gated factor $R$ be tested against a "

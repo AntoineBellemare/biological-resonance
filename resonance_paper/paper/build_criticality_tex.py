@@ -108,6 +108,17 @@ CAPS = {
     r"\textbf{(C)} Per-seed Spearman $\rho$ between each resonance factor and avalanche-criticality "
     r"proximity (95\% CI): $R$ does not track avalanche criticality (null), confirming that $R$ indexes "
     r"oscillatory synchronization rather than the branching/avalanche face of criticality."),
+"crit_Fig9_aperiodic": (
+    r"\textbf{$H$ is robust to aperiodic mis-estimation except under strong under-removal.} A "
+    r"controlled residual $1/f$ tilt $\delta$ is injected into the branching-model signal before the "
+    r"standard removal (the amplitude spectrum is multiplied by $f^{\delta}$; $\delta<0$ = "
+    r"under-removed / steeper). Plotted is the per-seed Spearman correlation between $H_{\max}$ and "
+    r"criticality proximity ($-|\sigma-1|$) with 95\% CI. The criticality signal is strong under "
+    r"over-flattening ($\delta>0$), the default fit ($\delta=0$) and even with no removal (dotted "
+    r"line), and weakens monotonically but does not reverse---staying above the shaded $\rho\le0$ "
+    r"failure region, with the $H$ peak remaining at criticality---even under strong residual "
+    r"steepening ($\delta=-0.5$), the under-removed-$1/f$ regime the in-vivo analysis further guards "
+    r"against by reading $H$ off the scale-free observable and controlling slow-wave power."),
 }
 
 PREAMBLE = r"""\documentclass[11pt]{article}
@@ -237,6 +248,7 @@ def main():
         parts.append(figure_tex(figkey))
     parts.append(r"\section{Discussion}" + "\n" + s["discussion"] + "\n")
     parts.append(r"\section{Methods}" + "\n" + s["methods"] + "\n")
+    parts.append(figure_tex("crit_Fig9_aperiodic"))
     parts.append(references_tex())
     parts.append(r"\end{document}")
     OUT.write_text("\n".join(parts), encoding="utf-8")

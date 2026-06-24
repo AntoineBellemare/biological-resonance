@@ -439,9 +439,38 @@ def fig8_oscillatory():
     fig.tight_layout(); save(fig, "crit_Fig8_oscillatory")
 
 
+# --------------------------------------------------------------------------- F9
+def fig9_aperiodic():
+    """Robustness of H to aperiodic mis-estimation: criticality-tracking ρ vs an injected residual
+    1/f tilt δ. Stable to over-flattening and no-removal; fails only under strong under-removal."""
+    s = load("study28_aperiodic_robustness.json")
+    if not s:
+        return
+    sm = s["summary"]; tilts = sm["tilts"]
+    keys = [f"tilt{d:+.2f}" for d in tilts]
+    rho = [sm["tracks"][k]["rho"] for k in keys]
+    lo = [sm["tracks"][k]["rho"] - sm["tracks"][k]["lo"] for k in keys]
+    hi = [sm["tracks"][k]["hi"] - sm["tracks"][k]["rho"] for k in keys]
+    fig, ax = plt.subplots(figsize=(COL2 * 0.58, 2.6))
+    ax.axhspan(-1.05, 0, color=RED, alpha=0.06)
+    ax.errorbar(tilts, rho, yerr=[lo, hi], fmt="o-", color=ORANGE, capsize=3, ms=4,
+                label="H tracks criticality")
+    nr = sm["tracks"]["no_removal"]["rho"]
+    ax.axhline(nr, color=GREY, ls=":", lw=1.0, label=f"no removal (ρ={nr:+.2f})")
+    ax.axvline(0, color=BLUE, ls="--", lw=0.8, label="default fit")
+    ax.axhline(0, color="k", lw=0.7)
+    ax.set_ylim(-0.6, 1.0)
+    ax.set_xlabel("residual aperiodic tilt  δ\n(−: under-removed / steeper)")
+    ax.set_ylabel("ρ(H, criticality proximity)")
+    ax.set_title("H tracks criticality across aperiodic\nmis-fit (weakens, does not reverse)")
+    ax.legend(fontsize=6, loc="lower right"); panel(ax, "A")
+    fig.tight_layout(); save(fig, "crit_Fig9_aperiodic")
+
+
 def main():
     fig1_schematic(); fig2_branching(); fig3_reservoir(); fig4_ei()
     fig5_realdata_tension(); fig6_resolution(); fig7_specificity(); fig8_oscillatory()
+    fig9_aperiodic()
     print(f"  Done -> {FIGDIR}")
 
 
