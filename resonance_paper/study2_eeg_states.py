@@ -49,7 +49,25 @@ def _epoch_rows(epochs, cfg, band):
     return rows
 
 
-def _analyze_contrast(name, epochs, pos_cond, neg_cond, band, quick):
+def _specparam_Hmax(signal, sf, cfg_keep, fmin=2.0, fmax=45.0):
+    """H_max with a specparam (FOOOF) aperiodic removal instead of the lightweight 2-parameter NLS:
+    FOOOF separates peaks from the aperiodic component, so a strong alpha peak cannot bias the slope.
+    We fit FOOOF to the PSD, whiten the signal by the fitted aperiodic spectrum, then compute H with
+    the framework's own removal disabled -- a like-for-like aperiodic cross-check on H_max."""
+    from fooof import FOOOF
+    from scipy.signal import welch
+    n = len(signal)
+    f, P = welch(signal, fs=sf, nperseg=min(n, int(2 * sf)))
+    fm = FOOOF(max_n_peaks=6, aperiodic_mode="fixed", verbose=False)
+    fm.fit(f, P, [fmin, fmax])
+    apf = fm.freqs; ap = 10.0 ** fm._ap_fit                       # aperiodic power over [fmin,fmax]
+    fr = np.fft.rfftfreq(n, 1.0 / sf)
+    apg = np.exp(np.interp(np.log(np.clip(fr, apf[0], apf[-1])), np.log(apf), np.log(ap)))
+    sig_w = np.fft.irfft(np.fft.rfft(signal) / np.sqrt(apg + 1e-30), n=n)
+    return float(compute_resonance(sig_w, sf=sf, config=cfg_keep).summaries["H"]["max"])
+
+
+def _analyze_contrast(name, epochs, pos_cond, neg_cond, band, quick, do_specparam=False):
     cfg_rm = C.default_config(fmin=2, fmax=45, remove_aperiodic=True)
     cfg_keep = C.default_config(fmin=2, fmax=45, remove_aperiodic=False)
     rows = _epoch_rows(epochs, cfg_rm, band)
@@ -77,6 +95,16 @@ def _analyze_contrast(name, epochs, pos_cond, neg_cond, band, quick):
         H_max_auc_with_removal=per_feat["H_max"]["auc"],
         H_max_auc_without_removal=C.roc_auc(pk, nk),
     )
+    if do_specparam:   # specparam (FOOOF) cross-check of the lightweight aperiodic fit
+        try:
+            ps = [_specparam_Hmax(ep["signal"], ep["sf"], cfg_keep)
+                  for ep in epochs if ep["condition"] == pos_cond]
+            ns = [_specparam_Hmax(ep["signal"], ep["sf"], cfg_keep)
+                  for ep in epochs if ep["condition"] == neg_cond]
+            aperiodic_check["H_max_auc_specparam"] = C.roc_auc(ps, ns)
+        except Exception as e:
+            aperiodic_check["H_max_auc_specparam"] = None
+            aperiodic_check["specparam_error"] = str(e)
     return dict(name=name, n_epochs=len(rows), pos=pos_cond, neg=neg_cond,
                 per_feature=per_feat, classification=clf,
                 aperiodic_check=aperiodic_check, rows=rows)
@@ -132,7 +160,7 @@ def run(quick=True):
     if eo_ec:
         print(f"  EO/EC: {len(eo_ec)} epochs")
         contrasts["eyes_open_vs_closed"] = _analyze_contrast(
-            "eyes_open_vs_closed", eo_ec, "EC", "EO", (8, 12), quick)
+            "eyes_open_vs_closed", eo_ec, "EC", "EO", (8, 12), quick, do_specparam=True)
 
     motor = D.load_eeg_motor_contrast(subjects=subjects, channels=D.MOTOR_CHANNELS,
                                       epoch_len=8.0, max_epochs_per_run=7)

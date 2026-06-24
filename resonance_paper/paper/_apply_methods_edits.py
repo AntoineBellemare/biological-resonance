@@ -89,6 +89,31 @@ _subs = {
          "\\emph{simulated} physiology (the ECG, PPG and respiration modalities are "
          "\\texttt{neurokit2}-generated, so the fingerprint partly reflects generator signatures "
          "rather than physiology)"),
+        ("not genuine harmonic organization, was driving the raw difference.",
+         "not genuine harmonic organization, was driving the raw difference. The \\emph{sub-chance} "
+         "value (rather than a mere drop to $0.5$) is itself informative: the aperiodic slope differs "
+         "between the two states in the \\emph{opposite} direction to their genuine harmonic "
+         "organization, so the uncorrected feature orders the conditions inversely."),
+        ("$H_{\\max}$ decoded the contrast at AUC $0.83$; without it, decoding collapsed to $0.29$",
+         "the $H_{\\max}$ harmonicity feature separated the two states at AUC $0.98$; without removal "
+         "it collapsed to $0.27$"),
+        ("This is direct evidence that harmonicity differences must be read only after aperiodic "
+         "removal.",
+         "This is direct evidence that harmonicity differences must be read only after aperiodic "
+         "removal. The choice of aperiodic estimator does not change this: replacing the lightweight "
+         "two-parameter fit with a specparam (FOOOF) decomposition---which models the alpha peak "
+         "separately and so cannot be slope-biased by it---gave a near-identical harmonicity AUC "
+         "($0.97$ vs $0.98$), confirming the eyes-closed result does not depend on the lightweight "
+         "correction."),
+    ],
+    "discussion": [
+        ("The phase-coupling surrogate null is mildly anti-conservative, with a per-instance "
+         "false-positive rate of $\\approx 0.09$ at $\\alpha = 0.05$ on uncoupled pairs, so strict "
+         "type-I control calls for more surrogates or a multiple-surrogate correction.",
+         "The phase-coupling surrogate null is mildly anti-conservative under a Gaussian-$z$ threshold "
+         "(false-positive rate $0.066$ at $\\alpha = 0.05$ on $n=1000$ uncoupled pairs, the null $z$ "
+         "being right-skewed); we therefore report significance via the exact permutation $p$, which "
+         "is calibrated ($0.045$ at $\\alpha=0.05$)."),
     ],
     "methods": [
         ("The core engine is biotuner, pinned to the immutable commit \\texttt{fc158c3} (full SHA "

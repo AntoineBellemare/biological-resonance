@@ -68,11 +68,15 @@ CAPS = {
     r"resonance peak-to-median, locked vs phase-scrambled (rank AUC $=1.00$)."),
 4: (r"\textbf{Operating characteristics.} \textbf{(A)} Detection AUC vs signal-to-noise ratio for harmonicity "
     r"$H$ and cross-signal coupling $\mathrm{PC}_z$ (chance dashed); $H$ holds to $\approx-18$~dB, coupling has "
-    r"a sharp threshold near $-12$~dB. \textbf{(B)} Null calibration of $\mathrm{PC}_z$ on uncoupled pairs "
-    r"(per-instance false-positive rate; $n=120$): mildly anti-conservative ($\approx0.09$ at $\alpha=0.05$). "
+    r"a sharp threshold near $-12$~dB. \textbf{(B)} Null calibration on $n=1000$ uncoupled pairs "
+    r"(false-positive rate; targets dashed): the Gaussian-$z$ threshold is mildly anti-conservative "
+    r"($0.066$ at $\alpha=0.05$) because the null $z$ is right-skewed, whereas the exact permutation "
+    r"$p$ is calibrated ($0.045$); we report the latter. "
     r"\textbf{(C)} Runtime is set by the frequency-grid size, not signal length."),
 5: (r"\textbf{Comparison with established measures.} \textbf{(A)} Coupling detection: framework "
-    r"$\mathrm{PC}_z$ matches the oracle raw n:m phase-locking value and saturates $\approx6$~dB earlier. "
+    r"$\mathrm{PC}_z$ against a like-for-like surrogate-normalized oracle $\mathrm{PLV}_z$ and the raw "
+    r"n:m phase-locking value; $\mathrm{PC}_z$ matches $\mathrm{PLV}_z$ at high SNR and detects "
+    r"$\approx6$~dB earlier, so the edge is not an artifact of normalized-vs-raw scoring. "
     r"\textbf{(B,C)} Harmonicity $H$ vs the classical harmonic-to-noise ratio, separating harmonic from "
     r"inharmonic (B) and from noise (C); $H$ matches HNR at usable SNR and adds a per-frequency spectrum."),
 6: (r"\textbf{Method choices and the locking mechanism.} \textbf{(A)} Across the strategy registry, detection "
