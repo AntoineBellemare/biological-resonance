@@ -1,0 +1,24 @@
+{
+  "quick": true,
+  "ratio": "2:3",
+  "rows": [
+    {
+      "method": "default (nm_plv+binary+stft)",
+      "coupled": 0.21494435672227352,
+      "uncoupled": 0.3010175270786633,
+      "delta": -0.08607317035638978
+    },
+    {
+      "method": "sound (canonical+fraction+hilbert)",
+      "coupled": 0.0645067378443207,
+      "uncoupled": 0.02410149614787129,
+      "delta": 0.040405241696449413
+    },
+    {
+      "method": "ORACLE (handed 2:3, hilbert PLV)",
+      "coupled": 0.9879586738611904,
+      "uncoupled": 0.2285528058790387,
+      "delta": 0.7594058679821517
+    }
+  ]
+}
