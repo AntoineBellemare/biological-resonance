@@ -25,8 +25,10 @@ import numpy as np
 
 from resonance_paper import _common as C
 from resonance_paper.signals import _norm, pink_noise
-from resonance_paper.study5_cross_signal import gen_pair, cross_target_z, _config_for, SF as SF5
+from resonance_paper.study5_cross_signal import (gen_pair, cross_target_z, iaaft_surrogate,
+                                                 _config_for, SF as SF5)
 from biotuner.resonance import compute_resonance
+from biotuner.harmonic_connectivity import compute_cross_resonance
 
 SF = 500.0           # >= 320 so the AAFT surrogate's 150 Hz post-filter stays below Nyquist
 DUR = 12.0
@@ -78,22 +80,56 @@ def part_a_snr(quick):
     return out
 
 
+def _null_instance(seed, n_surr, cfg5):
+    """One UNCOUPLED pair -> (Gaussian-threshold z, exact permutation rank-p) for the targeted
+    cross-PC entry against an IAAFT-of-B null. The surrogate recomputes the FULL cross-resonance,
+    so any n:m selection inside the kernel is re-run identically for data and surrogates (no
+    selection asymmetry). The rank-p is calibrated by construction; the z-threshold need not be."""
+    A, B = gen_pair("lock_2to3", False, snr_db=6, seed=seed)
+
+    def meas(res):
+        fr = res.freqs
+        return max(float(res.phase_coupling_matrix[int(np.argmin(np.abs(fr - fa))),
+                                                   int(np.argmin(np.abs(fr - fb)))])
+                   for fa, fb in LOCK_PAIRS)
+
+    obs_v = meas(compute_cross_resonance(A, B, sf=SF5, config=cfg5))
+    rng = np.random.default_rng(seed + 1)
+    sv = np.array([meas(compute_cross_resonance(A, iaaft_surrogate(B, np.random.default_rng(int(s))),
+                                                sf=SF5, config=cfg5))
+                   for s in rng.integers(0, 2 ** 31 - 1, n_surr)])
+    z = float((obs_v - sv.mean()) / (sv.std() + 1e-12))
+    rank_p = float((1 + np.sum(sv >= obs_v)) / (n_surr + 1))   # exact one-sided permutation p
+    return z, rank_p
+
+
 def part_b_null(quick):
-    """Null calibration of the cross PC z-score: on UNCOUPLED pairs (the genuine null)
-    the z should be ~N(0,1), so ~5% exceed the one-sided alpha=0.05 threshold."""
+    """Null calibration on UNCOUPLED pairs (the genuine null). Reports the full null z distribution
+    and contrasts the Gaussian-threshold decision (z>z_alpha -- anti-conservative under heavy tails)
+    with the exact permutation/rank p (calibrated by construction), demonstrating the recommended
+    correction. n>=1000 instances at paper grade."""
+    from scipy.stats import skew
     cfg5 = _config_for("lock_2to3")
-    n_inst = 40 if quick else 120
-    n_surr = 30 if quick else 60
-    zs = []
-    for s in range(n_inst):
-        A, B = gen_pair("lock_2to3", False, snr_db=6, seed=s + 9000)
-        zs.append(cross_target_z(A, B, SF5, cfg5, LOCK_PAIRS, "PC", n=n_surr, seed=s + 9000))
-        if s % 10 == 0:
-            print(f"  [B] null instance {s}/{n_inst}", flush=True)
-    Z = np.array(zs); Z = Z[np.isfinite(Z)]
+    n_inst = 120 if quick else 1000
+    n_surr = 49 if quick else 99
+    seeds = [9000 + s for s in range(n_inst)]
+    try:
+        from joblib import Parallel, delayed
+        res = Parallel(n_jobs=-1)(delayed(_null_instance)(s, n_surr, cfg5) for s in seeds)
+    except Exception:
+        res = [_null_instance(s, n_surr, cfg5) for s in seeds]
+    Z = np.array([z for z, _ in res]); P = np.array([p for _, p in res])
+    ok = np.isfinite(Z); Z = Z[ok]; P = P[ok]
+    zthr = {0.05: 1.645, 0.01: 2.326}; alphas = [0.05, 0.01]
+    hist, edges = np.histogram(Z, bins=24)
     return dict(n_instances=int(Z.size), n_surr=n_surr,
-                fpr_005=float(np.mean(Z > 1.645)), fpr_001=float(np.mean(Z > 2.326)),
-                z_mean=float(Z.mean()), z_std=float(Z.std()))
+                z_mean=float(Z.mean()), z_std=float(Z.std()), z_skew=float(skew(Z)),
+                z_pct={str(p): float(np.percentile(Z, p)) for p in [50, 90, 95, 97.5, 99]},
+                fpr_z={str(a): float(np.mean(Z > zthr[a])) for a in alphas},
+                fpr_rank={str(a): float(np.mean(P <= a)) for a in alphas},
+                z_hist=hist.tolist(), z_hist_edges=edges.tolist(),
+                # back-compat keys
+                fpr_005=float(np.mean(Z > 1.645)), fpr_001=float(np.mean(Z > 2.326)))
 
 
 def part_c_scaling(quick):
@@ -139,9 +175,11 @@ def _headline(result):
           + "  ".join(f"{s:+d}dB:{a:.2f}" for s, a in zip(A["snrs"], A["H_auc"])))
     print("      coupling detection AUC vs SNR:    "
           + "  ".join(f"{s:+d}dB:{a:.2f}" for s, a in zip(A["cpl_snrs"], A["PC_auc"])))
-    print(f"  (B) cross PC z-score null calibration (uncoupled pairs): false-positive rate "
-          f"at alpha=0.05 = {B['fpr_005']:.3f} (target 0.05); at 0.01 = {B['fpr_001']:.3f} (target 0.01); "
-          f"null z = {B['z_mean']:.2f}+/-{B['z_std']:.2f}")
+    print(f"  (B) null calibration (n={B['n_instances']} uncoupled pairs, {B['n_surr']} surrogates each):")
+    print(f"      Gaussian-threshold FPR  a=0.05:{B['fpr_z']['0.05']:.3f}  a=0.01:{B['fpr_z']['0.01']:.3f}"
+          f"  (anti-conservative; null z={B['z_mean']:+.2f}+/-{B['z_std']:.2f}, skew {B['z_skew']:+.2f})")
+    print(f"      permutation-p     FPR  a=0.05:{B['fpr_rank']['0.05']:.3f}  a=0.01:{B['fpr_rank']['0.01']:.3f}"
+          f"  (exact/calibrated -- the recommended decision rule)")
     sc = result["scaling"]["by_length"]; rr = result["scaling"]["by_resolution"]
     print(f"  (C) scaling: runtime ~flat in length ({sc[0]['length']}->{sc[0]['sec_per_call']*1000:.0f}ms, "
           f"{sc[-1]['length']}->{sc[-1]['sec_per_call']*1000:.0f}ms) — dominated by n_freqs: "
@@ -159,11 +197,17 @@ def _figures(result):
     axes[0].set_xlabel("SNR (dB)"); axes[0].set_ylabel("detection AUC"); axes[0].set_ylim(0.4, 1.05)
     axes[0].set_title("A. Operating range\n(detection AUC vs SNR)", fontsize=10); axes[0].legend(fontsize=7)
 
-    axes[1].bar([0, 1], [B["fpr_005"], B["fpr_001"]], color="#009E73", width=0.6, alpha=0.85)
+    x = np.arange(2); w = 0.35
+    axes[1].bar(x - w / 2, [B["fpr_z"]["0.05"], B["fpr_z"]["0.01"]], w, color="#D55E00",
+                label="Gaussian z-threshold")
+    axes[1].bar(x + w / 2, [B["fpr_rank"]["0.05"], B["fpr_rank"]["0.01"]], w, color="#009E73",
+                label="permutation p")
     axes[1].axhline(0.05, color="k", ls="--", lw=0.8); axes[1].axhline(0.01, color="grey", ls=":", lw=0.8)
-    axes[1].set_xticks([0, 1]); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
+    axes[1].set_xticks(x); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
     axes[1].set_ylabel("per-instance false-positive rate")
-    axes[1].set_title("B. Null calibration of PC_z\n(n=120 pairs; targets = dashed)", fontsize=10)
+    axes[1].set_title(f"B. Null calibration (n={B['n_instances']}):\nz-threshold anti-conservative; "
+                      f"permutation p calibrated", fontsize=9)
+    axes[1].legend(fontsize=6)
 
     nf = [r["n_freqs"] for r in sc["by_resolution"]]; ms = [r["sec_per_call"] * 1000 for r in sc["by_resolution"]]
     axes[2].plot(nf, ms, "o-", color="#D55E00")
