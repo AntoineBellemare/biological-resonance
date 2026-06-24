@@ -95,8 +95,9 @@ def _headline(result):
           f"frac PC significant={ctrl['frac_pc_sig']:.2f}")
     print(f"  nonsinusoidal waveforms: PC_z {min(r['pc_z'] for r in nons):+.2f}..{max(r['pc_z'] for r in nons):+.2f}, "
           f"H {min(r['H'] for r in nons):.2f}..{max(r['H'] for r in nons):.2f}")
-    print("  => within-signal PC_z is at null for a pure sinusoid but elevated for every nonsinusoidal")
-    print("     waveform (as is H): the single-signal phase axis partly re-reports waveform shape.")
+    print("  => within-signal PC_z stays at the null (<=0, none significant) for EVERY nonsinusoidal")
+    print("     waveform: the phase-preserving surrogate also contains the stationary harmonic phase")
+    print("     relations, so PC_z does NOT re-report waveform nonsinusoidality (H carries the shape).")
 
 
 if __name__ == "__main__":
