@@ -89,7 +89,7 @@ def figure1():
     axes[0].set_ylabel("mean harmonicity H")
     axes[0].set_title("Harmonic-structure recovery")
     axes[0].tick_params(axis="x", rotation=35)
-    axes[0].text(0.04, 0.92, f"ρ(richness,H)={s1['part_a']['spearman_richness_Havg']:.2f}",
+    axes[0].text(0.04, 0.92, f"$\\rho$(richness,H)={s1['part_a']['spearman_richness_Havg']:.2f}",
                  transform=axes[0].transAxes, fontsize=7)
     panel(axes[0], "A")
 
@@ -155,9 +155,9 @@ def figure2():
     ax.bar(x - w/2, h_vals, w, color=ORANGE, label="H", alpha=0.9)
     ax.bar(x + w/2, pc_vals, w, color=PURPLE, label="PC", alpha=0.9)
     ax.axhline(0, color="k", lw=0.7)
-    ax.set_xticks(x); ax.set_xticklabels(["vs ratio\ncomplexity", "vs phase\nlocking κ"], fontsize=7)
-    ax.set_ylabel("Spearman ρ"); ax.set_ylim(-0.75, 0.75)
-    ax.annotate("H vs κ ≈ 0\n(phase-blind)", (1 - w/2, h_vals[1]), xytext=(0.45, 0.55),
+    ax.set_xticks(x); ax.set_xticklabels(["vs ratio\ncomplexity", "vs phase\nlocking $\\kappa$"], fontsize=7)
+    ax.set_ylabel("Spearman $\\rho$"); ax.set_ylim(-0.75, 0.75)
+    ax.annotate("H vs $\\kappa\\approx0$\n(phase-blind)", (1 - w/2, h_vals[1]), xytext=(0.45, 0.55),
                 textcoords="axes fraction", fontsize=6.5, ha="center",
                 arrowprops=dict(arrowstyle="->", lw=0.7))
     ax.set_title("Independence"); ax.legend(loc="lower left")
@@ -171,12 +171,12 @@ def figure2():
     kcols = {"2:3": GREEN, "3:4": BLUE, "4:5": RED}
     for label, rows in tr.items():
         ax.plot([max(d["K"], 1.0) for d in rows], [d["PC"] for d in rows], "o-",
-                color=kcols.get(label), ms=3, lw=1.2, label=f"{label} (n·m={cx[label]})")
+                color=kcols.get(label), ms=3, lw=1.2, label=f"{label} ($n\\cdot m$={cx[label]})")
     ax.axhline(0.5, color="grey", ls=":", lw=0.6)
     ax.set_xscale("log")
     ax.set_xlabel("coupling strength K (log)"); ax.set_ylabel("phase coupling PC")
     rho = s7["corr"]["kstar_vs_complexity"]
-    ax.set_title(f"Generative: complex ratios\nlock later (K*↑ with n·m, ρ={rho:+.1f})")
+    ax.set_title(f"Generative: complex ratios\nlock later ($K^*$ rises with $n\\cdot m$, $\\rho={rho:+.1f}$)")
     ax.legend(fontsize=5.5)
     panel(ax, "D")
 
@@ -264,8 +264,8 @@ def figure4():
     # B: devil's staircase
     st = s8["staircase"]
     axes[1].plot([d["Omega"] for d in st], [d["rho"] for d in st], ".", color=BLUE, ms=2.5)
-    axes[1].set_xlabel("drive ratio  Ω"); axes[1].set_ylabel("rotation number  ρ")
-    axes[1].set_title("Rotation number ρ(Ω)\n(forced Van der Pol: 1:1 lock)")
+    axes[1].set_xlabel("drive ratio  $\\Omega$"); axes[1].set_ylabel("rotation number  $\\rho$")
+    axes[1].set_title("Rotation number $\\rho(\\Omega)$\n(forced Van der Pol: 1:1 lock)")
     panel(axes[1], "B")
 
     # C: tongue width vs complexity, colored by harmonicity
@@ -430,11 +430,16 @@ def figure8():
     axes[0].set_xlabel("SNR (dB)"); axes[0].set_ylabel("detection AUC")
     axes[0].set_title("Operating range vs SNR"); axes[0].legend(fontsize=7); panel(axes[0], "A")
 
-    axes[1].bar([0, 1], [B["fpr_005"], B["fpr_001"]], color=GREEN, width=0.6, alpha=0.85)
+    fz = B.get("fpr_z", {"0.05": B.get("fpr_005"), "0.01": B.get("fpr_001")})
+    frk = B.get("fpr_rank", {"0.05": float("nan"), "0.01": float("nan")})
+    xb = np.arange(2); wb = 0.35
+    axes[1].bar(xb - wb / 2, [fz["0.05"], fz["0.01"]], wb, color=RED, label="Gaussian z")
+    axes[1].bar(xb + wb / 2, [frk["0.05"], frk["0.01"]], wb, color=GREEN, label="permutation p")
     axes[1].axhline(0.05, color="k", ls="--", lw=0.8); axes[1].axhline(0.01, color=GREY, ls=":", lw=0.8)
-    axes[1].set_xticks([0, 1]); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
-    axes[1].set_ylabel("per-instance false-positive rate")
-    axes[1].set_title("PC_z null calibration\n(n=120 pairs; targets dashed)"); panel(axes[1], "B")
+    axes[1].set_xticks(xb); axes[1].set_xticklabels(["α=0.05", "α=0.01"])
+    axes[1].set_ylabel("false-positive rate")
+    axes[1].set_title(f"Null calibration (n={B.get('n_instances', 120)}):\nz anti-conservative, perm. calibrated")
+    axes[1].legend(fontsize=6); panel(axes[1], "B")
 
     nf = [r["n_freqs"] for r in sc["by_resolution"]]; ms = [r["sec_per_call"] * 1000 for r in sc["by_resolution"]]
     axes[2].plot(nf, ms, "o-", color=RED)
@@ -453,10 +458,12 @@ def figure9():
     fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.7))
 
     axes[0].plot(cpl["snrs"], cpl["PCz_auc"], "o-", color=PURPLE, label="framework PC_z")
+    if cpl.get("PLVz_auc"):
+        axes[0].plot(cpl["snrs"], cpl["PLVz_auc"], "^-", color=BLUE, label="oracle PLV_z (like-for-like)")
     axes[0].plot(cpl["snrs"], cpl["rawPLV_auc"], "s--", color=GREY, label="raw n:m PLV")
     axes[0].axhline(0.5, color="k", ls=":", lw=0.7); axes[0].set_ylim(0.30, 1.05)
     axes[0].set_xlabel("SNR (dB)"); axes[0].set_ylabel("coupling AUC")
-    axes[0].set_title("Coupling: PC_z vs raw PLV"); axes[0].legend(fontsize=7); panel(axes[0], "A")
+    axes[0].set_title("Coupling: PC_z vs PLV_z\n(like-for-like) vs raw PLV"); axes[0].legend(fontsize=6); panel(axes[0], "A")
 
     axes[1].plot(harm["snrs"], harm["H_auc_inh"], "o-", color=BLUE, label="framework H")
     axes[1].plot(harm["snrs"], harm["HNR_auc_inh"], "s--", color=GREY, label="HNR")

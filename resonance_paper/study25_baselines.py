@@ -27,7 +27,8 @@ from scipy.signal import butter, filtfilt, hilbert
 
 from resonance_paper import _common as C
 from resonance_paper.signals import _norm, pink_noise
-from resonance_paper.study5_cross_signal import gen_pair, cross_target_z, _config_for, SF as SF5
+from resonance_paper.study5_cross_signal import (gen_pair, cross_target_z, iaaft_surrogate,
+                                                 _config_for, SF as SF5)
 from biotuner.resonance import compute_resonance
 
 SF = 500.0           # >= 320 so the AAFT surrogate's 150 Hz post-filter stays below Nyquist
@@ -43,6 +44,17 @@ def raw_nm_plv(A, B, fa, fb, p, q, bw=2.0):
         b, a = butter(4, [(f - bw) / (SF5 / 2), (f + bw) / (SF5 / 2)], btype="band")
         return np.angle(hilbert(filtfilt(b, a, sig)))
     return float(np.abs(np.mean(np.exp(1j * (q * phase(A, fa) - p * phase(B, fb))))))
+
+
+def raw_nm_plv_z(A, B, fa, fb, p, q, n=40, seed=0):
+    """Surrogate-normalized oracle PLV: the SAME IAAFT-of-B null as PC_z, so PC_z vs PLV_z is a
+    like-for-like comparison (both surrogate z-scores) -- the fair test the raw-vs-normalized
+    comparison cannot provide."""
+    obs = raw_nm_plv(A, B, fa, fb, p, q)
+    rng = np.random.default_rng(seed)
+    sv = np.array([raw_nm_plv(A, iaaft_surrogate(B, np.random.default_rng(int(s))), fa, fb, p, q)
+                   for s in rng.integers(0, 2 ** 31 - 1, n)])
+    return float((obs - sv.mean()) / (sv.std() + 1e-12))
 
 
 # ----- harmonicity signals + HNR baseline
@@ -84,19 +96,23 @@ def run(quick=True):
     n_surr = 20 if quick else 40
 
     # (A) coupling (cross lock_2to3): framework targeted PC z-score vs ORACLE raw n:m PLV
-    cpl = {"snrs": snrs, "PCz_auc": [], "rawPLV_auc": []}
+    cpl = {"snrs": snrs, "PCz_auc": [], "rawPLV_auc": [], "PLVz_auc": []}
     for snr in snrs:
-        pcz_pos, pcz_neg, plv_pos, plv_neg = [], [], [], []
+        pcz_pos, pcz_neg, plv_pos, plv_neg, plvz_pos, plvz_neg = [], [], [], [], [], []
         for s in cpl_seeds:
             A, B = gen_pair("lock_2to3", True, snr_db=snr, seed=s)
             pcz_pos.append(cross_target_z(A, B, SF5, cfg5, LOCK_PAIRS, "PC", n=n_surr, seed=s))
             plv_pos.append(raw_nm_plv(A, B, FA, FB, P, Q))
+            plvz_pos.append(raw_nm_plv_z(A, B, FA, FB, P, Q, n=n_surr, seed=s))
             A, B = gen_pair("lock_2to3", False, snr_db=snr, seed=s + 700)
             pcz_neg.append(cross_target_z(A, B, SF5, cfg5, LOCK_PAIRS, "PC", n=n_surr, seed=s + 700))
             plv_neg.append(raw_nm_plv(A, B, FA, FB, P, Q))
+            plvz_neg.append(raw_nm_plv_z(A, B, FA, FB, P, Q, n=n_surr, seed=s + 700))
         cpl["PCz_auc"].append(C.bootstrap_auc_ci(pcz_pos, pcz_neg)["auc"])
         cpl["rawPLV_auc"].append(C.bootstrap_auc_ci(plv_pos, plv_neg)["auc"])
-        print(f"  [A] SNR={snr:+d}  PC_z AUC={cpl['PCz_auc'][-1]:.2f}  rawPLV AUC={cpl['rawPLV_auc'][-1]:.2f}", flush=True)
+        cpl["PLVz_auc"].append(C.bootstrap_auc_ci(plvz_pos, plvz_neg)["auc"])
+        print(f"  [A] SNR={snr:+d}  PC_z={cpl['PCz_auc'][-1]:.2f}  PLV_z={cpl['PLVz_auc'][-1]:.2f}  "
+              f"rawPLV={cpl['rawPLV_auc'][-1]:.2f}", flush=True)
 
     # (B) harmonicity: H vs HNR, harmonic vs inharmonic and vs noise
     harm = {"snrs": snrs, "H_auc_inh": [], "HNR_auc_inh": [], "H_auc_noise": [], "HNR_auc_noise": []}
@@ -125,14 +141,15 @@ def _headline(result):
     cpl = result["coupling"]; harm = result["harmonicity"]
     print("\n  --- Study 25 headline (baselines) ---")
     print("  (A) coupling detection (locked vs unlocked), AUC by SNR:")
-    for snr, a, b in zip(cpl["snrs"], cpl["PCz_auc"], cpl["rawPLV_auc"]):
-        print(f"      SNR={snr:+d}  PC_z={a:.2f}   raw n:m PLV={b:.2f}")
+    for snr, a, z, b in zip(cpl["snrs"], cpl["PCz_auc"], cpl["PLVz_auc"], cpl["rawPLV_auc"]):
+        print(f"      SNR={snr:+d}  PC_z={a:.2f}  PLV_z={z:.2f}  raw PLV={b:.2f}")
     print("  (B) harmonicity, harmonic-vs-INHARMONIC AUC by SNR (H vs classical HNR):")
     for snr, a, b in zip(harm["snrs"], harm["H_auc_inh"], harm["HNR_auc_inh"]):
         print(f"      SNR={snr:+d}  H={a:.2f}   HNR={b:.2f}")
-    print("  => framework PC_z MATCHES the oracle raw n:m PLV for detection, while additionally")
-    print("     providing a calibrated surrogate null (significance) and auto-selecting the n:m")
-    print("     ratio (raw PLV needs p:q supplied and has no built-in null). H matches HNR and")
+    print("  => like-for-like (both surrogate z-scores on the same IAAFT null), framework PC_z MATCHES")
+    print("     the surrogate-normalized oracle PLV_z for detection, while additionally auto-selecting")
+    print("     the n:m ratio and supplying the null intrinsically (raw PLV needs p:q given, is")
+    print("     unnormalized, and has no built-in significance). H matches HNR and")
     print("     additionally yields a per-frequency spectrum + scores inharmonicity explicitly.")
 
 
@@ -142,7 +159,8 @@ def _figures(result):
     fig, axes = plt.subplots(1, 3, figsize=(14, 4.2))
 
     axes[0].plot(cpl["snrs"], cpl["PCz_auc"], "o-", color="#CC79A7", label="framework PC_z")
-    axes[0].plot(cpl["snrs"], cpl["rawPLV_auc"], "s--", color="#777777", label="raw n:m PLV")
+    axes[0].plot(cpl["snrs"], cpl.get("PLVz_auc", []), "^-", color="#0072B2", label="oracle PLV_z (like-for-like)")
+    axes[0].plot(cpl["snrs"], cpl["rawPLV_auc"], "s--", color="#777777", label="raw n:m PLV (unnormalized)")
     axes[0].axhline(0.5, color="k", ls=":", lw=0.7); axes[0].set_ylim(0.4, 1.05)
     axes[0].set_xlabel("SNR (dB)"); axes[0].set_ylabel("coupling AUC")
     axes[0].set_title("A. Coupling: PC_z vs raw n:m PLV", fontsize=10); axes[0].legend(fontsize=7)
