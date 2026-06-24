@@ -1,0 +1,41 @@
+{
+  "quick": false,
+  "subjects": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "contrasts": {
+    "eyes_open_vs_closed": {
+      "name": "eyes_open_vs_closed",
+      "n_epochs": 420,
+      "n_subjects": 10,
+      "pos": "EC",
+      "auc_band_power": 0.8439682539682539,
+      "auc_resonance": 0.8073696145124716,
+      "auc_combined": 0.8432653061224489,
+      "delta_auc": -0.0007029478458050464,
+      "lift_p": 0.4955044955044955,
+      "lift_null_mean": 0.001146462585034011
+    },
+    "rest_vs_motor": {
+      "name": "rest_vs_motor",
+      "n_epochs": 420,
+      "n_subjects": 10,
+      "pos": "MOTOR",
+      "auc_band_power": 0.4771428571428572,
+      "auc_resonance": 0.6385714285714286,
+      "auc_combined": 0.5972789115646259,
+      "delta_auc": 0.12013605442176867,
+      "lift_p": 0.002997002997002997,
+      "lift_null_mean": -0.0008934240362811756
+    }
+  }
+}
