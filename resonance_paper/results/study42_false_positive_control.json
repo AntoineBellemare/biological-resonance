@@ -1,0 +1,50 @@
+{
+  "quick": true,
+  "n_surr": 49,
+  "out": {
+    "negative": {
+      "plv": {
+        "mean_obs": 0.9972165147759179,
+        "mean_z": 7.30054776927586,
+        "frac_sig": 1.0
+      },
+      "rho_entropy": {
+        "mean_obs": 0.9785351923402502,
+        "mean_z": 41.78171427988101,
+        "frac_sig": 1.0
+      },
+      "conditional_prob": {
+        "mean_obs": 0.992157950305902,
+        "mean_z": 7.315873115356342,
+        "frac_sig": 1.0
+      },
+      "phase_mi": {
+        "mean_obs": 0.8659747684996347,
+        "mean_z": 37.07981782553017,
+        "frac_sig": 1.0
+      }
+    },
+    "positive": {
+      "plv": {
+        "mean_obs": 0.9947314941422336,
+        "mean_z": 4.582935642043054,
+        "frac_sig": 1.0
+      },
+      "rho_entropy": {
+        "mean_obs": 0.8588604602502601,
+        "mean_z": 19.551341267011953,
+        "frac_sig": 1.0
+      },
+      "conditional_prob": {
+        "mean_obs": 0.9897114801698135,
+        "mean_z": 4.5861655373577594,
+        "frac_sig": 1.0
+      },
+      "phase_mi": {
+        "mean_obs": 0.799301375652952,
+        "mean_z": 17.748670225544853,
+        "frac_sig": 1.0
+      }
+    }
+  }
+}

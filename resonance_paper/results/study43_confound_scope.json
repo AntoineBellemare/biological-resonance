@@ -1,0 +1,28 @@
+{
+  "quick": true,
+  "n_surr": 49,
+  "out": {
+    "within_harmonic_NEG": {
+      "iaaft/plv": 7.0517149107440416,
+      "iaaft/rho_entropy": 42.96620271486638,
+      "iaaft/phase_mi": 37.96725677699855,
+      "phase_randomize/plv": 6.078317978107408,
+      "phase_randomize/rho_entropy": 35.38789226192496,
+      "phase_randomize/phase_mi": 30.689903115024322,
+      "time_shuffle/plv": 3.471665951222626,
+      "time_shuffle/rho_entropy": 5.519195086638732,
+      "time_shuffle/phase_mi": 5.746857556978332
+    },
+    "cross_genuine_POS": {
+      "iaaft/plv": 8.92437683870861,
+      "iaaft/rho_entropy": 47.86339099720736,
+      "iaaft/phase_mi": 48.150986907299384,
+      "phase_randomize/plv": 8.091354339508312,
+      "phase_randomize/rho_entropy": 38.302422320706384,
+      "phase_randomize/phase_mi": 38.58942192763161,
+      "time_shuffle/plv": 10.207162463811619,
+      "time_shuffle/rho_entropy": 47.96802353353721,
+      "time_shuffle/phase_mi": 48.8311354589422
+    }
+  }
+}
