@@ -1,0 +1,153 @@
+{
+  "ratios": [
+    "1:2",
+    "1:3",
+    "2:3",
+    "3:4",
+    "3:5",
+    "4:5",
+    "5:6",
+    "5:7"
+  ],
+  "techniques": [
+    "plv_canonical",
+    "pli_canonical",
+    "wpli_canonical",
+    "rrci_canonical",
+    "wpli_complex_canonical",
+    "rho_entropy",
+    "conditional_prob",
+    "phase_mi"
+  ],
+  "regimes": [
+    "clean",
+    "bimodal",
+    "multistable3",
+    "nonsinusoidal_cf",
+    "weak_kappa",
+    "low_snr",
+    "nonstationary",
+    "harmonic_contam"
+  ],
+  "detection_auc": {
+    "clean": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.924072265625,
+      "wpli_canonical": 0.931396484375,
+      "rrci_canonical": 0.889892578125,
+      "wpli_complex_canonical": 0.935791015625,
+      "rho_entropy": 1.0,
+      "conditional_prob": 1.0,
+      "phase_mi": 1.0
+    },
+    "bimodal": {
+      "plv_canonical": 0.3388671875,
+      "pli_canonical": 0.3287353515625,
+      "wpli_canonical": 0.348388671875,
+      "rrci_canonical": 0.333251953125,
+      "wpli_complex_canonical": 0.359130859375,
+      "rho_entropy": 0.9873046875,
+      "conditional_prob": 0.338623046875,
+      "phase_mi": 0.986328125
+    },
+    "multistable3": {
+      "plv_canonical": 0.3642578125,
+      "pli_canonical": 0.6329345703125,
+      "wpli_canonical": 0.375732421875,
+      "rrci_canonical": 0.377685546875,
+      "wpli_complex_canonical": 0.385498046875,
+      "rho_entropy": 0.90087890625,
+      "conditional_prob": 0.363037109375,
+      "phase_mi": 0.89697265625
+    },
+    "nonsinusoidal_cf": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.947509765625,
+      "wpli_canonical": 0.9580078125,
+      "rrci_canonical": 0.9052734375,
+      "wpli_complex_canonical": 0.955810546875,
+      "rho_entropy": 1.0,
+      "conditional_prob": 1.0,
+      "phase_mi": 1.0
+    },
+    "weak_kappa": {
+      "plv_canonical": 0.65869140625,
+      "pli_canonical": 0.6026611328125,
+      "wpli_canonical": 0.6044921875,
+      "rrci_canonical": 0.6005859375,
+      "wpli_complex_canonical": 0.6875,
+      "rho_entropy": 0.639892578125,
+      "conditional_prob": 0.659423828125,
+      "phase_mi": 0.6484375
+    },
+    "low_snr": {
+      "plv_canonical": 0.922119140625,
+      "pli_canonical": 0.839111328125,
+      "wpli_canonical": 0.847412109375,
+      "rrci_canonical": 0.84033203125,
+      "wpli_complex_canonical": 0.85693359375,
+      "rho_entropy": 0.87646484375,
+      "conditional_prob": 0.923583984375,
+      "phase_mi": 0.8916015625
+    },
+    "nonstationary": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.9228515625,
+      "wpli_canonical": 0.920166015625,
+      "rrci_canonical": 0.91259765625,
+      "wpli_complex_canonical": 0.953125,
+      "rho_entropy": 1.0,
+      "conditional_prob": 1.0,
+      "phase_mi": 1.0
+    },
+    "harmonic_contam": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.9227294921875,
+      "wpli_canonical": 0.9326171875,
+      "rrci_canonical": 0.892578125,
+      "wpli_complex_canonical": 0.937744140625,
+      "rho_entropy": 1.0,
+      "conditional_prob": 1.0,
+      "phase_mi": 1.0
+    }
+  },
+  "specificity_ident_accuracy": {
+    "clean": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.984375,
+      "wpli_canonical": 1.0,
+      "rrci_canonical": 1.0,
+      "wpli_complex_canonical": 1.0,
+      "rho_entropy": 1.0,
+      "conditional_prob": 1.0,
+      "phase_mi": 1.0
+    },
+    "bimodal": {
+      "plv_canonical": 1.0,
+      "pli_canonical": 0.921875,
+      "wpli_canonical": 0.9375,
+      "rrci_canonical": 0.921875,
+      "wpli_complex_canonical": 1.0,
+      "rho_entropy": 1.0,
+      "conditional_prob": 0.28125,
+      "phase_mi": 0.75
+    }
+  },
+  "regime_winner": {
+    "clean": "plv_canonical",
+    "bimodal": "rho_entropy",
+    "multistable3": "rho_entropy",
+    "nonsinusoidal_cf": "plv_canonical",
+    "weak_kappa": "wpli_complex_canonical",
+    "low_snr": "conditional_prob",
+    "nonstationary": "plv_canonical",
+    "harmonic_contam": "plv_canonical"
+  },
+  "sanity_gates": {
+    "clean_plv_gt_0.9": true,
+    "bimodal_plv_lt_0.6": true,
+    "bimodal_rho_gt_plv": true,
+    "all_passed": true
+  },
+  "n_seeds": 8
+}
