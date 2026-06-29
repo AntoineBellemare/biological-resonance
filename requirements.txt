@@ -19,6 +19,7 @@ scikit-learn>=1.1
 # Real-data acquisition / simulation
 mne>=1.4            # PhysioNet EEG (eegbci) auto-download
 neurokit2>=0.2      # ECG / PPG / RSP simulation
+wfdb>=4.0           # PhysioNet Fantasia ECG+respiration (cardiorespiratory polyrhythm study)
 
 # Paper compilation (optional): the eLife-style manuscript is built with
 # resonance_paper/paper/build_elife_tex.py (stdlib only) and compiled with
