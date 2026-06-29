@@ -4,9 +4,13 @@
 # release and the version was NOT bumped — so `pip install biotuner` (0.4.1)
 # does NOT reproduce these results, and `biotuner.__version__` reads 0.4.1 even
 # on main (so the version string cannot distinguish them). We therefore PIN an
-# immutable commit (main HEAD, 2026-06-20). For active biotuner development,
-# swap the SHA below back to `@main`.
-biotuner @ git+https://github.com/AntoineBellemare/biotuner.git@fc158c3a92b499d4020c8db9527a0b1cea33788e
+# immutable commit (main HEAD, 2026-06-28). This SHA adds the n:m soundness work:
+# canonical (Tass-convention) coupling metrics, the all-moment indices
+# (nm_rho_entropy / nm_conditional_prob / nm_phase_mi), the cross-signal
+# detect_nm_coupling detector, and the peak-coupling defaults (bandwidth 3 Hz,
+# aggregate=max) these studies rely on. For active biotuner development, swap the
+# SHA below back to `@main`.
+biotuner @ git+https://github.com/AntoineBellemare/biotuner.git@cd415cba933da4950f26879556c05e305445a023
 
 # Scientific stack
 numpy>=1.23
