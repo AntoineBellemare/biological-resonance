@@ -200,6 +200,30 @@ def fig6_sleep():
     _save(fig, "fig6_sleep_spectrum")
 
 
+def fig7_sleep_within_between():
+    d = _load("study48_sleep_within_cross.json")
+    freqs = np.array(d["freqs"]); stages = d["stages"]; metric = "rho_entropy"
+    scol = {"Wake": "#e69f00", "N2": "#56b4e9", "N3": "#0072b2", "REM": "#cc79a7"}
+    fig, axes = plt.subplots(1, 2, figsize=(9.2, 3.4), sharey=True)
+    panels = [(axes[0], "within", "A  within-channel (Fpz-Cz)\nwaveform-preserving (time-shuffle) null"),
+              (axes[1], "between", "B  between-channel (Fpz-Cz$\\leftrightarrow$Pz-Oz)\nIAAFT null")]
+    for ax, reg, title in panels:
+        dd = d[reg][metric]
+        for s in stages:
+            ax.plot(freqs, np.array(dd["mean_z"][s]), color=scol[s], label=s, lw=1.7)
+        ax.axhline(0, color="k", lw=0.5)
+        ax.set_xlabel("frequency (Hz)"); ax.set_title(title, fontsize=9)
+        ax.text(0.96, 0.05, f"{dd['n_sig']}/{len(freqs)} bins\nstage-dep. (FDR)",
+                transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5,
+                bbox=dict(boxstyle="round", fc="white", ec="0.7", alpha=0.8))
+    axes[0].set_ylabel("surrogate-$z$ n:m coupling")
+    axes[0].legend(fontsize=7, loc="upper right")
+    fig.suptitle("Stage-dependent n:m phase coupling is genuine within-channel (delta) but absent "
+                 "between channels\n($\\rho$-entropy; Sleep-EDF; whole-spectrum, surrogate-controlled)",
+                 fontweight="bold", y=1.06)
+    _save(fig, "fig7_sleep_within_between")
+
+
 def main():
     made = []
     for fn, name in [(fig1_cardio, "Fig1"), (fig2_defaults, "Fig2"), (fig3_sound, "Fig3"),

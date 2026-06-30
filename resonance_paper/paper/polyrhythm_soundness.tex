@@ -30,7 +30,9 @@ validation against ground truth, and they are vulnerable to a fundamental confou
 non-sinusoidal oscillation decomposes into harmonics that are intrinsically phase-locked, so apparent
 \textit{n:m} coupling can arise with no second oscillator at all. We treat \textit{n:m} coupling
 \emph{measurement} as an object of study. We first confirm, on real cardiorespiratory recordings, that
-genuine polyrhythms are present and recoverable. We then show that the \emph{default} settings of a
+genuine polyrhythms are present and recoverable, and --- in sleep EEG --- that the new techniques recover
+a genuine, surrogate-controlled, state-dependent \textit{n:m} phase-coupling spectrum (while
+inter-regional coupling stays at the noise floor). We then show that the \emph{default} settings of a
 representative estimator do not merely lose power but \textbf{anti-detect} a clean 2:3 lock, and we
 trace and correct four independent defects. With the corrected estimator no single technique is best:
 the \textit{n:m} phase-locking value (PLV) is the most sensitive detector on clean, unimodal locks and at
@@ -103,6 +105,37 @@ windowed resultant of the $1{:}3$ relative phase exceeds the surrogate 95th perc
 intermittent locking. (B) Per-subject surrogate $z$ at the frequency-predicted ratio; cardiorespiratory
 locking is intermittent and subject-dependent.}
 \label{fig:cardio}
+\end{figure}
+
+\subsection{A genuine, state-dependent \textit{n:m} coupling spectrum in sleep EEG}
+
+\textit{n:m} coupling also appears in the brain, where the slow oscillations of non-REM sleep impose
+strong low-frequency rhythms. We computed the whole-spectrum \textit{n:m} phase-coupling spectrum (every
+frequency pair, fraction-kernel ratios, canonical convention, Hilbert phase, power-independent) per
+30\,s epoch of the frontal derivation (Fpz--Cz) across Wake/N2/N3/REM (Sleep-EDF), normalising each epoch
+by a \emph{waveform-preserving} time-shuffle surrogate. Within-channel coupling is strongly
+stage-dependent in the delta band --- 6--7 of 10 frequency bins differ across stages (Kruskal--Wallis,
+FDR-corrected), strongest near $3$~Hz, with wakefulness markedly higher than sleep
+(Figure~\ref{fig:sleep}A). Because the surrogate preserves each epoch's waveform, this is \emph{not}
+merely the changing non-sinusoidality of the dominant rhythm but a genuine change in \textit{n:m}
+coupling beyond the harmonic baseline; the all-moment entropy index carries it at least as strongly as
+the PLV. The same analysis between two distant derivations (Fpz--Cz versus Pz--Oz), against an
+IAAFT-of-one-channel null, shows \emph{no} stage-dependent inter-regional coupling
+(Figure~\ref{fig:sleep}B). The honest reading: within-channel \textit{n:m} coupling --- which at
+harmonically related frequencies partly reflects the rhythm's waveform shape --- carries a genuine,
+state-dependent component the new techniques track, whereas inter-regional \textit{n:m} coupling in
+scalp EEG sits at the noise floor, consistent with the broader difficulty of establishing cross-region
+\textit{n:m} coupling in macroscopic recordings.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{fig7_sleep_within_between.pdf}
+\caption{\textbf{A state-dependent \textit{n:m} phase-coupling spectrum in sleep EEG.} Surrogate-$z$
+\textit{n:m} phase coupling (entropy index) by sleep stage. (A) Within Fpz--Cz, against a
+waveform-preserving time-shuffle null: coupling is strongly stage-dependent in the delta band
+(wake $\gg$ sleep) and survives the waveform control. (B) Between Fpz--Cz and Pz--Oz, against an IAAFT
+null: no stage-dependent inter-regional coupling.}
+\label{fig:sleep}
 \end{figure}
 
 \subsection{Default settings anti-detect a clean polyrhythm}
