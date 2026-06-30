@@ -178,6 +178,28 @@ def fig5_confound():
     _save(fig, "fig5_harmonic_confound")
 
 
+def fig6_sleep():
+    d = _load("study47_sleep_spectrum.json")
+    freqs = np.array(d["freqs"]); stages = d["stages"]; metrics = list(d["pc_mean"].keys())
+    scol = {"Wake": "#e69f00", "N2": "#56b4e9", "N3": "#0072b2", "REM": "#cc79a7"}
+    fig, axes = plt.subplots(1, len(metrics), figsize=(13, 3.1), sharex=True)
+    for ax, m in zip(axes, metrics):
+        for s in stages:
+            sp = d["pc_mean"][m].get(s)
+            if sp:
+                ax.plot(freqs, np.array(sp), color=scol.get(s, "#888"), label=s, lw=1.6)
+        ax.set_title(m.replace("nm_", "").replace("_canonical", ""))
+        ax.set_xlabel("frequency (Hz)")
+        sd = d["stage_dependence"][m]
+        ax.text(0.96, 0.96, f"{sd['n_freqs_sig']}/{sd['n_freqs']} bins\nstage-dep.\n(FDR$\\leq$0.05)",
+                transform=ax.transAxes, ha="right", va="top", fontsize=7)
+    axes[0].set_ylabel("n:m phase coupling\n(power-independent)")
+    axes[0].legend(fontsize=7, loc="lower right")
+    fig.suptitle("The n:m phase-coupling spectrum reorganizes across sleep stages "
+                 "(Fpz-Cz, Sleep-EDF; whole-spectrum, all pairs)", fontweight="bold", y=1.02)
+    _save(fig, "fig6_sleep_spectrum")
+
+
 def main():
     made = []
     for fn, name in [(fig1_cardio, "Fig1"), (fig2_defaults, "Fig2"), (fig3_sound, "Fig3"),
