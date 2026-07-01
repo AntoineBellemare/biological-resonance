@@ -1,0 +1,199 @@
+{
+  "quick": true,
+  "dataset": "HMC SN001",
+  "channels": [
+    "F4-M1",
+    "C4-M1",
+    "O2-M1",
+    "C3-M2"
+  ],
+  "n_surr": 10,
+  "epochs_per_stage": {
+    "Wake": 60,
+    "N2": 60,
+    "N3": 23,
+    "REM": 60
+  },
+  "rows": [
+    {
+      "kind": "within",
+      "label": "F4-M1",
+      "metric": "plv",
+      "n_sig": 3,
+      "n_freqs": 10,
+      "min_p": 0.00016527216920466544,
+      "peak_freq": 3.0
+    },
+    {
+      "kind": "within",
+      "label": "F4-M1",
+      "metric": "rho_entropy",
+      "n_sig": 1,
+      "n_freqs": 10,
+      "min_p": 2.7783305405482738e-05,
+      "peak_freq": 3.0
+    },
+    {
+      "kind": "within",
+      "label": "C4-M1",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.040183492306006166,
+      "peak_freq": 13.5
+    },
+    {
+      "kind": "within",
+      "label": "C4-M1",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.17850622357769153,
+      "peak_freq": 1.5
+    },
+    {
+      "kind": "within",
+      "label": "O2-M1",
+      "metric": "plv",
+      "n_sig": 2,
+      "n_freqs": 10,
+      "min_p": 0.0012306088192344249,
+      "peak_freq": 15.0
+    },
+    {
+      "kind": "within",
+      "label": "O2-M1",
+      "metric": "rho_entropy",
+      "n_sig": 1,
+      "n_freqs": 10,
+      "min_p": 0.0012074595320554979,
+      "peak_freq": 15.0
+    },
+    {
+      "kind": "within",
+      "label": "C3-M2",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.015440132365102055,
+      "peak_freq": 13.5
+    },
+    {
+      "kind": "within",
+      "label": "C3-M2",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.038211135962217105,
+      "peak_freq": 12.0
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->C4-M1",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.05543073392592884,
+      "peak_freq": 7.5
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->C4-M1",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.020772763234161055,
+      "peak_freq": 10.5
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->O2-M1",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.09554624268046921,
+      "peak_freq": 1.5
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->O2-M1",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.038065755512402696,
+      "peak_freq": 1.5
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->C3-M2",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.0263694476810601,
+      "peak_freq": 3.0
+    },
+    {
+      "kind": "between",
+      "label": "F4-M1<->C3-M2",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.1157735105566669,
+      "peak_freq": 1.5
+    },
+    {
+      "kind": "between",
+      "label": "C4-M1<->O2-M1",
+      "metric": "plv",
+      "n_sig": 1,
+      "n_freqs": 10,
+      "min_p": 0.0013496820841446568,
+      "peak_freq": 13.5
+    },
+    {
+      "kind": "between",
+      "label": "C4-M1<->O2-M1",
+      "metric": "rho_entropy",
+      "n_sig": 1,
+      "n_freqs": 10,
+      "min_p": 0.0023082588920733172,
+      "peak_freq": 6.0
+    },
+    {
+      "kind": "between",
+      "label": "C4-M1<->C3-M2",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.10862856860442568,
+      "peak_freq": 9.0
+    },
+    {
+      "kind": "between",
+      "label": "C4-M1<->C3-M2",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.014605180232848602,
+      "peak_freq": 10.5
+    },
+    {
+      "kind": "between",
+      "label": "O2-M1<->C3-M2",
+      "metric": "plv",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.03960413985140689,
+      "peak_freq": 6.0
+    },
+    {
+      "kind": "between",
+      "label": "O2-M1<->C3-M2",
+      "metric": "rho_entropy",
+      "n_sig": 0,
+      "n_freqs": 10,
+      "min_p": 0.08446769884981398,
+      "peak_freq": 1.5
+    }
+  ]
+}
