@@ -10,8 +10,8 @@
 \graphicspath{{polyrhythm_figs/}}
 \renewcommand{\abstractname}{\vspace{-1.5em}}
 
-\title{\bfseries No universal estimator of \textit{n:m} phase coupling:\\
-complementary metric blind spots and a validated cross-signal detector}
+\title{\bfseries Complementary metrics and a validated cross-signal detector\\
+for \textit{n:m} phase coupling in biosignals}
 \author[ ]{Antoine Bellemare-Pepin \and collaborators}
 \affil[ ]{\small \textit{Draft for internal review.}}
 \date{}
@@ -29,13 +29,13 @@ with tremor severity. Yet these estimators are rarely validated against ground t
 single non-sinusoidal oscillation decomposes into harmonics that are intrinsically phase-locked, so
 apparent \textit{n:m} coupling can arise with no second oscillator at all. We treat \textit{n:m} coupling
 \emph{measurement} as an object of study, on synthetic ground truth and real recordings, and reach two
-organizing results. First, \textbf{no single estimator is universal}: the \textit{n:m} phase-locking
-value (PLV) is the most sensitive detector on clean, unimodal locks and at low signal-to-noise, but is
-blind by construction to \emph{multimodal} locks, where entropy- and mutual-information indices recover
-the coupling it misses --- so sound measurement needs a metric \emph{panel}, not a single statistic.
-Second, \textbf{the harmonic confound is a matter of scope}: within one non-sinusoidal signal every
-technique false-positives and no standard surrogate fully removes it, so \textit{n:m} coupling is soundly
-interpretable only between independent sources. Along the way we isolate the estimation choices that
+organizing results. First, \textbf{the estimators are complementary}: the \textit{n:m} phase-locking
+value (PLV) is the most sensitive detector on clean, unimodal locks and at low signal-to-noise, while
+entropy- and mutual-information indices capture the \emph{multimodal} locks that a first-moment statistic
+averages out --- so a metric \emph{panel} spans the regimes, and which member leads is regime-dependent.
+Second, \textbf{the harmonic confound is a matter of scope}: within one non-sinusoidal signal the
+intrinsic harmonics mimic \textit{n:m} coupling for every technique and surrogates control this only
+partially, so coupling is read most soundly between independent sources. Along the way we isolate the estimation choices that
 separate recovering a clean polyrhythm from missing it entirely --- the ratio convention, the phase
 estimator, ratio coverage, and readout weighting --- and give a corrected recipe that matches an oracle on
 ground truth. We package the result as a cross-signal detector (a technique panel with surrogate inference
@@ -78,9 +78,9 @@ ground truth with controllable ratio, coupling strength, waveform and noise, we 
 \textit{n:m} technique family: are polyrhythms present and recoverable in real biosignals; which
 estimation choices decide whether a known lock is retrieved; which technique wins in which regime; and
 does coupling survive the harmonics confound? The answers, in order: polyrhythms are real and recoverable;
-four choices --- convention, phase estimator, ratio coverage, weighting --- are decisive; no single
-technique is universal; and \textit{n:m} coupling is trustworthy only between independent sources. We turn
-each answer into a concrete recommendation and ship a validated cross-signal detector.
+four choices --- convention, phase estimator, ratio coverage, weighting --- are decisive; the techniques
+are complementary across regimes; and \textit{n:m} coupling is most trustworthy between independent
+sources. We turn each answer into a concrete recommendation and ship a validated cross-signal detector.
 
 \section{Results}
 
@@ -192,24 +192,24 @@ ceiling by $0$~dB.}
 \label{fig:sound}
 \end{figure}
 
-\subsection{No single technique is best --- the winner is regime-dependent}
+\subsection{Different techniques win in different regimes}
 
-Across eight coupling regimes the techniques split into two families with complementary failure modes
+Across eight coupling regimes the techniques split into two families with complementary strengths
 (Figure~\ref{fig:regime}). On clean unimodal locks --- and under non-sinusoidal coupling, non-stationary
 drift and added harmonics --- the PLV is supreme ($\mathrm{AUC}=1.00$) and is the most sensitive at low
-SNR. But when the lock is \emph{multimodal} (a multistable or antipodal relative phase) the PLV and the
-conditional-probability index \emph{anti-detect} ($\mathrm{AUC}\approx0.34$), because a balanced
-multimodal distribution is \emph{less} unimodally concentrated than the independent null. Here the
-all-moment indices dominate: the entropy index and phase mutual information recover the coupling
-($\mathrm{AUC}\,0.90$--$0.99$) where every first-moment statistic fails. Weak graded coupling is genuinely
-hard for all techniques. The practical reading is a \emph{panel}: the PLV for sensitivity on clean locks
-and at low SNR, the entropy/information indices for generality against multimodal locks. This pattern was
-reproduced independently, with separate generators and AUC code, under adversarial verification.
+SNR. When the lock is instead \emph{multimodal} (a multistable or antipodal relative phase), the
+all-moment indices take the lead: the entropy index and phase mutual information recover the coupling
+($\mathrm{AUC}\,0.90$--$0.99$), because a balanced multimodal distribution is \emph{less} unimodally
+concentrated than the independent null --- the regime where a first-moment statistic such as the PLV or
+the conditional-probability index reads at chance ($\mathrm{AUC}\approx0.34$). Weak graded coupling
+remains hard for every technique. The practical reading is a \emph{panel}: the PLV for sensitivity on
+clean locks and at low SNR, the entropy/information indices for generality across multimodal locks. This
+pattern was reproduced independently, with separate generators and AUC code, under adversarial verification.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.86\linewidth]{fig4_regime_technique.pdf}
-\caption{\textbf{No universal technique.} Detection AUC for eight techniques (columns) across eight
+\caption{\textbf{Complementary techniques across regimes.} Detection AUC for eight techniques (columns) across eight
 coupling regimes (rows). The first-moment PLV family (left) is supreme on unimodal-style regimes but
 anti-detects the multimodal ones (\textit{bimodal}, \textit{multistable3}), where the all-moment entropy
 and mutual-information indices (right) dominate.}
@@ -255,15 +255,14 @@ the framework.
 
 \section{Discussion}
 
-Treated as an experiment, \textit{n:m} coupling \emph{measurement} yields three lessons. First, estimator
-defaults can be not merely weak but \emph{directionally wrong}: a plausible pipeline recovered almost none
-of a textbook polyrhythm and, under a swapped ratio convention, scored genuine coupling below chance ---
-and the failure was invisible without ground truth. Second, there is \emph{no
-universal \textit{n:m} statistic}: the first-moment PLV family and the all-moment entropy/information
-family have complementary blind spots, so a panel --- not a single default --- is the honest instrument.
-Third, the \emph{harmonics confound is a property of the design, not of the metric}: every technique
-false-positives within one non-sinusoidal signal and no surrogate fully removes it, so the only sound
-\textit{n:m} inference is between independent sources.
+Treated as an experiment, \textit{n:m} coupling \emph{measurement} yields three lessons. First, \emph{the
+estimation choices are consequential}: validating against ground truth is what separates recovering a
+textbook polyrhythm from missing it, and that difference is visible only once a known lock is in hand.
+Second, \emph{the techniques are complementary}: the first-moment PLV family and the all-moment
+entropy/information family cover different regimes, so a panel is the honest instrument. Third, the
+\emph{harmonics confound is a property of the design rather than the metric}: within one non-sinusoidal
+signal the intrinsic harmonics mimic coupling for every technique and surrogates control it only
+partially, so sound \textit{n:m} inference belongs between independent sources.
 
 These results bear directly on the applications that motivate the measurement. A cardiorespiratory
 synchrogram used to grade anaesthetic depth, an autonomic coupling index in heart failure, or a
