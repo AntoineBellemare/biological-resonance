@@ -10,10 +10,10 @@
 \graphicspath{{polyrhythm_figs/}}
 \renewcommand{\abstractname}{\vspace{-1.5em}}
 
-\title{\bfseries Sound measurement of polyrhythmic phase coupling in biosignals:\\
-diagnosing and correcting an \textit{n:m} coupling estimator}
+\title{\bfseries No universal estimator of \textit{n:m} phase coupling:\\
+complementary metric blind spots and a validated cross-signal detector}
 \author[ ]{Antoine Bellemare-Pepin \and collaborators}
-\affil[ ]{\small \textit{Draft for internal review --- numbers are quick-grade pending a paper-grade rerun.}}
+\affil[ ]{\small \textit{Draft for internal review.}}
 \date{}
 
 \begin{document}
@@ -25,24 +25,23 @@ Many biological rhythms do not merely co-occur but lock into integer \textit{n:m
 beats a fixed number of times per breath, cortical activity phase-locks to tremor, and stride entrains to
 ventilation. The coupling \emph{order} and its stability are clinically meaningful state variables ---
 they grade anaesthetic depth, index autonomic and sleep regulation, track fetal maturation, and scale
-with tremor severity. Yet the estimators in routine use are applied almost universally without
-validation against ground truth, and they are vulnerable to a fundamental confound: a single
-non-sinusoidal oscillation decomposes into harmonics that are intrinsically phase-locked, so apparent
-\textit{n:m} coupling can arise with no second oscillator at all. We treat \textit{n:m} coupling
-\emph{measurement} as an object of study. We first confirm, on real cardiorespiratory recordings, that
-genuine polyrhythms are present and recoverable, and --- in sleep EEG --- that the new techniques recover
-a genuine, surrogate-controlled, state-dependent \textit{n:m} phase-coupling spectrum (while
-inter-regional coupling stays at the noise floor). We then show that the \emph{default} settings of a
-representative estimator recover almost none of a clean 2:3 lock (a detection margin of $0.02$ against an
-oracle's $0.79$) and, under a swapped ratio convention, \textbf{anti-detect} --- scoring genuine coupling
-below chance --- and we trace and correct four independent defects. With the corrected estimator no single technique is best:
-the \textit{n:m} phase-locking value (PLV) is the most sensitive detector on clean, unimodal locks and at
-low signal-to-noise, but is \emph{blind by construction} to multimodal locks, where entropy- and
-mutual-information indices recover the coupling it misses. Finally we quantify the harmonics confound:
-within one non-sinusoidal signal every technique false-positives, and no standard surrogate fully
-removes it --- so \textit{n:m} coupling is soundly interpretable only between independent sources. We
-release a validated cross-signal detector (a technique panel with surrogate inference and a scope guard)
-and concrete recommendations.
+with tremor severity. Yet these estimators are rarely validated against ground truth, and they face a fundamental confound: a
+single non-sinusoidal oscillation decomposes into harmonics that are intrinsically phase-locked, so
+apparent \textit{n:m} coupling can arise with no second oscillator at all. We treat \textit{n:m} coupling
+\emph{measurement} as an object of study, on synthetic ground truth and real recordings, and reach two
+organizing results. First, \textbf{no single estimator is universal}: the \textit{n:m} phase-locking
+value (PLV) is the most sensitive detector on clean, unimodal locks and at low signal-to-noise, but is
+blind by construction to \emph{multimodal} locks, where entropy- and mutual-information indices recover
+the coupling it misses --- so sound measurement needs a metric \emph{panel}, not a single statistic.
+Second, \textbf{the harmonic confound is a matter of scope}: within one non-sinusoidal signal every
+technique false-positives and no standard surrogate fully removes it, so \textit{n:m} coupling is soundly
+interpretable only between independent sources. Along the way we isolate the estimation choices that
+separate recovering a clean polyrhythm from missing it entirely --- the ratio convention, the phase
+estimator, ratio coverage, and readout weighting --- and give a corrected recipe that matches an oracle on
+ground truth. We package the result as a cross-signal detector (a technique panel with surrogate inference
+and a scope guard) and demonstrate it on real data: genuine cardiorespiratory polyrhythms are recovered;
+in sleep EEG a within-channel, state-dependent \textit{n:m} phase-coupling spectrum is recovered and
+replicated across montages, while inter-regional coupling is correctly returned at the noise floor.
 \end{abstract}
 
 \section{Introduction}
@@ -75,11 +74,13 @@ the confound emphasized by \citet{aru2015}, \citet{schefferteixeira2016} and \ci
 compounded by surrogate nulls whose construction is neither standardized nor robust.
 
 Here we make the measurement itself the experiment. Using cardiorespiratory recordings and polyrhythmic
-ground truth with controllable ratio, coupling strength, waveform and noise, we ask, of a representative
-estimator and of the broader technique family: are polyrhythms present and recoverable in real
-biosignals; does the estimator retrieve a known lock; which technique wins in which regime; and does it
-survive the harmonics confound? The answers are, in order: yes; not with its defaults; it depends on the
-regime; and only between independent sources. We turn each into a fix and ship a validated detector.
+ground truth with controllable ratio, coupling strength, waveform and noise, we ask four questions of the
+\textit{n:m} technique family: are polyrhythms present and recoverable in real biosignals; which
+estimation choices decide whether a known lock is retrieved; which technique wins in which regime; and
+does coupling survive the harmonics confound? The answers, in order: polyrhythms are real and recoverable;
+four choices --- convention, phase estimator, ratio coverage, weighting --- are decisive; no single
+technique is universal; and \textit{n:m} coupling is trustworthy only between independent sources. We turn
+each answer into a concrete recommendation and ship a validated cross-signal detector.
 
 \section{Results}
 
@@ -144,13 +145,13 @@ null: no stage-dependent inter-regional coupling.}
 \label{fig:sleep}
 \end{figure}
 
-\subsection{Default settings fail on a clean polyrhythm}
+\subsection{Four estimation choices decide whether a clean polyrhythm is recovered}
 
 On synthetic ground truth --- a genuine 2:3 lock between two independent oscillators --- an oracle (the
 \textit{n:m} PLV on band-pass--Hilbert phase at the known ratio) separates coupled from uncoupled cleanly
-($\Delta=0.79$). The representative estimator's \emph{default} configuration recovers almost none of it:
-the coupled--uncoupled margin collapses to $\Delta=0.02$ (Figure~\ref{fig:defaults}A). Four
-independent defects explain it. (i)~\emph{Convention}: the ratio rule returns multipliers under a swapped
+($\Delta=0.79$). Four estimation choices decide whether an estimator reaches that separation: mishandling
+them drops the coupled--uncoupled margin to near zero ($\Delta=0.02$; Figure~\ref{fig:defaults}A), and each
+is individually consequential. (i)~\emph{Convention}: the ratio rule returns multipliers under a swapped
 convention applied literally, so the relative phase is non-stationary even for a perfect lock; the PLV
 then falls to $\mathrm{AUC}=0.38$ ($0.17$ against volume-conduction controls) and the zero-lag--rejecting
 metrics (PLI/wPLI/RRCi) drop to $\mathrm{AUC}=0.04$--$0.23$ on odd-integer ratios, below chance
@@ -164,10 +165,10 @@ each (canonical multipliers, Hilbert phase, exact-fraction ratios, unweighted re
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\linewidth]{fig2_defaults_fail.pdf}
-\caption{\textbf{Default settings fail on a known lock.}
-(A) Detection margin (coupled $-$ uncoupled) for a clean 2:3 lock: the default configuration collapses to
-near zero ($\Delta=0.02$), the corrected configuration improves it, and only the oracle separates cleanly
-($\Delta=0.79$).
+\caption{\textbf{Four estimation choices decide recovery of a known lock.}
+(A) Detection margin (coupled $-$ uncoupled) for a clean 2:3 lock: the uncorrected configuration collapses
+to near zero ($\Delta=0.02$), the corrected configuration improves it, and only the oracle separates
+cleanly ($\Delta=0.79$).
 (B) The swapped-multiplier convention alone drives detection below chance; the canonical convention
 restores it.}
 \label{fig:defaults}
