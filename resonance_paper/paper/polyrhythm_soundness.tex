@@ -33,8 +33,9 @@ non-sinusoidal oscillation decomposes into harmonics that are intrinsically phas
 genuine polyrhythms are present and recoverable, and --- in sleep EEG --- that the new techniques recover
 a genuine, surrogate-controlled, state-dependent \textit{n:m} phase-coupling spectrum (while
 inter-regional coupling stays at the noise floor). We then show that the \emph{default} settings of a
-representative estimator do not merely lose power but \textbf{anti-detect} a clean 2:3 lock, and we
-trace and correct four independent defects. With the corrected estimator no single technique is best:
+representative estimator recover almost none of a clean 2:3 lock (a detection margin of $0.02$ against an
+oracle's $0.79$) and, under a swapped ratio convention, \textbf{anti-detect} --- scoring genuine coupling
+below chance --- and we trace and correct four independent defects. With the corrected estimator no single technique is best:
 the \textit{n:m} phase-locking value (PLV) is the most sensitive detector on clean, unimodal locks and at
 low signal-to-noise, but is \emph{blind by construction} to multimodal locks, where entropy- and
 mutual-information indices recover the coupling it misses. Finally we quantify the harmonics confound:
@@ -125,7 +126,12 @@ IAAFT-of-one-channel null, shows \emph{no} stage-dependent inter-regional coupli
 harmonically related frequencies partly reflects the rhythm's waveform shape --- carries a genuine,
 state-dependent component the new techniques track, whereas inter-regional \textit{n:m} coupling in
 scalp EEG sits at the noise floor, consistent with the broader difficulty of establishing cross-region
-\textit{n:m} coupling in macroscopic recordings.
+\textit{n:m} coupling in macroscopic recordings. Both halves of this pattern replicate on an independent,
+higher-density recording with a different reference montage (four referential channels, Fpz--Cz's bipolar
+derivation replaced by frontal/central/occipital electrodes): at matched power the within-channel
+stage-dependence recurs, while the between-channel effect is null across all six near- and far-electrode
+pairs --- so the within-versus-between asymmetry is a property of the coupling, not of the two-channel
+sampling.
 
 \begin{figure}[t]
 \centering
@@ -138,27 +144,30 @@ null: no stage-dependent inter-regional coupling.}
 \label{fig:sleep}
 \end{figure}
 
-\subsection{Default settings anti-detect a clean polyrhythm}
+\subsection{Default settings fail on a clean polyrhythm}
 
 On synthetic ground truth --- a genuine 2:3 lock between two independent oscillators --- an oracle (the
 \textit{n:m} PLV on band-pass--Hilbert phase at the known ratio) separates coupled from uncoupled cleanly
-($\Delta=0.76$). The representative estimator's \emph{default} configuration does the opposite: coupled
-signals score \emph{below} their uncoupled controls ($\Delta=-0.09$; Figure~\ref{fig:defaults}A). Four
+($\Delta=0.79$). The representative estimator's \emph{default} configuration recovers almost none of it:
+the coupled--uncoupled margin collapses to $\Delta=0.02$ (Figure~\ref{fig:defaults}A). Four
 independent defects explain it. (i)~\emph{Convention}: the ratio rule returns multipliers under a swapped
-convention applied literally, so the relative phase is non-stationary even for a perfect lock; across the
-ratio range every raw technique anti-detects ($\mathrm{AUC}\approx0.13$; Figure~\ref{fig:defaults}B).
+convention applied literally, so the relative phase is non-stationary even for a perfect lock; the PLV
+then falls to $\mathrm{AUC}=0.38$ ($0.17$ against volume-conduction controls) and the zero-lag--rejecting
+metrics (PLI/wPLI/RRCi) drop to $\mathrm{AUC}=0.04$--$0.23$ on odd-integer ratios, below chance
+(Figure~\ref{fig:defaults}B).
 (ii)~\emph{Phase estimator}: the default short-time-Fourier-transform bin phase is leakage-limited and
 misses \textit{n:m} locking the Hilbert estimator recovers. (iii)~\emph{Ratio coverage}: the default
 ratio table reaches only 3:3 and silently relabels unmatched pairs as 1:1. (iv)~\emph{Weighting}: a
-complexity weight multiplied into the coupling value caps a perfect 2:3 lock at $\approx0.17$. We correct
+complexity weight multiplied into the coupling value caps a perfect 2:3 lock far below its unweighted value. We correct
 each (canonical multipliers, Hilbert phase, exact-fraction ratios, unweighted readout).
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\linewidth]{fig2_defaults_fail.pdf}
-\caption{\textbf{Default settings anti-detect a known lock.}
-(A) Detection margin (coupled $-$ uncoupled) for a clean 2:3 lock: the default configuration is negative
-(anti-detection), the corrected configuration recovers the sign, the oracle separates cleanly.
+\caption{\textbf{Default settings fail on a known lock.}
+(A) Detection margin (coupled $-$ uncoupled) for a clean 2:3 lock: the default configuration collapses to
+near zero ($\Delta=0.02$), the corrected configuration improves it, and only the oracle separates cleanly
+($\Delta=0.79$).
 (B) The swapped-multiplier convention alone drives detection below chance; the canonical convention
 restores it.}
 \label{fig:defaults}
@@ -246,8 +255,9 @@ the framework.
 \section{Discussion}
 
 Treated as an experiment, \textit{n:m} coupling \emph{measurement} yields three lessons. First, estimator
-defaults can be not merely weak but \emph{directionally wrong}: a plausible pipeline anti-detected a
-textbook polyrhythm, and the failure was invisible without ground truth. Second, there is \emph{no
+defaults can be not merely weak but \emph{directionally wrong}: a plausible pipeline recovered almost none
+of a textbook polyrhythm and, under a swapped ratio convention, scored genuine coupling below chance ---
+and the failure was invisible without ground truth. Second, there is \emph{no
 universal \textit{n:m} statistic}: the first-moment PLV family and the all-moment entropy/information
 family have complementary blind spots, so a panel --- not a single default --- is the honest instrument.
 Third, the \emph{harmonics confound is a property of the design, not of the metric}: every technique
@@ -265,12 +275,16 @@ where it cannot be trusted, and reports surrogate-calibrated inference rather th
 
 \paragraph{Limitations.} The within-signal confound is scoped, not solved; a definitive within-signal test
 would require waveform-aware controls beyond phase surrogates. Weak graded coupling sits near the
-detection floor for all techniques. We did not implement a debiased estimator (pairwise phase consistency)
+detection floor for all techniques. We did not implement a debiased estimator (pairwise phase consistency, \citealp{vinck2010})
 for comparing coupling across epochs of differing length, a useful addition where trial counts vary. The
-real-data demonstration here is a single clearly-locked subject plus the established literature; a
-population study across the full cohort and conditions (paced breathing, sleep, exercise) would
-strengthen the prevalence estimate. All synthetic ground truth is at quick grade pending a paper-grade
-rerun.
+real-data evidence spans a clearly-locked cardiorespiratory subject, a within-channel sleep effect
+replicated across two montages, and the established literature; a population study across full cohorts and
+conditions (paced breathing, sleep, exercise) would strengthen the prevalence estimate. Inter-regional
+scalp coupling is the hard case: in a separate music-listening EEG dataset, cross-regional \textit{n:m}
+coupling did not survive an across-subject control for the shared auditory stimulus, echoing the null
+between-channel sleep result --- consistent evidence that genuine \textit{n:m} coupling between distant
+scalp regions is at or below the detection floor, and that within-signal positives must be read with the
+waveform caveat in mind.
 
 \begin{thebibliography}{99}
 \small

@@ -1,24 +1,24 @@
 {
-  "quick": true,
+  "quick": false,
   "ratio": "2:3",
   "rows": [
     {
       "method": "default (nm_plv+binary+stft)",
-      "coupled": 0.21494435672227352,
-      "uncoupled": 0.3010175270786633,
-      "delta": -0.08607317035638978
+      "coupled": 0.2710985746550559,
+      "uncoupled": 0.2470620025636414,
+      "delta": 0.024036572091414493
     },
     {
       "method": "sound (canonical+fraction+hilbert)",
-      "coupled": 0.0645067378443207,
-      "uncoupled": 0.02410149614787129,
-      "delta": 0.040405241696449413
+      "coupled": 0.064497333469821,
+      "uncoupled": 0.02278575592682606,
+      "delta": 0.04171157754299494
     },
     {
       "method": "ORACLE (handed 2:3, hilbert PLV)",
-      "coupled": 0.9879586738611904,
-      "uncoupled": 0.2285528058790387,
-      "delta": 0.7594058679821517
+      "coupled": 0.9882540848318296,
+      "uncoupled": 0.19673703643037463,
+      "delta": 0.791517048401455
     }
   ]
 }

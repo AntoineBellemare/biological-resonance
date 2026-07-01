@@ -1,28 +1,28 @@
 {
-  "quick": true,
-  "n_surr": 49,
+  "quick": false,
+  "n_surr": 99,
   "out": {
     "within_harmonic_NEG": {
-      "iaaft/plv": 7.0517149107440416,
-      "iaaft/rho_entropy": 42.96620271486638,
-      "iaaft/phase_mi": 37.96725677699855,
-      "phase_randomize/plv": 6.078317978107408,
-      "phase_randomize/rho_entropy": 35.38789226192496,
-      "phase_randomize/phase_mi": 30.689903115024322,
-      "time_shuffle/plv": 3.471665951222626,
-      "time_shuffle/rho_entropy": 5.519195086638732,
-      "time_shuffle/phase_mi": 5.746857556978332
+      "iaaft/plv": 6.699304276736278,
+      "iaaft/rho_entropy": 38.46431824867726,
+      "iaaft/phase_mi": 33.673606521693074,
+      "phase_randomize/plv": 5.902744114159972,
+      "phase_randomize/rho_entropy": 32.475582498540035,
+      "phase_randomize/phase_mi": 28.37336752554145,
+      "time_shuffle/plv": 3.446902407222753,
+      "time_shuffle/rho_entropy": 5.36256262109733,
+      "time_shuffle/phase_mi": 5.501306109907291
     },
     "cross_genuine_POS": {
-      "iaaft/plv": 8.92437683870861,
-      "iaaft/rho_entropy": 47.86339099720736,
-      "iaaft/phase_mi": 48.150986907299384,
-      "phase_randomize/plv": 8.091354339508312,
-      "phase_randomize/rho_entropy": 38.302422320706384,
-      "phase_randomize/phase_mi": 38.58942192763161,
-      "time_shuffle/plv": 10.207162463811619,
-      "time_shuffle/rho_entropy": 47.96802353353721,
-      "time_shuffle/phase_mi": 48.8311354589422
+      "iaaft/plv": 8.398733625458698,
+      "iaaft/rho_entropy": 42.134918222126224,
+      "iaaft/phase_mi": 41.74724881165523,
+      "phase_randomize/plv": 8.469449218233555,
+      "phase_randomize/rho_entropy": 42.38426680386102,
+      "phase_randomize/phase_mi": 42.19942019978111,
+      "time_shuffle/plv": 10.191123749221651,
+      "time_shuffle/rho_entropy": 52.19934282443564,
+      "time_shuffle/phase_mi": 52.126505831555924
     }
   }
 }

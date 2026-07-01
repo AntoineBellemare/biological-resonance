@@ -32,80 +32,80 @@
   "detection_auc": {
     "clean": {
       "plv_canonical": 1.0,
-      "pli_canonical": 0.924072265625,
-      "wpli_canonical": 0.931396484375,
-      "rrci_canonical": 0.889892578125,
-      "wpli_complex_canonical": 0.935791015625,
+      "pli_canonical": 0.92755126953125,
+      "wpli_canonical": 0.93951416015625,
+      "rrci_canonical": 0.89306640625,
+      "wpli_complex_canonical": 0.94464111328125,
       "rho_entropy": 1.0,
       "conditional_prob": 1.0,
       "phase_mi": 1.0
     },
     "bimodal": {
-      "plv_canonical": 0.3388671875,
-      "pli_canonical": 0.3287353515625,
-      "wpli_canonical": 0.348388671875,
-      "rrci_canonical": 0.333251953125,
-      "wpli_complex_canonical": 0.359130859375,
-      "rho_entropy": 0.9873046875,
-      "conditional_prob": 0.338623046875,
-      "phase_mi": 0.986328125
+      "plv_canonical": 0.39154052734375,
+      "pli_canonical": 0.384674072265625,
+      "wpli_canonical": 0.40655517578125,
+      "rrci_canonical": 0.39398193359375,
+      "wpli_complex_canonical": 0.41339111328125,
+      "rho_entropy": 0.99212646484375,
+      "conditional_prob": 0.38885498046875,
+      "phase_mi": 0.99163818359375
     },
     "multistable3": {
-      "plv_canonical": 0.3642578125,
-      "pli_canonical": 0.6329345703125,
-      "wpli_canonical": 0.375732421875,
-      "rrci_canonical": 0.377685546875,
-      "wpli_complex_canonical": 0.385498046875,
-      "rho_entropy": 0.90087890625,
-      "conditional_prob": 0.363037109375,
-      "phase_mi": 0.89697265625
+      "plv_canonical": 0.33563232421875,
+      "pli_canonical": 0.67034912109375,
+      "wpli_canonical": 0.38348388671875,
+      "rrci_canonical": 0.3848876953125,
+      "wpli_complex_canonical": 0.38128662109375,
+      "rho_entropy": 0.9180908203125,
+      "conditional_prob": 0.3326416015625,
+      "phase_mi": 0.91485595703125
     },
     "nonsinusoidal_cf": {
       "plv_canonical": 1.0,
-      "pli_canonical": 0.947509765625,
-      "wpli_canonical": 0.9580078125,
-      "rrci_canonical": 0.9052734375,
-      "wpli_complex_canonical": 0.955810546875,
+      "pli_canonical": 0.954437255859375,
+      "wpli_canonical": 0.96502685546875,
+      "rrci_canonical": 0.91204833984375,
+      "wpli_complex_canonical": 0.96112060546875,
       "rho_entropy": 1.0,
       "conditional_prob": 1.0,
       "phase_mi": 1.0
     },
     "weak_kappa": {
-      "plv_canonical": 0.65869140625,
-      "pli_canonical": 0.6026611328125,
-      "wpli_canonical": 0.6044921875,
-      "rrci_canonical": 0.6005859375,
-      "wpli_complex_canonical": 0.6875,
-      "rho_entropy": 0.639892578125,
-      "conditional_prob": 0.659423828125,
-      "phase_mi": 0.6484375
+      "plv_canonical": 0.655029296875,
+      "pli_canonical": 0.6107177734375,
+      "wpli_canonical": 0.62091064453125,
+      "rrci_canonical": 0.61273193359375,
+      "wpli_complex_canonical": 0.69134521484375,
+      "rho_entropy": 0.64642333984375,
+      "conditional_prob": 0.6553955078125,
+      "phase_mi": 0.6614990234375
     },
     "low_snr": {
-      "plv_canonical": 0.922119140625,
-      "pli_canonical": 0.839111328125,
-      "wpli_canonical": 0.847412109375,
-      "rrci_canonical": 0.84033203125,
-      "wpli_complex_canonical": 0.85693359375,
-      "rho_entropy": 0.87646484375,
-      "conditional_prob": 0.923583984375,
-      "phase_mi": 0.8916015625
+      "plv_canonical": 0.9320068359375,
+      "pli_canonical": 0.849334716796875,
+      "wpli_canonical": 0.8583984375,
+      "rrci_canonical": 0.849609375,
+      "wpli_complex_canonical": 0.868896484375,
+      "rho_entropy": 0.8837890625,
+      "conditional_prob": 0.9326171875,
+      "phase_mi": 0.89862060546875
     },
     "nonstationary": {
-      "plv_canonical": 1.0,
-      "pli_canonical": 0.9228515625,
-      "wpli_canonical": 0.920166015625,
-      "rrci_canonical": 0.91259765625,
-      "wpli_complex_canonical": 0.953125,
-      "rho_entropy": 1.0,
-      "conditional_prob": 1.0,
-      "phase_mi": 1.0
+      "plv_canonical": 0.99945068359375,
+      "pli_canonical": 0.93768310546875,
+      "wpli_canonical": 0.92626953125,
+      "rrci_canonical": 0.92071533203125,
+      "wpli_complex_canonical": 0.96392822265625,
+      "rho_entropy": 0.9996337890625,
+      "conditional_prob": 0.99957275390625,
+      "phase_mi": 0.9990234375
     },
     "harmonic_contam": {
       "plv_canonical": 1.0,
-      "pli_canonical": 0.9227294921875,
-      "wpli_canonical": 0.9326171875,
-      "rrci_canonical": 0.892578125,
-      "wpli_complex_canonical": 0.937744140625,
+      "pli_canonical": 0.923431396484375,
+      "wpli_canonical": 0.937744140625,
+      "rrci_canonical": 0.89361572265625,
+      "wpli_complex_canonical": 0.9423828125,
       "rho_entropy": 1.0,
       "conditional_prob": 1.0,
       "phase_mi": 1.0
@@ -114,9 +114,9 @@
   "specificity_ident_accuracy": {
     "clean": {
       "plv_canonical": 1.0,
-      "pli_canonical": 0.984375,
-      "wpli_canonical": 1.0,
-      "rrci_canonical": 1.0,
+      "pli_canonical": 0.9921875,
+      "wpli_canonical": 0.9921875,
+      "rrci_canonical": 0.9921875,
       "wpli_complex_canonical": 1.0,
       "rho_entropy": 1.0,
       "conditional_prob": 1.0,
@@ -124,12 +124,12 @@
     },
     "bimodal": {
       "plv_canonical": 1.0,
-      "pli_canonical": 0.921875,
-      "wpli_canonical": 0.9375,
+      "pli_canonical": 0.90625,
+      "wpli_canonical": 0.9296875,
       "rrci_canonical": 0.921875,
-      "wpli_complex_canonical": 1.0,
+      "wpli_complex_canonical": 0.9921875,
       "rho_entropy": 1.0,
-      "conditional_prob": 0.28125,
+      "conditional_prob": 0.2890625,
       "phase_mi": 0.75
     }
   },
@@ -140,7 +140,7 @@
     "nonsinusoidal_cf": "plv_canonical",
     "weak_kappa": "wpli_complex_canonical",
     "low_snr": "conditional_prob",
-    "nonstationary": "plv_canonical",
+    "nonstationary": "rho_entropy",
     "harmonic_contam": "plv_canonical"
   },
   "sanity_gates": {
@@ -149,5 +149,5 @@
     "bimodal_rho_gt_plv": true,
     "all_passed": true
   },
-  "n_seeds": 8
+  "n_seeds": 16
 }
